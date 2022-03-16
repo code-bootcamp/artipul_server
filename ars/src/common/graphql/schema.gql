@@ -1,0 +1,39 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  name: String!
+  phoneNum: String!
+  email: String!
+  password: String!
+  nickname: String!
+  point: Int!
+  is_artist: Boolean!
+  profile: Profile
+}
+
+type Profile {
+  id: String!
+  url: String
+  college: String
+  Introduce: String
+  user: User!
+}
+
+type Query {
+  fetchUser(nickname: String!): User!
+}
+
+type Mutation {
+  createGeneral(createUserInput: CreateUserInput!, password: String!): User!
+  createArtist(createUserInput: CreateUserInput!, password: String!, college: String!): User!
+}
+
+input CreateUserInput {
+  name: String!
+  phoneNum: String!
+  email: String!
+  nickname: String!
+}
