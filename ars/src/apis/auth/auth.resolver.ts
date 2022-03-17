@@ -1,6 +1,3 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { UserService } from '../user/user.service';
-import { AuthService } from './auth.service';
 import {
   UnauthorizedException,
   UnprocessableEntityException,
@@ -30,7 +27,6 @@ export class AuthResolver {
     const isAuth = await bcrypt.compare(password, user.password);
     if (!isAuth) throw new UnauthorizedException('비밀번호가 틀렸습니다.');
 
-    console.log('res', context.res);
     this.authService.setRefreshToken({ user, res: context.res });
 
     return this.authService.getAccessToken({ user });

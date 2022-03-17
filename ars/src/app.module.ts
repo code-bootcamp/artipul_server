@@ -8,6 +8,7 @@ import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     UserModule,
     AuthModule,
     ConfigModule.forRoot({
@@ -24,7 +25,7 @@ import { AuthModule } from './apis/auth/auth.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '3160',
+      password: '123456789',
       database: 'ars',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,

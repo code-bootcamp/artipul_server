@@ -1,29 +1,22 @@
-import { Strategy, Profile } from 'passport-kakao';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy, Profile } from 'passport-kakao';
 
 @Injectable()
 export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   constructor() {
-    const kakaoId = process.env.KAKAO_ID;
-    const kakaoSecret = process.env.KAKAO_SECRET;
     super({
-      clientID: kakaoId,
-      clientSecret: kakaoSecret,
-      callbackURL: 'http://localhost:3000/login/kakao/callback',
-      scope: ['account_email', 'profile_nickname'],
+      clientID: process.env.KAKAO_CLIENT_ID,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+      callbackURL: process.env.KAKAO_CLIENT_CALLBACK,
+      scope: ['profile_nickname', 'account_email'],
     });
   }
-
   validate(accessToken: string, refreshToken: string, profile: Profile) {
-    console.log(profile);
     return {
       email: profile._json.kakao_account.email,
       password: profile.id,
       name: profile.displayName,
-      // age: 0,
     };
   }
 }

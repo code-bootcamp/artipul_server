@@ -1,32 +1,29 @@
-import { Strategy } from 'passport-jwt';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import {
-  CACHE_MANAGER,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Strategy } from 'passport-jwt';
 import { Cache } from 'cache-manager';
+import { CACHE_MANAGER, Inject } from '@nestjs/common';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
-  constructor() { // private readonly cachemanager: Cache, // @Inject(CACHE_MANAGER)
-    super({
-      jwtFromRequest: (req) => {
-        const cookie = req.headers.cookies;
-        return cookie.replace('refreshToken=', '');
-      },
-      secretOrKey: 'myRefreshKey',
-      passReqToCallback: true,
-    });
-  }
-
-  async validate(req, payload) {
-    //   let RT = req.headers.cookie.split('Token=')[1];
-    //   if (await this.cachemanager.get(RT)) {
-    //     throw new UnauthorizedException('리프레시 토큰 에러 ~');
-    //   }
-
+  // constructor(
+  //   @Inject(CACHE_MANAGER)
+  //   private readonly cacheManager: Cache,
+  // ) {
+  //   super({
+  //     jwtFromRequest: (req) => {
+  //       const cookies = req.headers.cookies;
+  //       return cookies.replace('refreshToken=', '');
+  //     },
+  //     secretOrKey: process.env.REFRESH_TOKEN_KEY,
+  //     passReqToCallback: true,
+  //   });
+  // }
+  async validate(req, payload: any) {
+  //   const refreshToken = req.headers.cookie.replace('refreshToken=', '');
+  //   const check = await this.cacheManager.get(`refreshToken: ${refreshToken}`);
+  //   if (check)
+  //     throw new UnauthorizedException('이미 로그아웃이 된 상태입니다.');
     return {
       id: payload.sub,
       email: payload.email,

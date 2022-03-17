@@ -12,21 +12,20 @@ import {
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   constructor(
     @Inject(CACHE_MANAGER)
-    private readonly cachemanager: Cache,
+    private readonly cacheManager: Cache,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'myAccessKey',
+      secretOrKey: process.env.ACCESS_TOKEN_KEY,
       passReqToCallback: true,
     });
   }
+  async validate(req, payload: any) {
+    const accessToken = req.headers.authorization.replace('Bearer ', '');
+    const check = await this.cacheManager.get(`accessToken: ${accessToken}`);
 
-  async validate(req, payload) {
-    // let AT = req.headers.authorization.split(' ')[1];
-    // console.log(AT);
-    // if (await this.cachemanager.get(AT)) {
-    //   throw new UnauthorizedException('액세스 토큰 에러 ~');
-    // }
+    if (check)
+      throw new UnauthorizedException('이미 로그아웃이 된 상태입니다.');
 
     return {
       id: payload.sub,
