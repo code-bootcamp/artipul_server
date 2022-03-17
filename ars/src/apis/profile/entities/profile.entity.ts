@@ -21,14 +21,10 @@ export class Profile {
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })
-  college?: string;
-
-  @Column({ nullable: true })
-  @Field(() => String, { nullable: true })
   Introduce?: string;
 
   @JoinColumn()
-  @OneToOne(() => User, { eager: true })
+  @OneToOne(() => User)
   @Field(() => User)
   user: User;
 }
