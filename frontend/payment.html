@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>결제 페이지</title>
+    <!-- jQuery -->
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+    ></script>
+    <!-- iamport.payment.js -->
+    <script
+      type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+      function mypayment() {
+        const myAmount = Number(document.getElementById("aaa").value);
+
+        IMP.init("imp99097280");
+        IMP.request_pay(
+          {
+            // param
+            pg: "html5_inicis",
+            pay_method: "card",
+            name: "회전 노르웨이",
+            amount: myAmount,
+            buyer_email: "gildong@gmail.com",
+            buyer_name: "홍길동",
+            buyer_tel: "010-4242-4242",
+            buyer_addr: "서울특별시 강남구 신사동",
+            buyer_postcode: "01181",
+          },
+          async (rsp) => {
+            // callback
+            if (rsp.success) {
+              alert("결제에 성공했습니다.");
+              console.log("결제 결과:", rsp);
+              //   ...,
+              // 결제 성공 시 로직,
+              //   ...
+              const data = await axios.post(
+                "http://localhost:3000/graphql",
+                {
+                  query: `
+                    mutation {
+                      createOrder(impUid:"${rsp.imp_uid}", amount: ${rsp.paid_amount}){
+                        amount
+                      }
+                    }
+                  `,
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiJiODk2YWVhNS1hMDQ5LTQ4ODMtODNmOC1hMDg4MTdjYzE4OTkiLCJpYXQiOjE2NDUwOTM2NTUsImV4cCI6MTY0NTA5NzI1NX0._NetIgLUdCuoghntIAfnGebFl7pXyvCIHORxyWNG93Q`,
+                  },
+                }
+              );
+            } else {
+              console.log("???");
+              //   ...,
+              // 결제 실패 시 로직,
+              //   ...
+            }
+          }
+        );
+      }
+    </script>
+  </head>
+  <body>
+    결제 금액:<input type="text" id="aaa" />
+
+    <button onclick="mypayment()">결제하기</button>
+  </body>
+</html>

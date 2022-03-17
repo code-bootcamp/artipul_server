@@ -43,6 +43,10 @@ export class User {
   @Field(() => Boolean)
   is_artist: boolean;
 
+  @Column({ default: null })
+  @Field(() => String)
+  college?: string;
+
   @JoinColumn()
   @OneToOne(() => Profile)
   @Field(() => Profile, { nullable: true })

@@ -2,13 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-
-type Board {
-  id: String!
-  title: String!
-  content: String!
-}
-
 type User {
   id: String!
   name: String!
@@ -18,30 +11,39 @@ type User {
   nickname: String!
   point: Int!
   is_artist: Boolean!
+  college: String!
   profile: Profile
 }
 
 type Profile {
   id: String!
   url: String
-  college: String
   Introduce: String
   user: User!
 }
 
+type Board {
+  id: String!
+  title: String!
+  content: String!
+}
+
 type Query {
-  fetchUser(nickname: String!): User!
+  fetchUser(userInput: String!): User!
 }
 
 type Mutation {
-  createGeneral(createUserInput: CreateUserInput!, password: String!): User!
-  createArtist(createUserInput: CreateUserInput!, password: String!, college: String!): User!
+  createUser(createUserInput: CreateUserInput!): User!
+  login(email: String!, password: String!): String!
+  retoreAccessToken: String!
 }
 
 input CreateUserInput {
   name: String!
   phoneNum: String!
+  password: String!
   email: String!
   nickname: String!
-
+  is_artist: Boolean!
+  college: String
 }
