@@ -28,7 +28,7 @@ export class Profile {
   Introduce?: string;
 
   @JoinColumn()
-  @OneToOne(() => User, { eager: true })
+  @OneToOne(() => User)
   @Field(() => User)
   user: User;
 }

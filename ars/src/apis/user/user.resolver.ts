@@ -32,7 +32,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  async fetchUser(@Args('nickname') nickname: string) {
-    return await this.userService.findOne({ nickname });
+  async fetchUser(@Args('userInput') userInput: string) {
+    return await this.userService.findOne(userInput);
   }
 }

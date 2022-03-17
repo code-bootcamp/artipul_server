@@ -18,8 +18,12 @@ export class UserService {
     private readonly connection: Connection,
   ) {}
 
-  async findOne({ nickname }: { nickname: string }) {
-    return await this.userRepository.findOne({ nickname: nickname });
+  async findOne(userInput) {
+    if (userInput.includes('@')) {
+      return await this.userRepository.findOne({ email: userInput });
+    } else {
+      return await this.userRepository.findOne({ nickname: userInput });
+    }
   }
 
   async createG({ createUserInput }: ICreate, hashedPassword) {

@@ -4,9 +4,11 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './apis/user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -21,7 +23,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '3160',
+      password: '123456789',
       database: 'ars',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
