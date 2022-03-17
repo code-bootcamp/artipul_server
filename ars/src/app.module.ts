@@ -10,6 +10,7 @@ import { AuthModule } from './apis/auth/auth.module';
   imports: [
     AuthModule,
     UserModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -17,6 +18,7 @@ import { AuthModule } from './apis/auth/auth.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
+      context: ({ req, res }) => ({ req, res }),
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',

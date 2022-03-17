@@ -9,26 +9,11 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation(() => User)
-  async createGeneral(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-    @Args('password') password: string,
-  ) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return await this.userService.createG({ createUserInput }, hashedPassword);
-  }
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    const { password, ...rest } = createUserInput;
+    const hashedPassword = await bcrypt.hash(password, 1);
 
-  @Mutation(() => User)
-  async createArtist(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-    @Args('password') password: string,
-    @Args('college') college: string,
-  ) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return await this.userService.createA(
-      { createUserInput },
-      hashedPassword,
-      college,
-    );
+    return await this.userService.create({ hashedPassword, ...rest });
   }
 
   @Query(() => User)

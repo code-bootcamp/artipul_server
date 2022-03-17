@@ -34,7 +34,7 @@ export class AuthService {
       const createUser = { ...rest, hashedPassword: password };
       user = await this.userService.create({ ...createUser });
     }
-
+    
     this.setRefreshToken({ user, res });
     res.redirect('http://localhost:5500/frontend/login/index.html');
   }

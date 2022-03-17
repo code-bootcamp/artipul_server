@@ -5,10 +5,6 @@ import { Profile } from '../profile/entities/profile.entity';
 import { CreateUserInput } from './dto/createUserInput';
 import { User } from './entities/user.entity';
 
-interface ICreate {
-  createUserInput: CreateUserInput;
-}
-
 @Injectable()
 export class UserService {
   constructor(
@@ -26,41 +22,18 @@ export class UserService {
     }
   }
 
-  async createG({ createUserInput }: ICreate, hashedPassword) {
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const user = queryRunner.manager.save(User, {
-        ...createUserInput,
-        password: hashedPassword,
-        is_artist: false,
-      });
-
-      await queryRunner.commitTransaction();
-      return await user;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw error + '화이팅 ㅎㅎ';
-    } finally {
-      await queryRunner.release();
-    }
+  async findOAuthUser({ email }) {
+    return await this.userRepository.findOne({ email });
   }
 
-  async createA({ createUserInput }: ICreate, hashedPassword, college) {
+  async create({ hashedPassword: password, ...rest }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       const user = await queryRunner.manager.save(User, {
-        ...createUserInput,
-        password: hashedPassword,
-        is_artist: true,
-      });
-
-      queryRunner.manager.save(Profile, {
-        college: college,
-        user: user,
+        password,
+        ...rest,
       });
 
       await queryRunner.commitTransaction();
