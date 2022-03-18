@@ -1,20 +1,34 @@
 import {
+  CACHE_MANAGER,
+  Inject,
   UnauthorizedException,
   UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
-import { GqlAuthRefreshGuard } from 'src/common/auth/gql-auth.guard';
+import { Cache } from 'cache-manager';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthRefreshGuard,
+} from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
+import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
+import { AuthService } from './auth.service';
+import * as jwt from 'jsonwebtoken';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+
+    @Inject(CACHE_MANAGER)
+    private readonly cachemanager: Cache,
   ) {}
 
-  @Mutation(() => String)
+  @Mutation(() => User)
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
@@ -34,7 +48,41 @@ export class AuthResolver {
 
   @UseGuards(GqlAuthRefreshGuard)
   @Mutation(() => String)
-  retoreAccessToken(@CurrentUser() currentUser: ICurrentUser) {
+  restoreAccessToken(@CurrentUser() currentUser: ICurrentUser) {
     return this.authService.getAccessToken({ user: currentUser });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String)
+  async logout(@Context() context: any) {
+    try {
+      let RT = context.req.headers.cookie.split('Token=')[1];
+      let AT = context.req.headers.authorization.split(' ')[1];
+      let tem = Math.floor(Date.now() / 1000);
+
+      jwt.verify(RT, 'myRefreshKey', async (err, payload) => {
+        if (err) {
+          throw err;
+        }
+        await this.cachemanager.set(RT, 'RefreshToken', {
+          ttl: payload.exp - tem,
+        });
+      });
+
+      jwt.verify(AT, 'myAccessKey', async (err, payload) => {
+        if (err) {
+          console.log(err, '*******');
+
+          throw err;
+        }
+        await this.cachemanager.set(AT, 'AccessToken', {
+          ttl: payload.exp - tem,
+        });
+      });
+      return '로그아웃에 성공했습니다.';
+    } catch (error) {
+      console.log(error, ' !!! ');
+      throw error;
+    }
   }
 }
