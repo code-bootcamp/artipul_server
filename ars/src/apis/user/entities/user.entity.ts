@@ -19,7 +19,7 @@ export class User {
   @Field(() => String)
   name: string;
 
-  @Column()
+  @Column({ default: null })
   @Field(() => String)
   phoneNum: string;
 
@@ -31,7 +31,7 @@ export class User {
   @Field(() => String)
   password: string;
 
-  @Column()
+  @Column({ default: null })
   @Field(() => String)
   nickname: string;
 
@@ -39,7 +39,7 @@ export class User {
   @Field(() => Int)
   point: number;
 
-  @Column()
+  @Column({ default: null })
   @Field(() => Boolean)
   is_artist: boolean;
 

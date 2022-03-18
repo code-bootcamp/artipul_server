@@ -50,4 +50,9 @@ export class UserResolver {
   ) {
     return await this.userService.checkToken(phoneNum, token);
   }
+
+  @Mutation(() => String)
+  async checkNickname(@Args('nickname') nickname: string) {
+    return await this.userService.checkNickname(nickname);
+  }
 }
