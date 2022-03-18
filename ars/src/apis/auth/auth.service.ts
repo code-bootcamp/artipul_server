@@ -28,6 +28,7 @@ export class AuthService {
 
   async loginOAuth(req, res) {
     let user = await this.userService.findOne({ email: req.user.email });
+
     if (!user) {
       const { password, ...rest } = req.user;
       console.log(password, '비밀번호');

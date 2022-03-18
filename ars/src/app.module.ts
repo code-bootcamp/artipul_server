@@ -8,9 +8,11 @@ import { AuthModule } from './apis/auth/auth.module';
 
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
+import { ArtModule } from './apis/art/art.module';
 
 @Module({
   imports: [
+    ArtModule,
     AuthModule,
     UserModule,
     ConfigModule.forRoot({
@@ -27,7 +29,7 @@ import * as redisStore from 'cache-manager-redis-store';
       host: 'my_database',
       port: 3306,
       username: 'root',
-      password: '3160',
+      password: '123456789',
       database: 'ars',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
