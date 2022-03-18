@@ -16,7 +16,7 @@ services:
     image: mysql:8.0.28
     environment:
       MYSQL_DATABASE: 'ars'
-      MYSQL_ROOT_PASSWORD: '3160'
+      MYSQL_ROOT_PASSWORD: '123456789'
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci

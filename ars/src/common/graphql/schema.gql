@@ -24,11 +24,12 @@ type Profile {
 
 type Art {
   id: String!
-  name: String!
+  title: String!
   description: String!
   start_price: Int!
   instant_bid: Int!
   price: Int!
+  createdAt: String!
   deadline: String!
   user: User!
 }
@@ -41,16 +42,29 @@ type Board {
 }
 
 type Query {
+  fetchArts: [Art!]!
+  fetchArt(title: String!): Art!
   fetchUser: User!
 }
 
 type Mutation {
+  createArt(createArtInput: CreateArtInput!): Art!
   login(email: String!, password: String!): User!
   restoreAccessToken: String!
   logout: String!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!
   phoneAuth(phoneNum: String!, token: String!): String!
+}
+
+input CreateArtInput {
+  title: String!
+  description: String!
+  start_price: Int!
+  instant_bid: Int!
+  price: Int!
+  createdAt: String!
+  deadline: String!
 }
 
 input CreateUserInput {
