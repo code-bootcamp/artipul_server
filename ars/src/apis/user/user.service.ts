@@ -27,6 +27,15 @@ export class UserService {
     return await this.userRepository.findOne({ email });
   }
 
+  async checkNickname(nickname) {
+    const user = await this.userRepository.findOne({ nickname });
+    if (user) {
+      return '이미 존재하는 닉네임 입니다.';
+    } else {
+      return '사용 가능한 닉네임 입니다.';
+    }
+  }
+
   async create({ hashedPassword: password, ...rest }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

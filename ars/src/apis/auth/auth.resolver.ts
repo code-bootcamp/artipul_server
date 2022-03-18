@@ -28,7 +28,7 @@ export class AuthResolver {
     private readonly cachemanager: Cache,
   ) {}
 
-  @Mutation(() => User)
+  @Mutation(() => String)
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
