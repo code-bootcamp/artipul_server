@@ -27,14 +27,14 @@ export class AuthService {
 
   async loginOAuth(req, res) {
     let user = await this.userService.findOne({
-      email: req.createUserInput.email,
+      email: req.user.email,
     });
     if (!user) {
       const { password, ...rest } = req.user;
       const createUser = { ...rest, hashedPassword: password };
       user = await this.userService.create({ ...createUser });
     }
-    
+
     this.setRefreshToken({ user, res });
     res.redirect('http://localhost:5500/frontend/login/index.html');
   }
