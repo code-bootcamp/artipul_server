@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './apis/user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './apis/auth/auth.module';
+import { ArtModule } from './apis/art/art.module';
 
 @Module({
   imports: [
+    ArtModule,
     AuthModule,
     UserModule,
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
