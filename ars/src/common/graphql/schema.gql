@@ -22,21 +22,44 @@ type Profile {
   user: User!
 }
 
+type Art {
+  id: String!
+  title: String!
+  description: String!
+  start_price: Int!
+  instant_bid: Int!
+  price: Int!
+  createdAt: String!
+  deadline: String!
+  user: User!
+}
 
 type Board {
   id: String!
   title: String!
   content: String!
+  user: User!
 }
 
 type Query {
-  fetchUser(userInput: String!): User!
+  fetchUser(email: String!): User!
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
+  createArt(createArtInput: CreateArtInput!): Art!
   login(email: String!, password: String!): String!
   retoreAccessToken: String!
+  createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateArtInput {
+  title: String!
+  description: String!
+  start_price: Int!
+  instant_bid: Int!
+  price: Int!
+  createdAt: String!
+  deadline: String!
 }
 
 input CreateUserInput {
