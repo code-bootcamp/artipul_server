@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,11 +6,13 @@ import { UserModule } from './apis/user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './apis/auth/auth.module';
 
+import { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
+
 @Module({
   imports: [
     AuthModule,
     UserModule,
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -22,14 +24,19 @@ import { AuthModule } from './apis/auth/auth.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'my_database',
       port: 3306,
       username: 'root',
-      password: '123456789',
+      password: '3160',
       database: 'ars',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
+    }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: 'redis://my_redis:6379',
+      isGlobal: true,
     }),
   ],
 })
