@@ -3,6 +3,7 @@ import { Tag } from 'src/apis/tag/entities/tag.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -19,7 +20,7 @@ export class Art {
 
   @Column()
   @Field(() => String)
-  title: string;
+  name: string;
 
   @Column()
   @Field(() => String)
@@ -33,13 +34,12 @@ export class Art {
   @Field(() => Int)
   instant_bid: number;
 
-  @Column({ default: null })
+  @Column()
   @Field(() => Int)
   price: number;
 
-  @Column()
-  @Field(() => String)
-  createdAt: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Column()
   @Field(() => String)
