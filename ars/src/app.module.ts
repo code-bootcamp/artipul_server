@@ -9,12 +9,14 @@ import { AuthModule } from './apis/auth/auth.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { ArtModule } from './apis/art/art.module';
+import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 
 @Module({
   imports: [
     ArtModule,
     AuthModule,
     UserModule,
+    PointTransactionModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

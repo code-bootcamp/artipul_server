@@ -13,8 +13,8 @@ export class ArtResolver {
   }
 
   @Query(() => Art)
-  async fetchArt(@Args('title') title: string) {
-    return await this.artService.findOne({ title });
+  async fetchArt(@Args('artId') artId: string) {
+    return await this.artService.findOne({ artId });
   }
 
   @Mutation(() => Art)
