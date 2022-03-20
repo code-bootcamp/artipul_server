@@ -48,7 +48,6 @@ type Query {
 }
 
 type Mutation {
-
   createArt(createArtInput: CreateArtInput!): Art!
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
