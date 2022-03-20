@@ -17,6 +17,7 @@ export class Payment {
   id: string;
 
   @CreateDateColumn()
+  @Field(() => Date)
   createdAt: Date;
 
   @Column()

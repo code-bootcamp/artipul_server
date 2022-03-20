@@ -10,7 +10,7 @@ interface ICreate {
 }
 
 interface IFindOne {
-  title: string;
+  artId: string;
 }
 
 @Injectable()
@@ -27,9 +27,9 @@ export class ArtService {
     });
   }
 
-  async findOne({ title }: IFindOne) {
+  async findOne({ artId }: IFindOne) {
     return await this.artRepository.findOne({
-      where: { title },
+      where: { artId },
       relations: ['tags'],
     });
   }

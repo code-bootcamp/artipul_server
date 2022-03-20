@@ -20,6 +20,7 @@ export class Board {
   title: string;
 
   @CreateDateColumn()
+  @Field(() => Date)
   createdAt: Date;
 
   @Column()
