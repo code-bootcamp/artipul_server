@@ -30,9 +30,9 @@ export class UserService {
   async checkNickname(nickname) {
     const user = await this.userRepository.findOne({ nickname });
     if (user) {
-      return '이미 존재하는 닉네임 입니다.';
+      return false;
     } else {
-      return '사용 가능한 닉네임 입니다.';
+      return true;
     }
   }
 

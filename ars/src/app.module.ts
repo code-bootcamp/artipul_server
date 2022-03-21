@@ -31,7 +31,7 @@ import { PointTransactionModule } from './apis/pointTransaction/pointTransaction
       host: 'my_database',
       port: 3306,
       username: 'root',
-      password: '123456789',
+      password: '3160',
       database: 'ars',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,

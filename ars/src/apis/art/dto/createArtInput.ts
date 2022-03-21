@@ -22,4 +22,10 @@ export class CreateArtInput {
 
   @Field(() => String)
   deadline: string;
+
+  @Field(() => [String])
+  image_urls: string[];
+
+  @Field(() => Boolean)
+  is_main: boolean;
 }

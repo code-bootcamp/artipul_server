@@ -22,6 +22,12 @@ type Profile {
   user: User!
 }
 
+type Tag {
+  id: String!
+  name: String!
+  arts: [Art!]!
+}
+
 type Art {
   id: String!
   title: String!
@@ -71,13 +77,15 @@ type Query {
 
 type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
+  uploadFiles(files: Upload!): [String!]!
+  createTag(id: String!, name: String!): Tag!
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!
-  phoneAuth(phoneNum: String!, token: String!): String!
-  checkNickname(nickname: String!): String!
+  phoneAuth(phoneNum: String!, token: String!): Boolean!
+  checkNickname(nickname: String!): Boolean!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
 }
@@ -90,7 +98,12 @@ input CreateArtInput {
   price: Int!
   createdAt: String!
   deadline: String!
+  image_urls: [String!]!
+  is_main: Boolean!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateUserInput {
   name: String!
