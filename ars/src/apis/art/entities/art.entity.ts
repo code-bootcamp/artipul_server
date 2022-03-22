@@ -3,6 +3,7 @@ import { Tag } from 'src/apis/tag/entities/tag.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -37,19 +38,14 @@ export class Art {
   @Field(() => Int)
   price: number;
 
-  @Column()
-  @Field(() => String)
+  @CreateDateColumn()
   createdAt: string;
 
   @Column()
   @Field(() => String)
   deadline: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
-
-  @JoinTable()
-  @ManyToMany(() => Tag, (tags) => tags.arts)
-  tags: Tag[];
 }

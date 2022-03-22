@@ -10,8 +10,6 @@ interface IFiles {
 export class FileService {
   async upload({ files }: IFiles) {
     const bucketName = process.env.BUCKET;
-
-    // 구글 스토리지에 이미지 업로드
     const storage = new Storage({
       keyFilename: process.env.KEYFILENAME,
       projectId: process.env.PROJECTID,
@@ -29,6 +27,8 @@ export class FileService {
             .pipe(storage.file(file.filename).createWriteStream())
             .on('finish', () => resolve(`/${bucketName}/${file.filename}`))
             .on('error', (error) => reject(error));
+
+          console.log(file.createReadStream().on);
         });
       }),
     );

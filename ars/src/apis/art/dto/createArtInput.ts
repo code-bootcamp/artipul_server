@@ -18,14 +18,11 @@ export class CreateArtInput {
   price: number;
 
   @Field(() => String)
-  createdAt: string;
-
-  @Field(() => String)
   deadline: string;
 
   @Field(() => [String])
   image_urls: string[];
 
-  @Field(() => Boolean)
-  is_main: boolean;
+  @Field(() => [Int])
+  tags: number[];
 }
