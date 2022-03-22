@@ -13,7 +13,7 @@ export class ArtImage {
   @Field(() => String)
   url: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   @Field(() => Boolean)
   isMain: boolean;
 

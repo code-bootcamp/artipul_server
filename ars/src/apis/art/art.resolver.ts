@@ -32,16 +32,12 @@ export class ArtResolver {
     @Args('createArtInput') createArtInput: CreateArtInput, //
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    const { image_urls, is_main, ...rest } = createArtInput;
-    return this.artService.create(
-      { image_urls, is_main, ...rest },
-      currentUser,
-    );
+    return this.artService.create({ ...createArtInput }, currentUser);
   }
 
   @Mutation(() => [String])
-  async uploadFiles(
-    @Args({ name: 'files', type: () => GraphQLUpload }) files: FileUpload[],
+  async uploadArtImage(
+    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
   ) {
     return await this.fileService.upload({ files });
   }

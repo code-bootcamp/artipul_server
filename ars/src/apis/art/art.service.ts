@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
+import { ArtTag } from '../art_tag/entities/art_tag.entity';
 import { Tag } from '../tag/entities/tag.entity';
 import { CreateArtInput } from './dto/createArtInput';
 import { Art } from './entities/art.entity';
@@ -33,7 +34,7 @@ export class ArtService {
     });
   }
 
-  async create({ image_urls, is_main, ...rest }, currentUser) {
+  async create({ image_urls, tags, ...rest }, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -43,12 +44,27 @@ export class ArtService {
         user: currentUser,
       });
 
-      console.log(result);
-      await queryRunner.manager.save(ArtImage, {
-        url: image_urls,
-        isMain: is_main,
-        art: result,
-      });
+      for (let i = 0; i < image_urls.length; i++) {
+        if (i === 0) {
+          await queryRunner.manager.save(ArtImage, {
+            url: image_urls[i],
+            isMain: true,
+            art: result,
+          });
+        } else {
+          await queryRunner.manager.save(ArtImage, {
+            url: image_urls[i],
+            art: result,
+          });
+        }
+      }
+
+      for (let i = 0; i < tags.length; i++) {
+        await queryRunner.manager.save(ArtTag, {
+          tagId: tags[i],
+          art: result,
+        });
+      }
 
       await queryRunner.commitTransaction();
       return result;

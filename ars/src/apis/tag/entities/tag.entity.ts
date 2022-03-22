@@ -6,14 +6,10 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 @ObjectType()
 export class Tag {
   @PrimaryGeneratedColumn()
-  @Field(() => String)
-  id: string;
+  @Field(() => Int)
+  id: number;
 
   @Column()
   @Field(() => String)
   name: string;
-
-  @ManyToMany(() => Art, (arts) => arts.tags)
-  @Field(() => [Art])
-  arts: Art[];
 }

@@ -22,10 +22,8 @@ type Profile {
   user: User!
 }
 
-type Tag {
-  id: String!
-  name: String!
-  arts: [Art!]!
+type Token {
+  accessToken: String!
 }
 
 type Art {
@@ -35,9 +33,13 @@ type Art {
   start_price: Int!
   instant_bid: Int!
   price: Int!
-  createdAt: String!
   deadline: String!
   user: User!
+}
+
+type Tag {
+  id: Int!
+  name: String!
 }
 
 type PointTransaction {
@@ -77,9 +79,9 @@ type Query {
 
 type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
-  uploadFiles(files: Upload!): [String!]!
+  uploadArtImage(files: [Upload!]!): [String!]!
   createTag(id: String!, name: String!): Tag!
-  login(email: String!, password: String!): String!
+  login(email: String!, password: String!): Token!
   restoreAccessToken: String!
   logout: String!
   createUser(createUserInput: CreateUserInput!): User!
@@ -96,10 +98,9 @@ input CreateArtInput {
   start_price: Int!
   instant_bid: Int!
   price: Int!
-  createdAt: String!
   deadline: String!
   image_urls: [String!]!
-  is_main: Boolean!
+  tags: [Int!]!
 }
 
 """The `Upload` scalar type represents a file upload."""
