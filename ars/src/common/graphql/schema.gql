@@ -82,7 +82,7 @@ type Mutation {
   uploadArtImage(files: [Upload!]!): [String!]!
   createTag(id: String!, name: String!): Tag!
   login(email: String!, password: String!): Token!
-  restoreAccessToken: String!
+  restoreAccessToken: Token!
   logout: String!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!
