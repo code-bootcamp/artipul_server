@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ArtImage } from 'src/apis/artImage/entities/artImage.entity';
+import { ArtTag } from 'src/apis/art_tag/entities/art_tag.entity';
 import { Tag } from 'src/apis/tag/entities/tag.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {

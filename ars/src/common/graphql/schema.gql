@@ -96,6 +96,7 @@ type Query {
   fetchArts: [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
+  fetchArtTags(artId: String!): [Tag!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
