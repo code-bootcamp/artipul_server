@@ -17,7 +17,7 @@ export class ArtImage {
   @Field(() => Boolean)
   isMain: boolean;
 
-  @ManyToOne(() => Art)
+  @ManyToOne(() => Art, { eager: true })
   @Field(() => Art)
   art: Art;
 }
