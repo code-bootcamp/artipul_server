@@ -47,7 +47,6 @@ export class User {
   @Field(() => String)
   college?: string;
 
-  @JoinColumn()
   @OneToOne(() => Profile)
   @Field(() => Profile, { nullable: true })
   profile?: Profile;
