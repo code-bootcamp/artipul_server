@@ -12,6 +12,7 @@ import { ArtModule } from './apis/art/art.module';
 import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 import { BoardModule } from './apis/board/board.module';
 import { CommentModule } from './apis/comment/comment.module';
+import { ProfileModule } from './apis/profile/profile.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CommentModule } from './apis/comment/comment.module';
     AuthModule,
     BoardModule,
     CommentModule,
+    ProfileModule,
     UserModule,
     PointTransactionModule,
     ConfigModule.forRoot({

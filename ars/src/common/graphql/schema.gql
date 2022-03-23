@@ -18,7 +18,7 @@ type User {
 type Profile {
   id: String!
   url: String
-  Introduce: String
+  introduce: String
   user: User!
 }
 
@@ -95,10 +95,12 @@ type Comment {
 type Query {
   fetchArts: [Art!]!
   fetchArt(artId: String!): Art!
+  fetchArtImages(artId: String!): [ArtImage!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
   fetchComments(boardId: String!): [Comment!]!
+  fetchProfile: Profile!
   fetchUser: User!
   fetchPointTransaction(pointTransactionId: String!): PointTransaction!
   fetchPointTransactions: [PointTransaction!]!
@@ -116,6 +118,7 @@ type Mutation {
   deleteBoard(boardId: String!): Boolean!
   uploadBoardImage(files: [Upload!]!): [String!]!
   createComment(boardId: String!, content: String!): Comment!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!
   phoneAuth(phoneNum: String!, token: String!): Boolean!
@@ -135,6 +138,9 @@ input CreateArtInput {
   tags: [Int!]!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input CreateBoardInput {
   title: String!
   content: String!
@@ -147,8 +153,10 @@ input UpdateBoardInput {
   image_urls: [String!]
 }
 
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
+input CreateProfileInput {
+  url: String
+  introduce: String
+}
 
 input CreateUserInput {
   name: String!
