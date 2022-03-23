@@ -12,11 +12,13 @@ import { ArtModule } from './apis/art/art.module';
 import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 import { BoardModule } from './apis/board/board.module';
 import { CommentModule } from './apis/comment/comment.module';
+import { ArtTagModule } from './apis/art_tag/art_tag.module';
 
 @Module({
   imports: [
     ArtModule,
     AuthModule,
+    ArtTagModule,
     BoardModule,
     CommentModule,
     UserModule,

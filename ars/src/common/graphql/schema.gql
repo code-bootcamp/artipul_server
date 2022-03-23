@@ -95,6 +95,8 @@ type Comment {
 type Query {
   fetchArts: [Art!]!
   fetchArt(artId: String!): Art!
+  fetchArtImages(artId: String!): [ArtImage!]!
+  fetchArtTags(artId: String!): [Tag!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
@@ -135,6 +137,9 @@ input CreateArtInput {
   tags: [Int!]!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input CreateBoardInput {
   title: String!
   content: String!
@@ -146,9 +151,6 @@ input UpdateBoardInput {
   content: String
   image_urls: [String!]
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input CreateUserInput {
   name: String!

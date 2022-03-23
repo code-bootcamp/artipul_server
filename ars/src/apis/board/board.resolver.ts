@@ -69,6 +69,6 @@ export class BoardResolver {
   async uploadBoardImage(
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
   ) {
-    return await this.fileService.uploads({ files });
+    return await this.fileService.upload({ files });
   }
 }
