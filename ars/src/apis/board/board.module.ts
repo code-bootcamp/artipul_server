@@ -15,6 +15,10 @@ import { Board } from './entities/board.entity';
       Comment,
     ]),
   ],
-  providers: [BoardResolver, BoardService, FileService],
+  providers: [
+    BoardResolver, //
+    BoardService,
+    FileService,
+  ],
 })
 export class BoardModule {}
