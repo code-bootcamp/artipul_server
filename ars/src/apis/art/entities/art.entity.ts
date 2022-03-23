@@ -1,12 +1,15 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ArtImage } from 'src/apis/artImage/entities/artImage.entity';
 import { Tag } from 'src/apis/tag/entities/tag.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -39,17 +42,16 @@ export class Art {
 
   @Column()
   @Field(() => String)
+  thumbnail: string;
+
+  @CreateDateColumn()
   createdAt: string;
 
   @Column()
   @Field(() => String)
   deadline: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
-
-  @JoinTable()
-  @ManyToMany(() => Tag, (tags) => tags.arts)
-  tags: Tag[];
 }

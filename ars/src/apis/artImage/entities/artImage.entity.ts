@@ -13,11 +13,11 @@ export class ArtImage {
   @Field(() => String)
   url: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   @Field(() => Boolean)
   isMain: boolean;
 
-  @ManyToOne(() => Art)
+  @ManyToOne(() => Art, { eager: true })
   @Field(() => Art)
   art: Art;
 }

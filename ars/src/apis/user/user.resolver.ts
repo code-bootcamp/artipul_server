@@ -43,7 +43,7 @@ export class UserResolver {
     return '인증번호 전송 완료 ~';
   }
 
-  @Mutation(() => String)
+  @Mutation(() => Boolean)
   async phoneAuth(
     @Args('phoneNum') phoneNum: string,
     @Args('token') token: string,
@@ -51,7 +51,7 @@ export class UserResolver {
     return await this.userService.checkToken(phoneNum, token);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => Boolean)
   async checkNickname(@Args('nickname') nickname: string) {
     return await this.userService.checkNickname(nickname);
   }

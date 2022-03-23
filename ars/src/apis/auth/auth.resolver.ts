@@ -13,10 +13,16 @@ import {
   GqlAuthRefreshGuard,
 } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
-import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import * as jwt from 'jsonwebtoken';
+import { Field, ObjectType } from '@nestjs/graphql';
+
+@ObjectType()
+class Token {
+  @Field(() => String)
+  accessToken: string;
+}
 
 @Resolver()
 export class AuthResolver {
@@ -28,7 +34,7 @@ export class AuthResolver {
     private readonly cachemanager: Cache,
   ) {}
 
-  @Mutation(() => String)
+  @Mutation(() => Token)
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
@@ -43,13 +49,15 @@ export class AuthResolver {
 
     this.authService.setRefreshToken({ user, res: context.res });
 
-    return this.authService.getAccessToken({ user });
+    return { accessToken: this.authService.getAccessToken({ user }) };
   }
 
   @UseGuards(GqlAuthRefreshGuard)
-  @Mutation(() => String)
+  @Mutation(() => Token)
   restoreAccessToken(@CurrentUser() currentUser: ICurrentUser) {
-    return this.authService.getAccessToken({ user: currentUser });
+    return {
+      accessToken: this.authService.getAccessToken({ user: currentUser }),
+    };
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -79,6 +87,7 @@ export class AuthResolver {
           ttl: payload.exp - tem,
         });
       });
+
       return '로그아웃에 성공했습니다.';
     } catch (error) {
       console.log(error, ' !!! ');

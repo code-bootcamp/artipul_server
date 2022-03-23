@@ -1,32 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { FileUpload } from 'graphql-upload';
 import { Storage } from '@google-cloud/storage';
-import { getToday } from 'src/common/libraries/utils';
-import { v4 as uuidv4 } from 'uuid';
+
+interface IFiles {
+  files: FileUpload[];
+}
 
 @Injectable()
 export class FileService {
-  async uploads({ files }) {
+  async upload({ files }: IFiles) {
+    const bucketName = process.env.BUCKET;
     const storage = new Storage({
-      keyFilename: process.env.STORAGE_KEY_FILENAME,
-      projectId: process.env.STORAGE_PROJECT_ID,
-    }).bucket(process.env.STORAGE_BUCKET);
+      keyFilename: process.env.KEYFILENAME,
+      projectId: process.env.PROJECTID,
+    }).bucket(bucketName);
 
-    // 먼저 이미지파일 모두 받아두기
+    // 업로드 할 이미지들 일단 먼저 받고,
     const waitedFiles = await Promise.all(files);
 
-    // 받은 파일 동시에 스토리지에 올리기
+    // 받은 이미지들 한번에 업로드하기
     const results = await Promise.all(
-      waitedFiles.map(
-        (file) =>
-          new Promise((resolve, reject) => {
-            const fname = `${getToday()}/${uuidv4()}/origin/${file.filename}`;
-            file
-              .createReadStream()
-              .pipe(storage.file(fname).createWriteStream())
-              .on('finish', () => resolve(`project-saul/${fname}`))
-              .on('error', (error) => reject(error));
-          }),
-      ),
+      waitedFiles.map((file) => {
+        return new Promise((resolve, reject) => {
+          file
+            .createReadStream()
+            .pipe(storage.file(file.filename).createWriteStream())
+            .on('finish', () => resolve(`/${bucketName}/${file.filename}`))
+            .on('error', (error) => reject(error));
+
+          console.log(file.createReadStream().on);
+        });
+      }),
     );
     return results;
   }

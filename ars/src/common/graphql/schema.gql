@@ -22,6 +22,10 @@ type Profile {
   user: User!
 }
 
+type Token {
+  accessToken: String!
+}
+
 type Art {
   id: String!
   title: String!
@@ -29,9 +33,21 @@ type Art {
   start_price: Int!
   instant_bid: Int!
   price: Int!
-  createdAt: String!
+  thumbnail: String!
   deadline: String!
   user: User!
+}
+
+type ArtImage {
+  id: String!
+  url: String!
+  isMain: Boolean!
+  art: Art!
+}
+
+type Tag {
+  id: Int!
+  name: String!
 }
 
 type PointTransaction {
@@ -90,8 +106,10 @@ type Query {
 
 type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
-  login(email: String!, password: String!): String!
-  restoreAccessToken: String!
+  uploadArtImage(files: [Upload!]!): [String!]!
+  createTag(id: String!, name: String!): Tag!
+  login(email: String!, password: String!): Token!
+  restoreAccessToken: Token!
   logout: String!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
@@ -100,8 +118,8 @@ type Mutation {
   createComment(boardId: String!, content: String!): Comment!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!
-  phoneAuth(phoneNum: String!, token: String!): String!
-  checkNickname(nickname: String!): String!
+  phoneAuth(phoneNum: String!, token: String!): Boolean!
+  checkNickname(nickname: String!): Boolean!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
 }
@@ -112,8 +130,9 @@ input CreateArtInput {
   start_price: Int!
   instant_bid: Int!
   price: Int!
-  createdAt: String!
   deadline: String!
+  image_urls: [String!]!
+  tags: [Int!]!
 }
 
 input CreateBoardInput {
