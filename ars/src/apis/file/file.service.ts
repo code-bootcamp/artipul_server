@@ -32,7 +32,6 @@ export class FileService {
         });
       }),
     );
-
     return results;
   }
 }

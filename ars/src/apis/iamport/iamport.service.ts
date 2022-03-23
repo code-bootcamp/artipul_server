@@ -43,8 +43,7 @@ export class IamportService {
       if (result.data.response.amount !== charge_amount)
         throw new UnprocessableEntityException('결제 금액이 잘못되었습니다.');
     } catch (error) {
-      // 위 if문안의 에러메세지는 우리가 만든 에러메세지이기에 아임포트에서 받은 에러메세지로는 확인 불가능
-      // 따라서 아임포트에서 받은 에러메세지가 있을때와 없을때를 나눠서 에러메세지가 생기게 해줘야하는것!
+      // 아임포트에서 받은 에러메세지가 있을때
       if (error?.response?.data?.message) {
         throw new HttpException(
           error.response.data.message,

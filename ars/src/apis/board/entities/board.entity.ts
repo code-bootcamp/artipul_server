@@ -1,10 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { BoardImage } from 'src/apis/boardImage/entities/boardImage.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -15,7 +18,7 @@ export class Board {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   title: string;
 
@@ -23,9 +26,13 @@ export class Board {
   @Field(() => Date)
   createdAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   content: string;
+
+  @Column()
+  @Field(() => String)
+  thumbnail: string;
 
   @ManyToOne(() => User)
   @Field(() => User)

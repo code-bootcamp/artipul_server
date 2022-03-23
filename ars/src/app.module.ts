@@ -10,11 +10,15 @@ import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { ArtModule } from './apis/art/art.module';
 import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
+import { BoardModule } from './apis/board/board.module';
+import { CommentModule } from './apis/comment/comment.module';
 
 @Module({
   imports: [
     ArtModule,
     AuthModule,
+    BoardModule,
+    CommentModule,
     UserModule,
     PointTransactionModule,
     ConfigModule.forRoot({
