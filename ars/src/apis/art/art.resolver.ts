@@ -3,6 +3,7 @@ import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
+import { ArtImage } from '../artImage/entities/artImage.entity';
 import { FileService } from '../file/file.service';
 import { Tag } from '../tag/entities/tag.entity';
 import { ArtService } from './art.service';
@@ -23,7 +24,12 @@ export class ArtResolver {
 
   @Query(() => Art)
   async fetchArt(@Args('artId') artId: string) {
-    return await this.artService.findOne({ artId });
+    return await this.artService.findOne(artId);
+  }
+
+  @Query(() => [ArtImage])
+  async fetchArtImages(@Args('artId') artId: string) {
+    return await this.artService.findImages({ artId });
   }
 
   @Mutation(() => Art)

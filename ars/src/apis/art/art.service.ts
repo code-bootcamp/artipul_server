@@ -7,31 +7,28 @@ import { Tag } from '../tag/entities/tag.entity';
 import { CreateArtInput } from './dto/createArtInput';
 import { Art } from './entities/art.entity';
 
-interface IFindOne {
-  artId: string;
-}
-
 @Injectable()
 export class ArtService {
   constructor(
     @InjectRepository(Art)
     private readonly artRepository: Repository<Art>,
 
+    @InjectRepository(ArtImage)
+    private readonly artImageRepository: Repository<ArtImage>,
+
     private readonly connection: Connection,
   ) {}
 
   async findAll() {
-    return await this.artRepository.find({
-      withDeleted: true,
-      relations: ['tags'],
-    });
+    return await this.artRepository.find();
   }
 
-  async findOne({ artId }: IFindOne) {
-    return await this.artRepository.findOne({
-      where: { artId },
-      relations: ['tags'],
-    });
+  async findOne(artId: string) {
+    return await this.artRepository.findOne(artId);
+  }
+
+  async findImages({ artId }) {
+    return await this.artImageRepository.find({ art: artId });
   }
 
   async create({ image_urls, tags, ...rest }, currentUser) {
@@ -42,6 +39,7 @@ export class ArtService {
       const result = await queryRunner.manager.save(Art, {
         ...rest,
         user: currentUser,
+        thumbnail: image_urls[0],
       });
 
       for (let i = 0; i < image_urls.length; i++) {
