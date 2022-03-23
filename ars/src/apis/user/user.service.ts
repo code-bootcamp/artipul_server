@@ -1,8 +1,6 @@
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
-import { Profile } from '../profile/entities/profile.entity';
-import { CreateUserInput } from './dto/createUserInput';
 import { User } from './entities/user.entity';
 import axios from 'axios';
 import { Cache } from 'cache-manager';
@@ -50,7 +48,7 @@ export class UserService {
       return user;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error + '화이팅 ㅎㅎ';
+      throw error + 'User create';
     } finally {
       await queryRunner.release();
     }

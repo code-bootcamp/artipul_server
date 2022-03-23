@@ -58,12 +58,31 @@ type Board {
   title: String!
   createdAt: DateTime!
   content: String!
+  thumbnail: String!
+  user: User!
+}
+
+type BoardImage {
+  id: String!
+  url: String!
+  is_main: Boolean!
+  board: Board!
+}
+
+type Comment {
+  id: String!
+  content: String!
+  board: Board!
   user: User!
 }
 
 type Query {
   fetchArts: [Art!]!
   fetchArt(artId: String!): Art!
+  fetchBoard(boardId: String!): Board!
+  fetchBoardImgaes(boardId: String!): [BoardImage!]!
+  fetchBoards: [Board!]!
+  fetchComments(boardId: String!): [Comment!]!
   fetchUser: User!
   fetchPointTransaction(pointTransactionId: String!): PointTransaction!
   fetchPointTransactions: [PointTransaction!]!
@@ -74,6 +93,11 @@ type Mutation {
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
+  deleteBoard(boardId: String!): Boolean!
+  uploadBoardImage(files: [Upload!]!): [String!]!
+  createComment(boardId: String!, content: String!): Comment!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!
   phoneAuth(phoneNum: String!, token: String!): String!
@@ -91,6 +115,21 @@ input CreateArtInput {
   createdAt: String!
   deadline: String!
 }
+
+input CreateBoardInput {
+  title: String!
+  content: String!
+  image_urls: [String!]!
+}
+
+input UpdateBoardInput {
+  title: String
+  content: String
+  image_urls: [String!]
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateUserInput {
   name: String!

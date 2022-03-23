@@ -9,13 +9,13 @@ export class BoardImage {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ default: false })
   @Field(() => String)
   url: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   @Field(() => Boolean)
-  isMain: boolean;
+  is_main: boolean;
 
   @ManyToOne(() => Board)
   @Field(() => Board)

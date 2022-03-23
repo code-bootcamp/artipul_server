@@ -10,11 +10,15 @@ import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { ArtModule } from './apis/art/art.module';
 import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
+import { BoardModule } from './apis/board/board.module';
+import { CommentModule } from './apis/comment/comment.module';
 
 @Module({
   imports: [
     ArtModule,
     AuthModule,
+    BoardModule,
+    CommentModule,
     UserModule,
     PointTransactionModule,
     ConfigModule.forRoot({
@@ -31,7 +35,7 @@ import { PointTransactionModule } from './apis/pointTransaction/pointTransaction
       host: 'my_database',
       port: 3306,
       username: 'root',
-      password: '123456789',
+      password: '3160',
       database: 'ars',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,

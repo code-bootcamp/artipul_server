@@ -4,7 +4,8 @@ dev-antonym-341008-4b961b814f1a.json
 # compiled output
 /dist
 /node_modules
-/.env
+/.env*
+/gcp-file-storage.json
 
 # Logs
 logs

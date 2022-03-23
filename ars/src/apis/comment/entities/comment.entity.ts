@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/board/entities/board.entity';
+import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,14 +11,10 @@ import {
 
 @Entity()
 @ObjectType()
-export class UserComment {
+export class Comment {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
-
-  @Column()
-  @Field(() => String)
-  writer: string;
 
   @Column()
   @Field(() => String)
@@ -26,7 +23,11 @@ export class UserComment {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Board)
+  @ManyToOne(() => Board, { eager: true })
   @Field(() => Board)
   board: Board;
+
+  @ManyToOne(() => User, { eager: true })
+  @Field(() => User)
+  user: User;
 }
