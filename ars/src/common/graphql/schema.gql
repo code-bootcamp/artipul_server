@@ -18,7 +18,7 @@ type User {
 type Profile {
   id: String!
   url: String
-  Introduce: String
+  introduce: String
   user: User!
 }
 
@@ -99,12 +99,14 @@ type Query {
   fetchArtImages(artId: String!): [ArtImage!]!
   fetchActionArts: [Art!]!
   fetchtransactioncompletedArts: [Art!]!
+  fetchLikeArt: [Art!]!
   fetchArtTags(artId: String!): [Tag!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
   fetchBoardsOfMine: [Board!]!
   fetchComments(boardId: String!): [Comment!]!
+  fetchProfile: Profile!
   fetchUser: User!
   fetchPointTransaction(pointTransactionId: String!): PointTransaction!
   fetchPointTransactions: [PointTransaction!]!
@@ -114,6 +116,7 @@ type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
   uploadArtImage(files: [Upload!]!): [String!]!
   createTag(id: String!, name: String!): Tag!
+  addlike(artId: String!): Boolean!
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!
@@ -122,6 +125,7 @@ type Mutation {
   deleteBoard(boardId: String!): Boolean!
   uploadBoardImage(files: [Upload!]!): [String!]!
   createComment(boardId: String!, content: String!): Comment!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!
   phoneAuth(phoneNum: String!, token: String!): Boolean!
@@ -155,6 +159,11 @@ input UpdateBoardInput {
   title: String
   content: String
   image_urls: [String!]
+}
+
+input CreateProfileInput {
+  url: String
+  introduce: String
 }
 
 input CreateUserInput {

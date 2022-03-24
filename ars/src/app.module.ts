@@ -5,14 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './apis/user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './apis/auth/auth.module';
-
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { ArtModule } from './apis/art/art.module';
 import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 import { BoardModule } from './apis/board/board.module';
 import { CommentModule } from './apis/comment/comment.module';
+import { ProfileModule } from './apis/profile/profile.module';
 import { ArtTagModule } from './apis/art_tag/art_tag.module';
+
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ArtTagModule } from './apis/art_tag/art_tag.module';
     ArtTagModule,
     BoardModule,
     CommentModule,
+    ProfileModule,
     UserModule,
     PointTransactionModule,
     ConfigModule.forRoot({
@@ -31,6 +33,7 @@ import { ArtTagModule } from './apis/art_tag/art_tag.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
+      cors: { origin: 'http://localhost:3000', credential: true },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',

@@ -21,10 +21,10 @@ export class Profile {
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })
-  Introduce?: string;
+  introduce?: string;
 
   @JoinColumn()
-  @OneToOne(() => User)
+  @OneToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
 }
