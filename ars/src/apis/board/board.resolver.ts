@@ -17,19 +17,29 @@ export class BoardResolver {
     private readonly fileService: FileService,
   ) {}
 
+  // 게시물 1개 조회
   @Query(() => Board)
   async fetchBoard(@Args('boardId') boardId: string) {
     return await this.boardService.findOne(boardId);
   }
 
+  // 게시물 이미지 조회
   @Query(() => [BoardImage])
   async fetchBoardImgaes(@Args('boardId') boardId: string) {
     return await this.boardService.findImage({ boardId });
   }
 
+  // 게시물 모두 조회
   @Query(() => [Board])
   async fetchBoards() {
     return await this.boardService.findAll();
+  }
+
+  // 내가 쓴 게시물 조회
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Board])
+  async fetchBoardsOfMine(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.boardService.findMine({ currentUser });
   }
 
   // 게시물 등록

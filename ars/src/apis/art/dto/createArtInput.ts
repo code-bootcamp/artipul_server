@@ -23,6 +23,9 @@ export class CreateArtInput {
   @Field(() => [String])
   image_urls: string[];
 
+  @Field(() => Boolean)
+  is_soldout: boolean;
+
   @Field(() => [Int])
   tags: number[];
 }

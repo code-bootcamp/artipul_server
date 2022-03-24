@@ -4,7 +4,6 @@ import { Connection, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { ArtTag } from '../art_tag/entities/art_tag.entity';
 import { Tag } from '../tag/entities/tag.entity';
-import { CreateArtInput } from './dto/createArtInput';
 import { Art } from './entities/art.entity';
 
 @Injectable()
@@ -29,6 +28,24 @@ export class ArtService {
 
   async findImages({ artId }) {
     return await this.artImageRepository.find({ art: artId });
+  }
+
+  // 미대생이 판매중인 작품 조회
+  async findAction({ currentUser }) {
+    const art = await this.artRepository.find({
+      relations: ['user'],
+      where: { user: currentUser.id, is_soldout: false },
+    });
+    return art;
+  }
+
+  // 일반유저(내가) 구매한 작품 조회
+  async findcompleteAction({ currentUser }) {
+    const art = await this.artRepository.find({
+      relations: ['user'],
+      where: { user: currentUser.id, is_soldout: true },
+    });
+    return art;
   }
 
   async create({ image_urls, tags, ...rest }, currentUser) {

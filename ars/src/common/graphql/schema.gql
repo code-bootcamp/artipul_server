@@ -35,6 +35,7 @@ type Art {
   price: Int!
   thumbnail: String!
   deadline: String!
+  is_soldout: Boolean!
   user: User!
 }
 
@@ -96,11 +97,14 @@ type Query {
   fetchArts: [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
+  fetchActionArts: [Art!]!
+  fetchtransactioncompletedArts: [Art!]!
   fetchLikeArt: [Art!]!
   fetchArtTags(artId: String!): [Tag!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
+  fetchBoardsOfMine: [Board!]!
   fetchComments(boardId: String!): [Comment!]!
   fetchProfile: Profile!
   fetchUser: User!
@@ -138,6 +142,7 @@ input CreateArtInput {
   price: Int!
   deadline: String!
   image_urls: [String!]!
+  is_soldout: Boolean!
   tags: [Int!]!
 }
 

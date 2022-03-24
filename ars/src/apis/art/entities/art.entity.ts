@@ -1,16 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { ArtImage } from 'src/apis/artImage/entities/artImage.entity';
-import { ArtTag } from 'src/apis/art_tag/entities/art_tag.entity';
-import { Tag } from 'src/apis/tag/entities/tag.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -51,6 +45,10 @@ export class Art {
   @Column()
   @Field(() => String)
   deadline: string;
+
+  @Column({ default: true })
+  @Field(() => Boolean)
+  is_soldout: boolean;
 
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
