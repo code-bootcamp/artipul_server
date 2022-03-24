@@ -4,6 +4,7 @@ import { Connection, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import axios from 'axios';
 import { Cache } from 'cache-manager';
+import { Profile } from '../profile/entities/profile.entity';
 
 @Injectable()
 export class UserService {
@@ -42,6 +43,12 @@ export class UserService {
       const user = await queryRunner.manager.save(User, {
         password,
         ...rest,
+      });
+
+      await queryRunner.manager.save(Profile, {
+        url: null,
+        introduce: null,
+        user: user,
       });
 
       await queryRunner.commitTransaction();
