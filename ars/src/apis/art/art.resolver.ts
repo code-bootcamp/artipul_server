@@ -32,6 +32,22 @@ export class ArtResolver {
     return await this.artService.findImages({ artId });
   }
 
+  // 미대생이 판매중인 작품 조회
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Art])
+  async fetchActionArts(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.findAction({ currentUser });
+  }
+
+  // 일반유저(내가) 구매한 작품 조회
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Art])
+  async fetchtransactioncompletedArts(
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.artService.findcompleteAction({ currentUser });
+  }
+
   @Mutation(() => Art)
   @UseGuards(GqlAuthAccessGuard)
   createArt(

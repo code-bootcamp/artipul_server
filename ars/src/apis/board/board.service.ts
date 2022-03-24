@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
@@ -21,18 +21,27 @@ export class BoardService {
     private readonly connection: Connection,
   ) {}
 
+  // 게시물 1개 조회
   async findOne(boardId: string) {
     return await this.boardRepository.findOne(boardId);
   }
 
+  // 게시물 이미지 조회
   async findImage({ boardId }) {
     return await this.boardImageRepository.find({ board: boardId });
   }
 
+  // 게시물 모두 조회
   async findAll() {
     return await this.boardRepository.find();
   }
 
+  // 내가 쓴 게시물 조회
+  async findMine({ currentUser }) {
+    return await this.boardRepository.find({ user: currentUser });
+  }
+
+  // 게시물 등록
   async create({ image_urls, ...rest }, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
@@ -68,6 +77,7 @@ export class BoardService {
     }
   }
 
+  // 게시물 수정
   async update({ image_urls, ...rest }, boardId, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
@@ -106,6 +116,7 @@ export class BoardService {
     }
   }
 
+  // 게시물 삭제
   async delete({ boardId }) {
     await this.boardImageRepository.delete({ board: boardId });
     await this.commentRepository.delete({ board: boardId });
