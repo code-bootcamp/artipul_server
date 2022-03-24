@@ -33,6 +33,7 @@ import { ArtTagModule } from './apis/art_tag/art_tag.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
+      cors: { origin: 'http://localhost:3000', credential: true },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
