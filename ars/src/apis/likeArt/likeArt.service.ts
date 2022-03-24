@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { LikeArt } from '../art/entities/likeArt.entity';
-import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class LikeArtService {
@@ -29,7 +28,7 @@ export class LikeArtService {
       }
       return true;
     } catch (error) {
-      throw error + 'like !!!';
+      throw error + 'like art!!!';
     }
   }
 }
