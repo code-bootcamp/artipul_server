@@ -14,6 +14,7 @@ export class ArtTag {
   @PrimaryColumn()
   tagId: number;
 
-  @ManyToOne(() => Art)
+  @ManyToOne(() => Art, { eager: true })
+  @Field(() => Art)
   art: Art;
 }

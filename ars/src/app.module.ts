@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './apis/user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './apis/auth/auth.module';
-
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { ArtModule } from './apis/art/art.module';
@@ -13,11 +12,14 @@ import { PointTransactionModule } from './apis/pointTransaction/pointTransaction
 import { BoardModule } from './apis/board/board.module';
 import { CommentModule } from './apis/comment/comment.module';
 import { ProfileModule } from './apis/profile/profile.module';
+import { ArtTagModule } from './apis/art_tag/art_tag.module';
+
 
 @Module({
   imports: [
     ArtModule,
     AuthModule,
+    ArtTagModule,
     BoardModule,
     CommentModule,
     ProfileModule,
