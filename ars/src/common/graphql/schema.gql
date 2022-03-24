@@ -96,6 +96,7 @@ type Query {
   fetchArts: [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
+  fetchLikeArt: [Art!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
@@ -110,6 +111,7 @@ type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
   uploadArtImage(files: [Upload!]!): [String!]!
   createTag(id: String!, name: String!): Tag!
+  addlike(artId: String!): Boolean!
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!

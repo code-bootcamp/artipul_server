@@ -1,13 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BoardImage } from 'src/apis/boardImage/entities/boardImage.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
