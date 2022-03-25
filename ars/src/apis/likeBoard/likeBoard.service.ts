@@ -20,7 +20,7 @@ export class LikeBoardService {
       const prevLike = await this.likeBoardRepository.findOne({
         userId: userId,
       });
-      if (!prevLike) {
+      if (prevLike.board !== boardId) {
         await this.likeBoardRepository.save({
           userId: userId,
           board: boardId,

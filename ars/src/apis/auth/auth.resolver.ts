@@ -66,25 +66,24 @@ export class AuthResolver {
     try {
       let RT = context.req.headers.cookie.split('Token=')[1];
       let AT = context.req.headers.authorization.split(' ')[1];
-      let tem = Math.floor(Date.now() / 1000);
+      // let tem = Math.floor(Date.now() / 1000);
 
       jwt.verify(RT, 'myRefreshKey', async (err, payload) => {
         if (err) {
           throw err;
         }
-        await this.cachemanager.set(RT, 'RefreshToken', {
-          ttl: payload.exp - tem,
+        await this.cachemanager.set(`R ${RT}`, 'RefreshToken', {
+          ttl: 28800,
         });
       });
 
       jwt.verify(AT, 'myAccessKey', async (err, payload) => {
         if (err) {
           console.log(err, '*******');
-
           throw err;
         }
-        await this.cachemanager.set(AT, 'AccessToken', {
-          ttl: payload.exp - tem,
+        await this.cachemanager.set(`A ${AT}`, 'AccessToken', {
+          ttl: 3600,
         });
       });
 

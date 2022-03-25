@@ -14,7 +14,6 @@ import { CommentModule } from './apis/comment/comment.module';
 import { ProfileModule } from './apis/profile/profile.module';
 import { ArtTagModule } from './apis/art_tag/art_tag.module';
 
-
 @Module({
   imports: [
     ArtModule,
@@ -45,6 +44,7 @@ import { ArtTagModule } from './apis/art_tag/art_tag.module';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
+      timezone: 'Asia/seoul',
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
