@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Profile } from 'src/apis/profile/entities/profile.entity';
+import { History } from 'src/apis/history/entities/history.entity';
 
 @Entity()
 @ObjectType()
@@ -50,4 +51,8 @@ export class User {
   @OneToOne(() => Profile)
   @Field(() => Profile, { nullable: true })
   profile?: Profile;
+
+  @OneToOne(() => History)
+  @Field(() => History)
+  history: History;
 }

@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
+import { History } from '../history/entities/history.entity';
 import { User } from '../user/entities/user.entity';
 import {
   PointTransaction,
@@ -19,6 +20,9 @@ export class PointTransactionServive {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(History)
+    private readonly historyRepository: Repository<History>,
 
     private readonly connection: Connection,
   ) {}
@@ -50,12 +54,7 @@ export class PointTransactionServive {
   }
 
   // 포인트 충전 API
-  async create({
-    impUid,
-    charge_amount,
-    currentUser,
-    status = POINTTRANSACTION_STATUS_ENUM.PAYMENT,
-  }) {
+  async create({ impUid, charge_amount, currentUser }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
@@ -65,9 +64,16 @@ export class PointTransactionServive {
         impUid: impUid,
         charge_amount: charge_amount,
         user: currentUser,
-        status,
+        status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
       });
+
+      const pointTransactionH = this.historyRepository.create({
+        charge_amount: charge_amount,
+        user: currentUser,
+      });
+
       await queryRunner.manager.save(pointTransaction);
+      await queryRunner.manager.save(pointTransactionH);
 
       // 현재 결제 요청 유저 정보 조회
       const user = await queryRunner.manager.findOne(
@@ -152,13 +158,19 @@ export class PointTransactionServive {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
     try {
-      const pointTransaction = await this.create({
-        impUid,
+      const pointTransaction = await this.pointTransactionRepository.create({
+        impUid: impUid,
         charge_amount: -charge_amount,
-        currentUser,
+        user: currentUser,
         status: POINTTRANSACTION_STATUS_ENUM.CANCLE,
       });
+
+      const pointTransactionH = await this.historyRepository.create({
+        charge_amount: -charge_amount,
+        user: currentUser,
+      });
       await queryRunner.manager.save(pointTransaction);
+      await queryRunner.manager.save(pointTransactionH);
       await queryRunner.commitTransaction();
 
       return pointTransaction;

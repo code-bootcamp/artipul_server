@@ -1,8 +1,11 @@
 import { ConflictException, ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
+import { Art } from '../art/entities/art.entity';
+import { ArtTag } from '../art_tag/entities/art_tag.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
+import { Tag } from '../tag/entities/tag.entity';
 import { User } from '../user/entities/user.entity';
 import { Board } from './entities/board.entity';
 
@@ -17,6 +20,15 @@ export class BoardService {
 
     @InjectRepository(BoardImage)
     private readonly boardImageRepository: Repository<BoardImage>,
+
+    @InjectRepository(ArtTag)
+    private readonly artTagRepository: Repository<ArtTag>,
+
+    // @InjectRepository(Tag)
+    // private readonly tagRepository: Repository<Tag>,
+
+    @InjectRepository(Art)
+    private readonly artRepository: Repository<Art>,
 
     private readonly connection: Connection,
   ) {}
