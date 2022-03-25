@@ -37,7 +37,7 @@ export class ArtResolver {
   // 미대생이 판매중인 작품 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
-  async fetchActionArts(@CurrentUser() currentUser: ICurrentUser) {
+  async fetchAuctionArts(@CurrentUser() currentUser: ICurrentUser) {
     return await this.artService.findAction({ currentUser });
   }
 

@@ -2,30 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: String!
-  name: String!
-  phoneNum: String!
-  email: String!
-  password: String!
-  nickname: String!
-  point: Int!
-  is_artist: Boolean!
-  college: String!
-  profile: Profile
-}
-
-type Profile {
-  id: String!
-  url: String
-  introduce: String
-  user: User!
-}
-
-type Token {
-  accessToken: String!
-}
-
 type Art {
   id: String!
   title: String!
@@ -39,17 +15,17 @@ type Art {
   user: User!
 }
 
-type ArtImage {
+type Payment {
   id: String!
-  url: String!
-  isMain: Boolean!
+  createdAt: DateTime!
+  amount: Int!
   art: Art!
 }
 
-type Tag {
-  id: Int!
-  name: String!
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type PointTransaction {
   id: String!
@@ -60,14 +36,55 @@ type PointTransaction {
   user: User!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 enum POINTTRANSACTION_ENUM {
   PAYMENT
   CANCLE
+}
+
+type History {
+  id: String!
+  createdAt: DateTime!
+  charge_amount: Int!
+  user: User!
+  pointTransaction: PointTransaction
+  payment: Payment
+}
+
+type User {
+  id: String!
+  name: String!
+  phoneNum: String!
+  email: String!
+  password: String!
+  nickname: String!
+  point: Int!
+  is_artist: Boolean!
+  college: String!
+  profile: Profile
+  history: History!
+}
+
+type Profile {
+  id: String!
+  url: String
+  introduce: String
+  user: User!
+}
+
+type Token {
+  accessToken: String!
+}
+
+type ArtImage {
+  id: String!
+  url: String!
+  isMain: Boolean!
+  art: Art!
+}
+
+type Tag {
+  id: Int!
+  name: String!
 }
 
 type Board {
@@ -97,7 +114,7 @@ type Query {
   fetchArts: [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
-  fetchActionArts: [Art!]!
+  fetchAuctionArts: [Art!]!
   fetchtransactioncompletedArts: [Art!]!
   fetchLikeArt: [Art!]!
   fetchArtTags(artId: String!): [Tag!]!
@@ -106,6 +123,7 @@ type Query {
   fetchBoards: [Board!]!
   fetchBoardsOfMine: [Board!]!
   fetchComments(boardId: String!): [Comment!]!
+  fetchHistory: [History!]!
   fetchProfile: Profile!
   fetchUser: User!
   fetchPointTransaction(pointTransactionId: String!): PointTransaction!

@@ -1,7 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Art } from 'src/apis/art/entities/art.entity';
 import {
-  Column,
   Entity,
   ManyToOne,
   PrimaryColumn,
@@ -11,6 +10,10 @@ import {
 @Entity()
 @ObjectType()
 export class ArtTag {
+  @PrimaryGeneratedColumn('uuid')
+  @Field(() => String)
+  id: string;
+
   @PrimaryColumn()
   tagId: number;
 

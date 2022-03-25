@@ -15,10 +15,8 @@ export class ArtTagService {
   ) {}
   async findTag({ artId }) {
     const tagId = await this.artTagRepository.find({ art: artId });
-    return Promise.all(
-      tagId.map(async (ele) => {
-        return await this.tagRepository.findOne({ id: ele.tagId });
-      }),
-    );
+    return tagId.map(async (ele) => {
+      return await this.tagRepository.findOne({ id: ele.tagId });
+    });
   }
 }
