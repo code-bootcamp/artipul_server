@@ -48,6 +48,7 @@ export class UserService {
       await queryRunner.manager.save(Profile, {
         url: null,
         introduce: null,
+        address: null,
         user: user,
       });
 

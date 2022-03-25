@@ -7,4 +7,7 @@ export class CreateProfileInput {
 
   @Field(() => String, { nullable: true })
   introduce?: string;
+
+  @Field(() => String, { nullable: true })
+  address?: string;
 }

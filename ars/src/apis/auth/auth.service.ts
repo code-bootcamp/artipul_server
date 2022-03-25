@@ -20,7 +20,7 @@ export class AuthService {
   setRefreshToken({ user, res }) {
     const refreshToken = this.jwtService.sign(
       { email: user.email, sub: user.id },
-      { secret: process.env.REFRESH_TOKEN_KEY, expiresIn: '2w' },
+      { secret: process.env.REFRESH_TOKEN_KEY, expiresIn: '8h' },
     );
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader(
