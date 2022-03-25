@@ -46,6 +46,7 @@ import { HistoryModule } from './apis/history/history.module';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
+      timezone: 'Asia/seoul',
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,

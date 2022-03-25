@@ -1,11 +1,12 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query, Int } from '@nestjs/graphql';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
 import { Art } from '../art/entities/art.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { FileService } from '../file/file.service';
+import { LikeBoardService } from '../likeBoard/likeBoard.service';
 import { BoardService } from './board.service';
 import { CreateBoardInput } from './dto/createBoardInput';
 import { UpdateBoardInput } from './dto/updateBoardInput';
@@ -16,6 +17,7 @@ export class BoardResolver {
   constructor(
     private readonly boardService: BoardService,
     private readonly fileService: FileService,
+    private readonly likeBoardService: LikeBoardService,
   ) {}
 
   // 게시물 1개 조회
@@ -81,5 +83,28 @@ export class BoardResolver {
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
   ) {
     return await this.fileService.upload({ files });
+  }
+
+  // 게시글 좋아요 개수 조회
+  @Query(() => Int)
+  async countLikeBoard(@Args('boardId') boardId: string) {
+    return await this.likeBoardService.count(boardId);
+  }
+
+  // 좋아요 기능
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Int)
+  async addLikeBoard(
+    @Args('boardId') boardId: string,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.likeBoardService.like(boardId, currentUser.id);
+  }
+
+  // 내가 좋아요 한 글 조회
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Board])
+  async fetchLikeBoard(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.likeBoardService.find(currentUser.id);
   }
 }

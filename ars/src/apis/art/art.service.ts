@@ -48,6 +48,7 @@ export class ArtService {
     return art;
   }
 
+  // 작품 등록
   async create({ image_urls, tags, ...rest }, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
@@ -91,6 +92,7 @@ export class ArtService {
     }
   }
 
+  // 태그 종류 추가
   async tag(id, name) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

@@ -23,6 +23,10 @@ export class Profile {
   @Field(() => String, { nullable: true })
   introduce?: string;
 
+  @Column({ nullable: true })
+  @Field(() => String, { nullable: true })
+  address?: string;
+
   @JoinColumn()
   @OneToOne(() => User, { eager: true })
   @Field(() => User)

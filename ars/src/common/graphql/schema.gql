@@ -122,6 +122,8 @@ type Query {
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
   fetchBoardsOfMine: [Board!]!
+  countLikeBoard(boardId: String!): Int!
+  fetchLikeBoard: [Board!]!
   fetchComments(boardId: String!): [Comment!]!
   fetchHistory: [History!]!
   fetchProfile: Profile!
@@ -134,7 +136,7 @@ type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
   uploadArtImage(files: [Upload!]!): [String!]!
   createTag(id: String!, name: String!): Tag!
-  addlike(artId: String!): Boolean!
+  addLikeArt(artId: String!): Boolean!
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!
@@ -142,6 +144,7 @@ type Mutation {
   updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
   deleteBoard(boardId: String!): Boolean!
   uploadBoardImage(files: [Upload!]!): [String!]!
+  addLikeBoard(boardId: String!): Int!
   createComment(boardId: String!, content: String!): Comment!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!

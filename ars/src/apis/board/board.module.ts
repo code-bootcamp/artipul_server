@@ -5,10 +5,11 @@ import { ArtTag } from '../art_tag/entities/art_tag.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
 import { FileService } from '../file/file.service';
-import { Tag } from '../tag/entities/tag.entity';
+import { LikeBoardService } from '../likeBoard/likeBoard.service';
 import { BoardResolver } from './board.resolver';
 import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
+import { LikeBoard } from './entities/likeBoard.entity';
 
 @Module({
   imports: [
@@ -18,13 +19,14 @@ import { Board } from './entities/board.entity';
       Board,
       BoardImage,
       Comment,
-      // Tag,
+      LikeBoard,
     ]),
   ],
   providers: [
     BoardResolver, //
     BoardService,
     FileService,
+    LikeBoardService,
   ],
 })
 export class BoardModule {}

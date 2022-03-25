@@ -22,7 +22,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   }
   async validate(req, payload: any) {
     const accessToken = req.headers.authorization.replace('Bearer ', '');
-    const check = await this.cacheManager.get(`accessToken: ${accessToken}`);
+    const check = await this.cacheManager.get(`A ${accessToken}`);
 
     if (check)
       throw new UnauthorizedException('이미 로그아웃이 된 상태입니다.');

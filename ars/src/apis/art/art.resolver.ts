@@ -73,7 +73,7 @@ export class ArtResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
-  async addlike(
+  async addLikeArt(
     @Args('artId') artId: string,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
