@@ -11,10 +11,7 @@ export class HistoryResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [History])
-  async fetchHistory(
-    // @Args('artId') artId: string,
-    @CurrentUser() currentUser: ICurrentUser,
-  ) {
+  async fetchHistory(@CurrentUser() currentUser: ICurrentUser) {
     return await this.historyService.findAll(currentUser);
   }
 }
