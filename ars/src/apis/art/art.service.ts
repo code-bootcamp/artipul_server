@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, getRepository, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
-import { ArtTag } from '../art_tag/entities/art_tag.entity';
 import { Tag } from '../tag/entities/tag.entity';
 import { Art } from './entities/art.entity';
 
