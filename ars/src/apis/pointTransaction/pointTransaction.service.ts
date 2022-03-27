@@ -4,7 +4,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Connection, getRepository, Repository } from 'typeorm';
 import { History } from '../history/entities/history.entity';
 import { User } from '../user/entities/user.entity';
 import {
@@ -29,13 +29,13 @@ export class PointTransactionServive {
 
   // 현재 로그인한 유저가 포인트 내역 조회
   async findOne({ pointTransactionId }) {
+    console.log('💛');
     return await this.pointTransactionRepository.findOne({
       where: {
         id: pointTransactionId,
       },
     });
   }
-
   // 현재 로그인한 유저의 모든 포인트 내역 조회
   async findAll(userId) {
     const queryRunner = this.connection.createQueryRunner();
@@ -59,28 +59,31 @@ export class PointTransactionServive {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
     try {
-      // pointTransaction 테이블에 거래기록 생성
-      const pointTransaction = this.pointTransactionRepository.create({
-        impUid: impUid,
-        charge_amount: charge_amount,
-        user: currentUser,
-        status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
-      });
-
-      const pointTransactionH = this.historyRepository.create({
-        charge_amount: charge_amount,
-        user: currentUser,
-      });
-
-      await queryRunner.manager.save(pointTransaction);
-      await queryRunner.manager.save(pointTransactionH);
-
       // 현재 결제 요청 유저 정보 조회
       const user = await queryRunner.manager.findOne(
         User,
         { id: currentUser.id },
         { lock: { mode: 'pessimistic_write' } },
       );
+
+      // pointTransaction 테이블에 거래기록 생성
+      const pointTransaction = await queryRunner.manager.save(
+        PointTransaction,
+        {
+          impUid: impUid,
+          charge_amount: charge_amount,
+          user: user,
+          status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
+        },
+      );
+
+      // history 테이블에 거래기록 생성
+      const pointTransactionH = this.historyRepository.create({
+        charge_amount: charge_amount,
+        user: user,
+        pointTransaction: pointTransaction,
+      });
+      await queryRunner.manager.save(History, pointTransactionH);
 
       // 유저 누적 포인트 업데이트
       const updatedUser = this.userRepository.create({
@@ -141,7 +144,6 @@ export class PointTransactionServive {
       user: userId,
       status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
     });
-    // console.log(pointTransaction);
     if (!pointTransaction)
       throw new UnprocessableEntityException('결제 기록이 존재하지 않습니다.');
 
@@ -158,19 +160,37 @@ export class PointTransactionServive {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
     try {
-      const pointTransaction = await this.pointTransactionRepository.create({
-        impUid: impUid,
-        charge_amount: -charge_amount,
-        user: currentUser,
-        status: POINTTRANSACTION_STATUS_ENUM.CANCLE,
-      });
+      // 현재 결제 요청 유저 정보 조회
+      const user = await queryRunner.manager.findOne(
+        User,
+        { id: currentUser.id },
+        { lock: { mode: 'pessimistic_write' } },
+      );
+
+      const pointTransaction = await queryRunner.manager.save(
+        PointTransaction,
+        {
+          impUid: impUid,
+          charge_amount: -charge_amount,
+          user: user,
+          status: POINTTRANSACTION_STATUS_ENUM.CANCLE,
+        },
+      );
 
       const pointTransactionH = await this.historyRepository.create({
         charge_amount: -charge_amount,
-        user: currentUser,
+        user: user,
+        pointTransaction: pointTransaction,
       });
-      await queryRunner.manager.save(pointTransaction);
+
       await queryRunner.manager.save(pointTransactionH);
+
+      // 유저 누적 포인트 업데이트
+      const updatedUser = this.userRepository.create({
+        ...user,
+        point: user.point - charge_amount,
+      });
+      await queryRunner.manager.save(updatedUser);
       await queryRunner.commitTransaction();
 
       return pointTransaction;

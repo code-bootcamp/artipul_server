@@ -2,6 +2,31 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  name: String!
+  phoneNum: String!
+  email: String!
+  password: String!
+  nickname: String!
+  point: Int!
+  is_artist: Boolean!
+  college: String!
+  profile: Profile
+}
+
+type Profile {
+  id: String!
+  url: String
+  introduce: String
+  address: String
+  user: User!
+}
+
+type Token {
+  accessToken: String!
+}
+
 type Art {
   id: String!
   title: String!
@@ -17,6 +42,17 @@ type Art {
   tag2: String
   tag3: String
   tag4: String
+
+type ArtImage {
+  id: String!
+  url: String!
+  isMain: Boolean!
+  art: Art!
+}
+
+type Tag {
+  id: Int!
+  name: String!
 }
 
 type Payment {
@@ -52,44 +88,6 @@ type History {
   user: User!
   pointTransaction: PointTransaction
   payment: Payment
-}
-
-type User {
-  id: String!
-  name: String!
-  phoneNum: String!
-  email: String!
-  password: String!
-  nickname: String!
-  point: Int!
-  is_artist: Boolean!
-  college: String!
-  profile: Profile
-  history: History!
-}
-
-type Profile {
-  id: String!
-  url: String
-  introduce: String
-  address: String
-  user: User!
-}
-
-type Token {
-  accessToken: String!
-}
-
-type ArtImage {
-  id: String!
-  url: String!
-  isMain: Boolean!
-  art: Art!
-}
-
-type Tag {
-  id: Int!
-  name: String!
 }
 
 type Board {

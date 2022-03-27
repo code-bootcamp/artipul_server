@@ -51,8 +51,4 @@ export class User {
   @OneToOne(() => Profile)
   @Field(() => Profile, { nullable: true })
   profile?: Profile;
-
-  @OneToOne(() => History)
-  @Field(() => History)
-  history: History;
 }
