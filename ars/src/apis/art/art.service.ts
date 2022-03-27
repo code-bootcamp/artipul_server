@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Connection, getRepository, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { ArtTag } from '../art_tag/entities/art_tag.entity';
 import { Tag } from '../tag/entities/tag.entity';
@@ -18,8 +18,55 @@ export class ArtService {
     private readonly connection: Connection,
   ) {}
 
-  async findAll() {
-    return await this.artRepository.find();
+  async findAll(tags) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const qb = getRepository(Art).createQueryBuilder('art');
+      const num = tags.length;
+      let result = [];
+
+      switch (num) {
+        case 1:
+          result = await queryRunner.manager.find(Art, {
+            where: { tag1: tags[0] },
+          });
+          break;
+
+        case 2:
+          result = await qb
+            .where('art.tag1 = :tag1', { tag1: tags[0] })
+            .andWhere('art.tag2 = :tag2', { tag2: tags[1] })
+            .getMany();
+          break;
+
+        case 3:
+          result = await qb
+            .where('art.tag1 = :tag1', { tag1: tags[0] })
+            .andWhere('art.tag2 = :tag2', { tag2: tags[1] })
+            .andWhere('art.tag3 = :tag3', { tag3: tags[2] })
+            .getMany();
+          break;
+
+        case 4:
+          result = await qb
+            .where('art.tag1 = :tag1', { tag1: tags[0] })
+            .andWhere('art.tag2 = :tag2', { tag2: tags[1] })
+            .andWhere('art.tag3 = :tag3', { tag3: tags[2] })
+            .andWhere('art.tag4 = :tag4', { tag4: tags[3] })
+            .getMany();
+          break;
+      }
+      await queryRunner.commitTransaction();
+      console.log(result, num);
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'Art fetch !!!';
+    } finally {
+      await queryRunner.manager.release();
+    }
   }
 
   async findOne(artId: string) {
@@ -58,6 +105,10 @@ export class ArtService {
         ...rest,
         user: currentUser,
         thumbnail: image_urls[0],
+        tag1: tags[0],
+        tag2: tags[1],
+        tag3: tags[2],
+        tag4: tags[3],
       });
 
       for (let i = 0; i < image_urls.length; i++) {
@@ -73,13 +124,6 @@ export class ArtService {
             art: result,
           });
         }
-      }
-
-      for (let i = 0; i < tags.length; i++) {
-        await queryRunner.manager.save(ArtTag, {
-          tagId: tags[i],
-          art: result,
-        });
       }
 
       await queryRunner.commitTransaction();
