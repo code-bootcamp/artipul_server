@@ -20,8 +20,10 @@ export class ArtResolver {
   ) {}
 
   @Query(() => [Art])
-  async fetchArts() {
-    return await this.artService.findAll();
+  async fetchArts(
+    @Args({ name: 'tags', type: () => [String] }) tags: string[],
+  ) {
+    return await this.artService.findAll(tags);
   }
 
   @Query(() => Art)

@@ -53,4 +53,20 @@ export class Art {
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
+
+  @Column()
+  @Field(() => String)
+  tag1: string;
+
+  @Column({ nullable: true, default: null })
+  @Field(() => String, { nullable: true })
+  tag2: string;
+
+  @Column({ nullable: true, default: null })
+  @Field(() => String, { nullable: true })
+  tag3: string;
+
+  @Column({ nullable: true, default: null })
+  @Field(() => String, { nullable: true })
+  tag4: string;
 }
