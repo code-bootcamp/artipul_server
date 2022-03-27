@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Art } from '../art/entities/art.entity';
-import { ArtTag } from '../art_tag/entities/art_tag.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
 import { FileService } from '../file/file.service';
@@ -15,7 +14,6 @@ import { LikeBoard } from './entities/likeBoard.entity';
   imports: [
     TypeOrmModule.forFeature([
       Art, //
-      ArtTag,
       Board,
       BoardImage,
       Comment,

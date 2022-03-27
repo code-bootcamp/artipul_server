@@ -12,14 +12,12 @@ import { PointTransactionModule } from './apis/pointTransaction/pointTransaction
 import { BoardModule } from './apis/board/board.module';
 import { CommentModule } from './apis/comment/comment.module';
 import { ProfileModule } from './apis/profile/profile.module';
-import { ArtTagModule } from './apis/art_tag/art_tag.module';
 import { HistoryModule } from './apis/history/history.module';
 
 @Module({
   imports: [
     ArtModule,
     AuthModule,
-    ArtTagModule,
     BoardModule,
     CommentModule,
     HistoryModule,

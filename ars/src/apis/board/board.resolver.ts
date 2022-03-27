@@ -3,7 +3,6 @@ import { Args, Mutation, Resolver, Query, Int } from '@nestjs/graphql';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
-import { Art } from '../art/entities/art.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { FileService } from '../file/file.service';
 import { LikeBoardService } from '../likeBoard/likeBoard.service';
