@@ -29,13 +29,13 @@ export class PointTransactionServive {
 
   // 현재 로그인한 유저가 포인트 내역 조회
   async findOne({ pointTransactionId }) {
+    console.log('💛');
     return await this.pointTransactionRepository.findOne({
       where: {
         id: pointTransactionId,
       },
     });
   }
-
   // 현재 로그인한 유저의 모든 포인트 내역 조회
   async findAll(userId) {
     const queryRunner = this.connection.createQueryRunner();

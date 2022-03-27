@@ -38,6 +38,7 @@ export class ProfileService {
           user: currentUser.id,
         });
       }
+
       await queryRunner.commitTransaction();
       return profile;
     } catch (error) {
