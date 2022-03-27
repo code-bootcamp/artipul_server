@@ -77,6 +77,7 @@ export class PointTransactionResolver {
     const token = await this.iamportService.getToken();
     const canceledAmount = await this.iamportService.cancel({ impUid, token });
 
+    console.log('aasasasassa', canceledAmount);
     // 결제 취소
     return await this.pointTransactionService.cancel({
       impUid,

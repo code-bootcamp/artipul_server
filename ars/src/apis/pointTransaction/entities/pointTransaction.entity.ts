@@ -40,7 +40,7 @@ export class PointTransaction {
   @Field(() => POINTTRANSACTION_STATUS_ENUM)
   status: POINTTRANSACTION_STATUS_ENUM;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
 }

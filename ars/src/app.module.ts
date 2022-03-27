@@ -34,7 +34,7 @@ import { HistoryModule } from './apis/history/history.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
-      cors: { origin: 'http://localhost:3000', credential: true },
+      // cors: { origin: 'http://localhost:3000', credential: true },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
