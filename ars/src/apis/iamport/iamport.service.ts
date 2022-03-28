@@ -46,13 +46,13 @@ export class IamportService {
       console.log(error);
       // 아임포트에서 받은 에러메세지가 있을때
       if (error?.response?.data?.message) {
-        // throw new HttpException(
-        //   error.response.data.message,
-        //   error.response.status,
-        // );
+        throw new HttpException(
+          error.response.data.message,
+          error.response.status,
+        );
       } else {
         // 아임포트에서 받은 에러메서지가 없을때
-        throw error; // try 문 내의 우리가 만든 에러메서지가 나타나게 하는것
+        throw error;
       }
     }
   }
@@ -65,10 +65,8 @@ export class IamportService {
         { imp_uid: impUid },
         { headers: { Authorization: token } },
       );
-      console.log('+++++++++=', result);
       return result.data.response.cancel_amount;
     } catch (error) {
-      console.log(error);
       throw new HttpException(
         error.response.data.message,
         error.response.data.status,
