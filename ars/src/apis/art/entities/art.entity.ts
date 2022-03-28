@@ -40,13 +40,14 @@ export class Art {
   thumbnail: string;
 
   @CreateDateColumn()
+  @Field(() => Date)
   createdAt: string;
 
   @Column()
   @Field(() => String)
   deadline: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   @Field(() => Boolean)
   is_soldout: boolean;
 

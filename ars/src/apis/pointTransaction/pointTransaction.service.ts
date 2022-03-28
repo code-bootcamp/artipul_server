@@ -4,7 +4,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getRepository, Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { History } from '../history/entities/history.entity';
 import { User } from '../user/entities/user.entity';
 import {
@@ -28,11 +28,11 @@ export class PointTransactionServive {
   ) {}
 
   // 현재 로그인한 유저가 포인트 내역 조회
-  async findOne({ pointTransactionId }) {
+  async findOne(userId: string) {
     console.log('💛');
     return await this.pointTransactionRepository.findOne({
       where: {
-        id: pointTransactionId,
+        user: userId,
       },
     });
   }
@@ -65,7 +65,7 @@ export class PointTransactionServive {
         { id: currentUser.id },
         { lock: { mode: 'pessimistic_write' } },
       );
-
+      console.log('!!!!');
       // pointTransaction 테이블에 거래기록 생성
       const pointTransaction = await queryRunner.manager.save(
         PointTransaction,
@@ -76,7 +76,7 @@ export class PointTransactionServive {
           status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
         },
       );
-
+      console.log(pointTransaction);
       // history 테이블에 거래기록 생성
       const pointTransactionH = this.historyRepository.create({
         charge_amount: charge_amount,

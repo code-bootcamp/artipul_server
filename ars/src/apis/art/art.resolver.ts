@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { Sse, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
@@ -22,8 +22,9 @@ export class ArtResolver {
   @Query(() => [Art])
   async fetchArts(
     @Args({ name: 'tags', type: () => [String] }) tags: string[],
+    @Args({ name: 'createdAt', defaultValue: '1970-2-10' }) createdAt: string,
   ) {
-    return await this.artService.findAll(tags);
+    return await this.artService.findAll(tags, createdAt);
   }
 
   @Query(() => Art)
@@ -68,11 +69,6 @@ export class ArtResolver {
     return await this.fileService.upload({ files });
   }
 
-  @Mutation(() => Tag)
-  async createTag(@Args('id') id: string, @Args('name') name: string) {
-    return await this.artService.tag(id, name);
-  }
-
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   async addLikeArt(
@@ -86,5 +82,15 @@ export class ArtResolver {
   @Query(() => [Art])
   async fetchLikeArt(@CurrentUser() currentUser: ICurrentUser) {
     return await this.likeArtService.find(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => [String])
+  async Bid(
+    @Args('artId') artId: string,
+    @Args('bid_price') bid_price: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.artService.call(artId, bid_price, currentUser.email);
   }
 }
