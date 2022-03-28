@@ -10,9 +10,11 @@ export class HistorySerive {
     private readonly historyRepository: Repository<History>,
   ) {}
 
-  async findAll(currentUser) {
+  async findAll(currentUser, page) {
     return await this.historyRepository.find({
-      user: currentUser,
+      take: 10,
+      skip: 10 * (page - 1),
+      where: { user: currentUser },
     });
   }
 }

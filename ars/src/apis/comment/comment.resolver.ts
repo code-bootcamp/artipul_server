@@ -10,17 +10,32 @@ export class CommnetResolver {
   constructor(private readonly commentService: CommentService) {}
 
   @Query(() => [Comment])
-  async fetchComments(@Args('boardId') boardId: String) {
+  async fetchComments(@Args('boardId') boardId: string) {
     return await this.commentService.findComment(boardId);
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Comment)
   async createComment(
-    @Args('boardId') boardId: String,
-    @Args('content') content: String,
+    @Args('boardId') boardId: string,
+    @Args('content') content: string,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.commentService.create(boardId, content, currentUser);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Comment)
+  async updateComment(
+    @Args('commentId') commentId: string,
+    @Args('content') content: string,
+  ) {
+    return await this.commentService.update(commentId, content);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean)
+  async deleteComment(@Args('commentId') commentId: string) {
+    return await this.commentService.delete(commentId);
   }
 }

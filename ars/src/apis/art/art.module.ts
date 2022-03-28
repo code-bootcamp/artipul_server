@@ -15,6 +15,7 @@ import { LikeArt } from './entities/likeArt.entity';
       Art, //
       ArtImage,
       LikeArt,
+      User,
     ]),
   ],
   providers: [
