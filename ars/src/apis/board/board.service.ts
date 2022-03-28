@@ -1,7 +1,6 @@
-import { ConflictException, ConsoleLogger, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
-import { Art } from '../art/entities/art.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
 import { Board } from './entities/board.entity';
@@ -17,9 +16,6 @@ export class BoardService {
 
     @InjectRepository(BoardImage)
     private readonly boardImageRepository: Repository<BoardImage>,
-
-    @InjectRepository(Art)
-    private readonly artRepository: Repository<Art>,
 
     private readonly connection: Connection,
   ) {}
