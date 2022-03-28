@@ -27,8 +27,6 @@ export class FileService {
             .pipe(storage.file(file.filename).createWriteStream())
             .on('finish', () => resolve(`/${bucketName}/${file.filename}`))
             .on('error', (error) => reject(error));
-
-          console.log(file.createReadStream().on);
         });
       }),
     );
