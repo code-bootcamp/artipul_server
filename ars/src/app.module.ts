@@ -13,6 +13,7 @@ import { BoardModule } from './apis/board/board.module';
 import { CommentModule } from './apis/comment/comment.module';
 import { ProfileModule } from './apis/profile/profile.module';
 import { HistoryModule } from './apis/history/history.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { HistoryModule } from './apis/history/history.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'my_database',
+      //host: '10.115.0.112', //클러스터IP
       port: 3306,
       username: 'root',
       password: '3160',
@@ -51,6 +53,7 @@ import { HistoryModule } from './apis/history/history.module';
       url: 'redis://my_redis:6379',
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}

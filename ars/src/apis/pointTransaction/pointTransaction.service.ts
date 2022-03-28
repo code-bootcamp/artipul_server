@@ -107,13 +107,11 @@ export class PointTransactionServive {
   async checkDuplicate({ impUid }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction('SERIALIZABLE');
+    await queryRunner.startTransaction();
     try {
-      const result = await queryRunner.manager.findOne(
-        PointTransaction,
-        { impUid },
-        { lock: { mode: 'pessimistic_write' } },
-      );
+      const result = await queryRunner.manager.findOne(PointTransaction, {
+        impUid,
+      });
       if (result) {
         throw new ConflictException('이미 결제 완료된 건입니다.');
       }

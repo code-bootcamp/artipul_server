@@ -42,6 +42,7 @@ type Art {
   tag2: String
   tag3: String
   tag4: String
+}
 
 type ArtImage {
   id: String!
@@ -120,7 +121,6 @@ type Query {
   fetchAuctionArts: [Art!]!
   fetchtransactioncompletedArts: [Art!]!
   fetchLikeArt: [Art!]!
-  fetchArtTags(artId: String!): [Tag!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
