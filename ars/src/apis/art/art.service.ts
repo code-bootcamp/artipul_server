@@ -97,6 +97,7 @@ export class ArtService {
   // 미대생이 판매중인 작품 조회
   async findAction({ currentUser }) {
     const art = await this.artRepository.find({
+      withDeleted: true,
       relations: ['user'],
       where: { user: currentUser.id, is_soldout: false },
     });
@@ -106,6 +107,7 @@ export class ArtService {
   // 일반유저(내가) 구매한 작품 조회
   async findcompleteAction({ currentUser }) {
     const art = await this.artRepository.find({
+      withDeleted: true,
       relations: ['user'],
       where: { user: currentUser.id, is_soldout: true },
     });
