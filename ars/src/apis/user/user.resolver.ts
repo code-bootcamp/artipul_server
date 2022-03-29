@@ -17,6 +17,11 @@ export class UserResolver {
     return await this.userService.findOne(currentUser.email);
   }
 
+  @Query(() => User)
+  async findUserEmail(@Args('phoneNum') phoneNum: string) {
+    return await this.userService.findUserEmail({ phoneNum });
+  }
+
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     const { password, ...rest } = createUserInput;
