@@ -26,6 +26,26 @@ export class UserService {
     return await this.userRepository.findOne({ email });
   }
 
+  async findUserEmail({ phoneNum }) {
+    const user = await this.userRepository.findOne({ phoneNum });
+    console.log(user.email);
+    let newEmail = '';
+    let frontEmail = user.email.split('@')[0];
+    let backEmail = user.email.split('@')[1];
+    if (user) {
+      if (frontEmail.length > 3) {
+        frontEmail = frontEmail.slice(-3).padStart(frontEmail.length, '*');
+        newEmail = frontEmail + '@' + backEmail;
+      } else if (frontEmail.length <= 3) {
+        frontEmail = ''.padStart(frontEmail.length, '*');
+        newEmail = frontEmail + '@' + backEmail;
+      }
+      return newEmail;
+    } else {
+      throw new Error('존재하지 않은 회원입니다.');
+    }
+  }
+
   async checkNickname(nickname) {
     const user = await this.userRepository.findOne({ nickname });
     if (user) {

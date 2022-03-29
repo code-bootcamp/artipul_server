@@ -29,7 +29,6 @@ export class PointTransactionServive {
 
   // 현재 로그인한 유저가 포인트 내역 조회
   async findOne(userId: string) {
-    console.log('💛');
     return await this.pointTransactionRepository.findOne({
       where: {
         user: userId,
@@ -65,33 +64,33 @@ export class PointTransactionServive {
         { id: currentUser.id },
         { lock: { mode: 'pessimistic_write' } },
       );
-      console.log('!!!!');
+
       // pointTransaction 테이블에 거래기록 생성
       const pointTransaction = await queryRunner.manager.save(
         PointTransaction,
         {
           impUid: impUid,
-          chargs_amount: charge_amount,
+          charge_amount: charge_amount,
           user: user,
           status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
         },
       );
-      console.log(pointTransaction);
-      // history 테이블에 거래기록 생성
-      const pointTransactionH = this.historyRepository.create({
-        point: charge_amount,
-        user: user,
-        pointTransaction: pointTransaction,
-      });
-      await queryRunner.manager.save(History, pointTransactionH);
-
       // 유저 누적 포인트 업데이트
       const updatedUser = this.userRepository.create({
         ...user,
         point: user.point + charge_amount,
       });
-
       await queryRunner.manager.save(updatedUser);
+
+      // history 테이블에 거래기록 생성
+      const pointTransactionH = this.historyRepository.create({
+        point: charge_amount,
+        balance: updatedUser.point,
+        user: user,
+        pointTransaction: pointTransaction,
+      });
+      await queryRunner.manager.save(History, pointTransactionH);
+
       await queryRunner.commitTransaction();
 
       return pointTransaction;

@@ -52,6 +52,7 @@ type Art {
   deletedAt: DateTime!
   deadline: DateTime!
   is_soldout: Boolean!
+  deletedAt: DateTime!
   user: User!
   payment: Payment!
   tag1: String!
@@ -85,6 +86,7 @@ type History {
   id: String!
   createdAt: DateTime!
   point: Int!
+  balance: Int!
   user: User!
   pointTransaction: PointTransaction
   payment: Payment

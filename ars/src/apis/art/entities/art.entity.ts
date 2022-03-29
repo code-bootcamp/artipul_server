@@ -58,6 +58,10 @@ export class Art {
   @Field(() => Boolean)
   is_soldout: boolean;
 
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
+
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
