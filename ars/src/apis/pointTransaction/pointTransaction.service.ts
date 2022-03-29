@@ -145,7 +145,7 @@ export class PointTransactionServive {
       throw new UnprocessableEntityException('결제 기록이 존재하지 않습니다.');
 
     const user = await this.userRepository.findOne({ id: currentUser.id });
-    if (user.point < pointTransaction.charge_amount)
+    if (user.point < pointTransaction.point)
       throw new UnprocessableEntityException(
         '취소 가능한 포인트가 부족합니다.',
       );

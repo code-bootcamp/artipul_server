@@ -46,9 +46,13 @@ export class Art {
   @Field(() => Date)
   createdAt: string;
 
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: string;
+
   @Column()
-  @Field(() => String)
-  deadline: string;
+  @Field(() => Date)
+  deadline: Date;
 
   @Column({ default: false })
   @Field(() => Boolean)

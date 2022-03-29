@@ -40,7 +40,6 @@ import { PaymentModule } from './apis/payment/payment.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'my_database',
-      //host: '10.115.0.112', //클러스터IP
       port: 3306,
       username: 'root',
       password: '3160',

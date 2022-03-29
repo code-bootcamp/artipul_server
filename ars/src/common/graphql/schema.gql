@@ -49,7 +49,8 @@ type Art {
   price: Int!
   thumbnail: String!
   createdAt: DateTime!
-  deadline: String!
+  deletedAt: DateTime!
+  deadline: DateTime!
   is_soldout: Boolean!
   deletedAt: DateTime!
   user: User!
@@ -71,7 +72,7 @@ type PointTransaction {
   id: String!
   impUid: String!
   createdAt: DateTime!
-  charge_amount: Int!
+  point: Int!
   status: POINTTRANSACTION_ENUM!
   user: User!
 }
@@ -131,7 +132,7 @@ type Query {
   fetchHistory(page: Float!): [History!]!
   fetchProfile: Profile!
   fetchUser: User!
-  findUserEmail(phoneNum: String!): String!
+  fetchPurchaseList: Payment!
   fetchPointTransactions: [PointTransaction!]!
 }
 
@@ -139,7 +140,6 @@ type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
   uploadArtImage(files: [Upload!]!): [String!]!
   addLikeArt(artId: String!): Boolean!
-  Bid(artId: String!, bid_price: Float!): [String!]!
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!
@@ -157,7 +157,9 @@ type Mutation {
   phoneAuth(phoneNum: String!, token: String!): Boolean!
   checkNickname(nickname: String!): Boolean!
   resetUserPassword(email: String!, password: String!): User!
-  createPayment(artId: String!, amount: Float!): Payment!
+  checkTimedoutAndProcess: String!
+  instantBid(artId: String!, price: Float!, artistEmail: String!): String!
+  Bid(artId: String!, bid_price: Float!): [String!]!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
 }
@@ -168,7 +170,7 @@ input CreateArtInput {
   start_price: Int!
   instant_bid: Int!
   price: Int!
-  deadline: String!
+  deadline: DateTime!
   image_urls: [String!]!
   is_soldout: Boolean!
   tags: [String!]!

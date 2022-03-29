@@ -6,7 +6,6 @@ import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { FileService } from '../file/file.service';
 import { LikeArtService } from '../likeArt/likeArt.service';
-import { Tag } from '../tag/entities/tag.entity';
 import { ArtService } from './art.service';
 import { CreateArtInput } from './dto/createArtInput';
 import { Art } from './entities/art.entity';
@@ -88,15 +87,5 @@ export class ArtResolver {
   @Query(() => [Art])
   async fetchLikeArt(@CurrentUser() currentUser: ICurrentUser) {
     return await this.likeArtService.find(currentUser.id);
-  }
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => [String])
-  async Bid(
-    @Args('artId') artId: string,
-    @Args('bid_price') bid_price: number,
-    @CurrentUser() currentUser: ICurrentUser,
-  ) {
-    return await this.artService.call(artId, bid_price, currentUser.email);
   }
 }

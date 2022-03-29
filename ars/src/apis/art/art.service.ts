@@ -1,5 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, getRepository, MoreThan, Not, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
@@ -14,9 +13,6 @@ export class ArtService {
     @InjectRepository(ArtImage)
     private readonly artImageRepository: Repository<ArtImage>,
 
-    @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache,
-
     private readonly connection: Connection,
   ) {}
 
@@ -25,7 +21,6 @@ export class ArtService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const qb = getRepository(Art).createQueryBuilder('art');
       const num = tags.length;
       let result = [];
 
@@ -151,11 +146,6 @@ export class ArtService {
           });
         }
       }
-
-      this.cacheManager.set(result.id, [], { ttl: 10 }, async (ttl) => {
-        if (ttl === -2) console.log(result.id + ' 레디스 저장 만료');
-      });
-
       await queryRunner.commitTransaction();
       return result;
     } catch (error) {
@@ -164,14 +154,5 @@ export class ArtService {
     } finally {
       await queryRunner.manager.release();
     }
-  }
-
-  // 야매 입찰
-  async call(artId, bid_price, email) {
-    await this.cacheManager.set(artId, [bid_price, email], {
-      ttl: 180,
-    });
-
-    return [bid_price, email];
   }
 }
