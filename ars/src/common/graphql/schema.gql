@@ -48,6 +48,7 @@ type Art {
   instant_bid: Int!
   price: Int!
   thumbnail: String!
+  createdAt: DateTime!
   deadline: String!
   is_soldout: Boolean!
   user: User!
@@ -58,6 +59,11 @@ type Art {
   tag4: String
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type ArtImage {
   id: String!
   url: String!
@@ -65,9 +71,16 @@ type ArtImage {
   art: Art!
 }
 
+
 type Tag {
   id: Int!
   name: String!
+
+type Payment {
+  id: String!
+  createdAt: DateTime!
+  amount: Int!
+  art: Art!
 }
 
 type PointTransaction {
@@ -117,7 +130,7 @@ type Comment {
 }
 
 type Query {
-  fetchArts(tags: [String!]!): [Art!]!
+  fetchArts(tags: [String!]!, createdAt: String = "1970-2-10"): [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
   fetchAuctionArts: [Art!]!
@@ -130,18 +143,17 @@ type Query {
   countLikeBoard(boardId: String!): Int!
   fetchLikeBoard: [Board!]!
   fetchComments(boardId: String!): [Comment!]!
-  fetchHistory: [History!]!
+  fetchHistory(page: Float!): [History!]!
   fetchProfile: Profile!
   fetchUser: User!
-  fetchPointTransaction(pointTransactionId: String!): PointTransaction!
   fetchPointTransactions: [PointTransaction!]!
 }
 
 type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
   uploadArtImage(files: [Upload!]!): [String!]!
-  createTag(id: String!, name: String!): Tag!
   addLikeArt(artId: String!): Boolean!
+  Bid(artId: String!, bid_price: Float!): [String!]!
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!
@@ -151,6 +163,8 @@ type Mutation {
   uploadBoardImage(files: [Upload!]!): [String!]!
   addLikeBoard(boardId: String!): Int!
   createComment(boardId: String!, content: String!): Comment!
+  updateComment(commentId: String!, content: String!): Comment!
+  deleteComment(commentId: String!): Boolean!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
   sendPhoneToken(phoneNum: String!): String!

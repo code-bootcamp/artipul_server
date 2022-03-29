@@ -14,14 +14,11 @@ export class PointTransactionResolver {
   ) {}
 
   // 현재 포인트 내역 조회
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => PointTransaction)
-  async fetchPointTransaction(
-    @Args('pointTransactionId') pointTransactionId: string,
-    @CurrentUser() currentUser: ICurrentUser,
-  ) {
-    return await this.pointTransactionService.findOne({ pointTransactionId });
-  }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Query(() => PointTransaction)
+  // async fetchPointTransaction(@CurrentUser() currentUser: ICurrentUser) {
+  //   return await this.pointTransactionService.findOne(currentUser.id);
+  // }
 
   // 포인트 내역 전체 조회
   @UseGuards(GqlAuthAccessGuard)

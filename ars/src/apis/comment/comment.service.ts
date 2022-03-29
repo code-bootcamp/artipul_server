@@ -39,4 +39,33 @@ export class CommentService {
       await queryRunner.release();
     }
   }
+
+  async update(commentId: string, content: string) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const prevcom = await queryRunner.manager.findOne(Comment, {
+        id: commentId,
+      });
+
+      const comment = await queryRunner.manager.save(Comment, {
+        ...prevcom,
+        content: content,
+      });
+
+      await queryRunner.commitTransaction();
+      return comment;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'Comment create';
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async delete(commentId: string) {
+    const result = await this.commentRepository.delete(commentId);
+    return result.affected ? true : false;
+  }
 }
