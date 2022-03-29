@@ -26,15 +26,15 @@ export class History {
   @Field(() => Int)
   point: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => PointTransaction, { nullable: true })
+  @ManyToOne(() => PointTransaction, { nullable: true, eager: true })
   @Field(() => PointTransaction, { nullable: true })
   pointTransaction?: PointTransaction;
 
-  @ManyToOne(() => Payment, { nullable: true })
+  @ManyToOne(() => Payment, { nullable: true, eager: true })
   @Field(() => Payment, { nullable: true })
   payment?: Payment;
 }
