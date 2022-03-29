@@ -4,6 +4,7 @@ import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToOne,
@@ -52,6 +53,10 @@ export class Art {
   @Column({ default: false })
   @Field(() => Boolean)
   is_soldout: boolean;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)

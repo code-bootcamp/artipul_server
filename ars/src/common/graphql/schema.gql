@@ -51,6 +51,7 @@ type Art {
   createdAt: DateTime!
   deadline: String!
   is_soldout: Boolean!
+  deletedAt: DateTime!
   user: User!
   payment: Payment!
   tag1: String!
