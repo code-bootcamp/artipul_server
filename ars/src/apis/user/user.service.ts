@@ -35,6 +35,10 @@ export class UserService {
     }
   }
 
+  async checkPassword(email) {
+    return await this.userRepository.findOne({ email: email });
+  }
+
   async create({ hashedPassword: password, ...rest }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
@@ -107,6 +111,28 @@ export class UserService {
       }
     } catch (error) {
       throw error + '!!! checkToken';
+    }
+  }
+
+  async reset({ email, hashedPassword: password }) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const user = await queryRunner.manager.findOne(User, { email });
+
+      const newPassword = await queryRunner.manager.save(User, {
+        ...user,
+        password,
+      });
+
+      await queryRunner.commitTransaction();
+      return newPassword;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'reset error';
+    } finally {
+      await queryRunner.release();
     }
   }
 }

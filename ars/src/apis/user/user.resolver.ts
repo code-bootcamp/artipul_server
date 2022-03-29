@@ -55,4 +55,18 @@ export class UserResolver {
   async checkNickname(@Args('nickname') nickname: string) {
     return await this.userService.checkNickname(nickname);
   }
+
+  @Mutation(() => User)
+  async resetUserPassword(
+    @Args('email') email: string,
+    @Args('password') password: string,
+  ) {
+    const checkPassword = await this.userService.checkPassword(email);
+    const isPassowrd = await bcrypt.compare(password, checkPassword.password);
+    if (isPassowrd) {
+      throw new Error('동일한 비밀번호입니다. 다른 비밀번호를 입력해주세요.');
+    }
+    const hashedPassword = await bcrypt.hash(password, 1);
+    return await this.userService.reset({ email, hashedPassword });
+  }
 }
