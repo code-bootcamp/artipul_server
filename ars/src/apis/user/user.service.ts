@@ -26,6 +26,16 @@ export class UserService {
     return await this.userRepository.findOne({ email });
   }
 
+  async findUserEmail({ phoneNum }) {
+    const user = await this.userRepository.findOne({ phoneNum });
+    console.log(user);
+    if (user) {
+      return await this.userRepository.findOne({ email: user.email });
+    } else {
+      throw new Error('존재하지 않은 회원입니다.');
+    }
+  }
+
   async checkNickname(nickname) {
     const user = await this.userRepository.findOne({ nickname });
     if (user) {
