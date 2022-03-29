@@ -1,7 +1,7 @@
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getRepository, MoreThan, Repository } from 'typeorm';
+import { Connection, getRepository, MoreThan, Not, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { Art } from './entities/art.entity';
 
@@ -95,17 +95,24 @@ export class ArtService {
   }
 
   // 미대생이 판매중인 작품 조회
-  async findAction({ currentUser }) {
+  async findAuction({ currentUser }) {
     const art = await this.artRepository.find({
-      withDeleted: true,
-      relations: ['user'],
       where: { user: currentUser.id, is_soldout: false },
     });
     return art;
   }
 
+  // 미대생 마감된 작품 조회
+  async fetchTimedOutArt(currentUser) {
+    const art = await this.artRepository.find({
+      withDeleted: true,
+      where: { user: currentUser.id, deletedAt: Not(null) },
+    });
+    return art;
+  }
+
   // 일반유저(내가) 구매한 작품 조회
-  async findcompleteAction({ currentUser }) {
+  async findcompleteAuction({ currentUser }) {
     const art = await this.artRepository.find({
       withDeleted: true,
       relations: ['user'],

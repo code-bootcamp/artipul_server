@@ -17,7 +17,7 @@ export class UserResolver {
     return await this.userService.findOne(currentUser.email);
   }
 
-  @Query(() => User)
+  @Query(() => String)
   async findUserEmail(@Args('phoneNum') phoneNum: string) {
     return await this.userService.findUserEmail({ phoneNum });
   }
