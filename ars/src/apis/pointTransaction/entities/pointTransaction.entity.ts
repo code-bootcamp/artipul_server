@@ -34,7 +34,7 @@ export class PointTransaction {
 
   @Column()
   @Field(() => Int)
-  charge_amount: number;
+  point: number;
 
   @Column({ type: 'enum', enum: POINTTRANSACTION_STATUS_ENUM })
   @Field(() => POINTTRANSACTION_STATUS_ENUM)

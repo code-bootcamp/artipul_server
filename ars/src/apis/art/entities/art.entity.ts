@@ -4,6 +4,7 @@ import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToOne,
@@ -45,9 +46,13 @@ export class Art {
   @Field(() => Date)
   createdAt: string;
 
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: string;
+
   @Column()
-  @Field(() => String)
-  deadline: string;
+  @Field(() => Date)
+  deadline: Date;
 
   @Column({ default: false })
   @Field(() => Boolean)
