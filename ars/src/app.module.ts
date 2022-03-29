@@ -14,6 +14,7 @@ import { CommentModule } from './apis/comment/comment.module';
 import { ProfileModule } from './apis/profile/profile.module';
 import { HistoryModule } from './apis/history/history.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { PaymentModule } from './apis/payment/payment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     HistoryModule,
     ProfileModule,
     UserModule,
+    PaymentModule,
     PointTransactionModule,
     ConfigModule.forRoot({
       isGlobal: true,
