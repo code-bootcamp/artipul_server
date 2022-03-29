@@ -24,7 +24,7 @@ export class History {
 
   @Column()
   @Field(() => Int)
-  charge_amount: number;
+  point: number;
 
   @ManyToOne(() => User)
   @Field(() => User)

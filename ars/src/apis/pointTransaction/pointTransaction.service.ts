@@ -71,7 +71,7 @@ export class PointTransactionServive {
         PointTransaction,
         {
           impUid: impUid,
-          charge_amount: charge_amount,
+          point: charge_amount,
           user: user,
           status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
         },
@@ -79,7 +79,7 @@ export class PointTransactionServive {
 
       // history 테이블에 거래기록 생성
       const pointTransactionH = this.historyRepository.create({
-        charge_amount: charge_amount,
+        point: charge_amount,
         user: user,
         pointTransaction: pointTransaction,
       });
@@ -165,6 +165,7 @@ export class PointTransactionServive {
         { lock: { mode: 'pessimistic_write' } },
       );
 
+      // 포인트 테이블 저장
       const pointTransaction = await queryRunner.manager.save(
         PointTransaction,
         {
@@ -175,8 +176,9 @@ export class PointTransactionServive {
         },
       );
 
+      // 히스토리 테이블 저장
       const pointTransactionH = await this.historyRepository.create({
-        charge_amount: -charge_amount,
+        point: -charge_amount,
         user: user,
         pointTransaction: pointTransaction,
       });

@@ -27,6 +27,19 @@ type Token {
   accessToken: String!
 }
 
+type Payment {
+  id: String!
+  createdAt: DateTime!
+  amount: Int!
+  art: Art!
+  user: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Art {
   id: String!
   title: String!
@@ -38,6 +51,7 @@ type Art {
   deadline: String!
   is_soldout: Boolean!
   user: User!
+  payment: Payment!
   tag1: String!
   tag2: String
   tag3: String
@@ -56,18 +70,6 @@ type Tag {
   name: String!
 }
 
-type Payment {
-  id: String!
-  createdAt: DateTime!
-  amount: Int!
-  art: Art!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type PointTransaction {
   id: String!
   impUid: String!
@@ -85,7 +87,7 @@ enum POINTTRANSACTION_ENUM {
 type History {
   id: String!
   createdAt: DateTime!
-  charge_amount: Int!
+  point: Int!
   user: User!
   pointTransaction: PointTransaction
   payment: Payment
@@ -154,6 +156,7 @@ type Mutation {
   sendPhoneToken(phoneNum: String!): String!
   phoneAuth(phoneNum: String!, token: String!): Boolean!
   checkNickname(nickname: String!): Boolean!
+  createPayment(artId: String!, amount: Float!): Payment!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
 }

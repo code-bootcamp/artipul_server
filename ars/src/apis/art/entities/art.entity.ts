@@ -1,10 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Payment } from 'src/apis/payment/entities/payment.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -53,6 +55,10 @@ export class Art {
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
+
+  @OneToOne(() => Payment)
+  @Field(() => Payment)
+  payment: Payment;
 
   @Column()
   @Field(() => String)
