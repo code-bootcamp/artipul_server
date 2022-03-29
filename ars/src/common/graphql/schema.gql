@@ -84,6 +84,7 @@ type History {
   id: String!
   createdAt: DateTime!
   point: Int!
+  balance: Int!
   user: User!
   pointTransaction: PointTransaction
   payment: Payment

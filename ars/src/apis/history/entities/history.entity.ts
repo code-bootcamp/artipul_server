@@ -26,6 +26,10 @@ export class History {
   @Field(() => Int)
   point: number;
 
+  @Column()
+  @Field(() => Int)
+  balance: number;
+
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
