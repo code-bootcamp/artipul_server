@@ -59,27 +59,10 @@ type Art {
   tag4: String
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type ArtImage {
   id: String!
   url: String!
   isMain: Boolean!
-  art: Art!
-}
-
-
-type Tag {
-  id: Int!
-  name: String!
-
-type Payment {
-  id: String!
-  createdAt: DateTime!
-  amount: Int!
   art: Art!
 }
 
@@ -170,6 +153,7 @@ type Mutation {
   sendPhoneToken(phoneNum: String!): String!
   phoneAuth(phoneNum: String!, token: String!): Boolean!
   checkNickname(nickname: String!): Boolean!
+  resetUserPassword(email: String!, password: String!): User!
   createPayment(artId: String!, amount: Float!): Payment!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
