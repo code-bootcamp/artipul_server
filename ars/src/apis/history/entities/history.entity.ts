@@ -26,7 +26,7 @@ export class History {
   @Field(() => Int)
   charge_amount: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
 

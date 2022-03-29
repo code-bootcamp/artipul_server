@@ -15,6 +15,6 @@ export class HistoryResolver {
     @Args('page') page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    return await this.historyService.findAll(currentUser, page);
+    return await this.historyService.findAll(currentUser.id, page);
   }
 }
