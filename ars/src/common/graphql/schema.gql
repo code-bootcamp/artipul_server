@@ -131,7 +131,7 @@ type Query {
   fetchHistory(page: Float!): [History!]!
   fetchProfile: Profile!
   fetchUser: User!
-  findUserEmail(phoneNum: String!): User!
+  findUserEmail(phoneNum: String!): String!
   fetchPointTransactions: [PointTransaction!]!
 }
 
