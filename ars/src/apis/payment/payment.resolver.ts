@@ -86,7 +86,6 @@ export class PaymentResolver {
     @Args('artId') artId: string,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    console.log(currentUser.id);
     await this.paymentService.save(artId, currentUser.id);
     return 'ok';
   }

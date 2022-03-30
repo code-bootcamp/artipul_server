@@ -40,7 +40,7 @@ export class AuthResolver {
     @Args('password') password: string,
     @Context() context: any,
   ) {
-    const user = await this.userService.findOAuthUser({ email });
+    const user = await this.userService.findOne(email);
     if (!user)
       // 이메일 체크
       throw new UnprocessableEntityException();
