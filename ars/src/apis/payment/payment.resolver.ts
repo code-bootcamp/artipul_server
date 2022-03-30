@@ -66,7 +66,7 @@ export class PaymentResolver {
     const bidder = await this.userService.findOne(currentUser.email);
     await this.paymentService.successfulBid(artId, price, bidder, artist);
 
-    return 'artId';
+    return artId;
   }
 
   // 입찰 API(임시)
