@@ -45,7 +45,7 @@ export class ArtResolver {
 
   // 미대생 마감된 작품 조회
   @UseGuards(GqlAuthAccessGuard)
-  @Query(() => Art)
+  @Query(() => [Art])
   async fetchTimedOutArt(@CurrentUser() currentUser: ICurrentUser) {
     return await this.artService.fetchTimedOutArt(currentUser);
   }

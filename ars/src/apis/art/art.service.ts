@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getRepository, MoreThan, Not, Repository } from 'typeorm';
+import { Connection, IsNull, MoreThan, Not, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { Art } from './entities/art.entity';
 
@@ -101,7 +101,7 @@ export class ArtService {
   async fetchTimedOutArt(currentUser) {
     const art = await this.artRepository.find({
       withDeleted: true,
-      where: { user: currentUser.id, deletedAt: Not('null') },
+      where: { user: currentUser.id, deletedAt: Not(IsNull()) },
     });
     console.log(art);
     return art;

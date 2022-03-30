@@ -123,7 +123,7 @@ type Query {
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
   fetchAuctionArts: [Art!]!
-  fetchTimedOutArt: Art!
+  fetchTimedOutArt: [Art!]!
   fetchTransactionCompletedArts: [Art!]!
   fetchLikeArt: [Art!]!
   fetchBoard(boardId: String!): Board!
