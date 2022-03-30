@@ -96,7 +96,7 @@ export class PointTransactionServive {
       return pointTransaction;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error + 'create';
+      throw error + 'create pointTransaction !!!';
     } finally {
       await queryRunner.release();
     }
@@ -145,7 +145,7 @@ export class PointTransactionServive {
       throw new UnprocessableEntityException('결제 기록이 존재하지 않습니다.');
 
     const user = await this.userRepository.findOne({ id: currentUser.id });
-    if (user.point < pointTransaction.point)
+    if (user.point < pointTransaction.charge_amount)
       throw new UnprocessableEntityException(
         '취소 가능한 포인트가 부족합니다.',
       );
@@ -176,7 +176,7 @@ export class PointTransactionServive {
       );
 
       // 히스토리 테이블 저장
-      const pointTransactionH = await this.historyRepository.create({
+      const pointTransactionH = this.historyRepository.create({
         point: -charge_amount,
         user: user,
         pointTransaction: pointTransaction,

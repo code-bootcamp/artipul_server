@@ -71,7 +71,7 @@ type PointTransaction {
   id: String!
   impUid: String!
   createdAt: DateTime!
-  point: Int!
+  charge_amount: Int!
   status: POINTTRANSACTION_ENUM!
   user: User!
 }
