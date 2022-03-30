@@ -6,10 +6,15 @@ import * as bcrypt from 'bcrypt';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
+import { Art } from '../art/entities/art.entity';
+import { ArtService } from '../art/art.service';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly artService: ArtService,
+  ) {}
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
@@ -20,6 +25,11 @@ export class UserResolver {
   @Query(() => String)
   async findUserEmail(@Args('phoneNum') phoneNum: string) {
     return await this.userService.findUserEmail({ phoneNum });
+  }
+
+  @Query(() => [Art])
+  async fetchArtistWorks(@Args('artId') artId: string) {
+    return await this.artService.findArtistWorks(artId);
   }
 
   @Mutation(() => User)

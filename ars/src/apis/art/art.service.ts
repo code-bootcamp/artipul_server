@@ -101,9 +101,23 @@ export class ArtService {
   async fetchTimedOutArt(currentUser) {
     const art = await this.artRepository.find({
       withDeleted: true,
-      where: { user: currentUser.id, deletedAt: Not(null) },
+      where: { user: currentUser.id, deletedAt: Not('null') },
     });
+    console.log(art);
     return art;
+  }
+
+  // 작품Id로 해당 작가 모든 작품검색
+  async findArtistWorks(artId) {
+    const art = await this.artRepository.findOne({
+      withDeleted: true,
+      where: { id: artId },
+    });
+    const user = art.user;
+    return await this.artRepository.find({
+      withDeleted: true,
+      where: { user: user },
+    });
   }
 
   // 일반유저(내가) 구매한 작품 조회
