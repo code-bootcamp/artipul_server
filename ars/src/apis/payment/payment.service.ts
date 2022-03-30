@@ -66,24 +66,24 @@ export class PaymentServie {
         art: soldoutArt,
       });
 
+      // 유저 누적 포인트 업데이트
+      const updated = await queryRunner.manager.save(User, {
+        ...bidder,
+        point: bidder.point - price,
+      });
+
       // 히스토리 테이블(낙찰자) 저장
       await queryRunner.manager.save(History, {
         point: price,
-        balance: bidder.point,
-        user: bidder,
+        balance: updated.point,
+        user: updated,
         payment: payment,
-      });
-
-      // 유저 누적 포인트 업데이트
-      await queryRunner.manager.save(User, {
-        ...bidder,
-        point: -price,
       });
 
       // 작가 누적 포인트 업데이트
       await queryRunner.manager.save(User, {
         ...artist,
-        point: +price,
+        point: artist.point + price,
       });
 
       await queryRunner.commitTransaction();
