@@ -16,6 +16,11 @@ export class ProfileResolver {
     return await this.profileService.findOne(currentUser.id);
   }
 
+  @Query(() => Profile)
+  async fetchArtistProfile(@Args('artId') artId: string) {
+    return await this.profileService.findArtistFromArt(artId);
+  }
+
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Profile)
   async createProfile(

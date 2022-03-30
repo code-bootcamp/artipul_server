@@ -22,10 +22,6 @@ export class UserService {
     return await this.userRepository.findOne({ email });
   }
 
-  async findOAuthUser({ email }) {
-    return await this.userRepository.findOne({ email });
-  }
-
   async findUserEmail({ phoneNum }) {
     const user = await this.userRepository.findOne({ phoneNum });
     console.log(user.email);

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
+import { Art } from '../art/entities/art.entity';
 import { User } from '../user/entities/user.entity';
 import { Profile } from './entities/profile.entity';
 
@@ -15,6 +16,25 @@ export class ProfileService {
 
   async findOne(userId) {
     return await this.profileRepository.findOne({ user: userId });
+  }
+
+  async findArtistFromArt(artId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const art = await queryRunner.manager.findOne(Art, { id: artId });
+      const profile = await queryRunner.manager.findOne(Profile, {
+        user: art.user,
+      });
+      await queryRunner.commitTransaction();
+      return profile;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'findArtistFromArt !';
+    } finally {
+      await queryRunner.manager.release();
+    }
   }
 
   async create({ ...createProfileInput }, currentUser) {
