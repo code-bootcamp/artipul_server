@@ -52,7 +52,6 @@ type Art {
   deletedAt: DateTime!
   deadline: DateTime!
   is_soldout: Boolean!
-  deletedAt: DateTime!
   user: User!
   payment: Payment!
   tag1: String!
@@ -115,6 +114,10 @@ type Comment {
   user: User!
 }
 
+type Engage {
+  art: Art!
+}
+
 type Query {
   fetchArts(tags: [String!]!, createdAt: String = "1970-2-10"): [Art!]!
   fetchArt(artId: String!): Art!
@@ -132,7 +135,9 @@ type Query {
   fetchHistory(page: Float!): [History!]!
   fetchProfile: Profile!
   fetchUser: User!
+  findUserEmail(phoneNum: String!): String!
   fetchPurchaseList: Payment!
+  fetchEngaging: [Engage!]!
   fetchPointTransactions: [PointTransaction!]!
 }
 
@@ -160,6 +165,7 @@ type Mutation {
   checkTimedoutAndProcess: String!
   instantBid(artId: String!, price: Float!, artistEmail: String!): String!
   Bid(artId: String!, bid_price: Float!): [String!]!
+  saveBid(artId: String!): String!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
 }

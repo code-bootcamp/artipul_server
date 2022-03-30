@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cache } from 'cache-manager';
 import { Connection, LessThan, Repository } from 'typeorm';
 import { Art } from '../art/entities/art.entity';
+import { Engage } from '../engage/entities/engage.entity';
 import { History } from '../history/entities/history.entity';
 import { User } from '../user/entities/user.entity';
 import { Payment } from './entities/payment.entity';
@@ -15,6 +16,9 @@ export class PaymentServie {
 
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+
+    @InjectRepository(Engage)
+    private readonly engageRepository: Repository<Engage>,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
@@ -53,6 +57,7 @@ export class PaymentServie {
         is_soldout: true,
       });
       await queryRunner.manager.softDelete(Art, { id: artId });
+      await queryRunner.manager.delete(Engage, { art: artId });
 
       // 낙찰 테이블 저장
       const payment = await queryRunner.manager.save(Payment, {
@@ -99,7 +104,6 @@ export class PaymentServie {
   async call(artId, bid_price, email) {
     const art = await this.artRepository.findOne(artId);
     const time = Number(art.deadline) - Number(new Date());
-    console.log(time);
     if (time > 0) {
       await this.cacheManager.set(artId, [bid_price, email], {
         ttl: time + 60000,
@@ -108,8 +112,39 @@ export class PaymentServie {
     return [bid_price, email];
   }
 
+  async save(artId, userId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const prevEngage = await queryRunner.manager.findOne(Engage, {
+        where: {
+          userId: userId,
+          art: artId,
+        },
+      });
+
+      if (!prevEngage)
+        await queryRunner.manager.save(Engage, {
+          userId: userId,
+          art: artId,
+        });
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'saveBid';
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
   // 구매한 작품 목록 조회
   async find(userId) {
     return await this.paymentRepository.find({ user: userId });
+  }
+
+  // 경매 참여 중인 작품 조회
+  async findEngage(userId) {
+    return await this.engageRepository.find({ userId: userId });
   }
 }

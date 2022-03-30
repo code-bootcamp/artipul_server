@@ -44,11 +44,11 @@ export class Art {
 
   @CreateDateColumn()
   @Field(() => Date)
-  createdAt: string;
+  createdAt: Date;
 
   @DeleteDateColumn()
   @Field(() => Date)
-  deletedAt: string;
+  deletedAt: Date;
 
   @Column()
   @Field(() => Date)
@@ -57,10 +57,6 @@ export class Art {
   @Column({ default: false })
   @Field(() => Boolean)
   is_soldout: boolean;
-
-  @DeleteDateColumn()
-  @Field(() => Date)
-  deletedAt: Date;
 
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
