@@ -69,6 +69,7 @@ export class PaymentServie {
       // 히스토리 테이블(낙찰자) 저장
       await queryRunner.manager.save(History, {
         point: price,
+        balance: bidder.point,
         user: bidder,
         payment: payment,
       });
