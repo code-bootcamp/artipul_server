@@ -17,7 +17,12 @@ export class LikeArtService {
 
   async like(artId, userId) {
     try {
-      const prevLike = await this.likeArtRepository.findOne({ art: artId });
+      const prevLike = await this.likeArtRepository.findOne({
+        where: {
+          userId: userId,
+          art: artId,
+        },
+      });
       if (!prevLike) {
         await this.likeArtRepository.save({
           userId: userId,

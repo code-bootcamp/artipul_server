@@ -3,6 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
+import { Engage } from '../engage/entities/engage.entity';
 import { UserService } from '../user/user.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentServie } from './payment.service';
@@ -23,11 +24,16 @@ export class PaymentResolver {
     return await this.paymentService.find(currentUser.id);
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Engage])
+  async fetchEngaging(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.paymentService.findEngage(currentUser.id);
+  }
+
   @Mutation(() => String)
   async checkTimedoutAndProcess() {
     try {
       const arts = await this.paymentService.checkTimeout();
-      console.log(arts, '작품들');
       arts.map(async (e) => {
         const bidInfo = await this.cacheManager.get(e.id);
         const price = bidInfo[0];
@@ -63,6 +69,7 @@ export class PaymentResolver {
     return 'artId';
   }
 
+  // 입찰 API(임시)
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => [String])
   async Bid(
@@ -71,5 +78,16 @@ export class PaymentResolver {
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.paymentService.call(artId, bid_price, currentUser.email);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String)
+  async saveBid(
+    @Args('artId') artId: string,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    console.log(currentUser.id);
+    await this.paymentService.save(artId, currentUser.id);
+    return 'ok';
   }
 }
