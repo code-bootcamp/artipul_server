@@ -37,9 +37,11 @@ export class AuthService {
       const hashedPassword = await bcrypt.hash(String(password), 1);
       const createUser = { ...rest, password: hashedPassword };
       user = await this.userService.create({ ...createUser });
+      this.setRefreshToken({ user, res });
+      res.redirect('http://localhost:3000/socialLogin');
+    } else {
+      this.setRefreshToken({ user, res });
+      res.redirect('http://localhost:3000');
     }
-
-    this.setRefreshToken({ user, res });
-    res.redirect('http://localhost:5500/frontend/login/index.html');
   }
 }

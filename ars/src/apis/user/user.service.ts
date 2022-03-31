@@ -82,6 +82,14 @@ export class UserService {
     }
   }
 
+  async updateSocialUser({ email, ...rest }) {
+    const user = await this.userRepository.findOne({ email });
+    return await this.userRepository.save({
+      ...user,
+      ...rest,
+    });
+  }
+
   async sendTokenTOSMS(phoneNum, token) {
     try {
       const appKey = process.env.SMS_APP_KEY;
