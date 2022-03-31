@@ -81,11 +81,8 @@ export class ArtResolver {
 
   // 작품id로 해당 작가의 모든 작품 조회
   @Query(() => [Art])
-  async fetchArtistWorks(
-    @Args('page') page: number,
-    @Args('artId') artId: string,
-  ) {
-    return await this.artService.findArtistWorks(artId, page);
+  async fetchArtistWorks(@Args('artId') artId: string) {
+    return await this.artService.findArtistWorks(artId);
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -115,7 +112,10 @@ export class ArtResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
-  async fetchLikeArt(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.likeArtService.find(currentUser.id);
+  async fetchLikeArt(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.likeArtService.find(currentUser.id, page);
   }
 }

@@ -112,7 +112,7 @@ export class ArtService {
   }
 
   // 작품Id로 해당 작가 모든 작품검색
-  async findArtistWorks(artId, page) {
+  async findArtistWorks(artId) {
     const art = await this.artRepository.findOne({
       withDeleted: true,
       where: { id: artId },
@@ -120,8 +120,6 @@ export class ArtService {
     const user = art.user;
     return await this.artRepository.find({
       withDeleted: true,
-      take: 10,
-      skip: 10 * (page - 1),
       where: { user: user },
     });
   }
