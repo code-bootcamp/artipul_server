@@ -168,6 +168,7 @@ type Mutation {
   deleteComment(commentId: String!): Boolean!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
+  updateSocialUser(updateSocialUser: UpdateSocialUser!): User!
   sendPhoneToken(phoneNum: String!): String!
   phoneAuth(phoneNum: String!, token: String!): Boolean!
   checkNickname(nickname: String!): Boolean!
@@ -222,6 +223,14 @@ input CreateUserInput {
   password: String!
   email: String!
   nickname: String!
+  is_artist: Boolean!
+  college: String
+}
+
+input UpdateSocialUser {
+  email: String!
+  nickname: String!
+  phoneNum: String!
   is_artist: Boolean!
   college: String
 }

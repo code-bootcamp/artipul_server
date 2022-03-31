@@ -18,7 +18,7 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    this.authService.loginOAuth(req, res);
+    await this.authService.loginOAuth(req, res);
   }
 
   @Get('/login/kakao')
@@ -27,6 +27,6 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    this.authService.loginOAuth(req, res);
+    await this.authService.loginOAuth(req, res);
   }
 }
