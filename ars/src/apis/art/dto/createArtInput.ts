@@ -29,12 +29,12 @@ export class CreateArtInput {
   @Field(() => String)
   tag1: string;
 
-  @Field(() => String)
-  tag2: string;
+  @Field(() => String, { nullable: true })
+  tag2?: string;
 
-  @Field(() => String)
-  tag3: string;
+  @Field(() => String, { nullable: true })
+  tag3?: string;
 
-  @Field(() => String)
-  tag4: string;
+  @Field(() => String, { nullable: true })
+  tag4?: string;
 }

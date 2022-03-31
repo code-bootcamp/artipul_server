@@ -113,7 +113,7 @@ export class PaymentService {
     return [bid_price, email];
   }
 
-  async save(artId, userId) {
+  async save(artId, userId, bid_price) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -125,11 +125,17 @@ export class PaymentService {
         },
       });
 
+      await queryRunner.manager.update(
+        Art,
+        { id: artId },
+        { price: bid_price },
+      );
       if (!prevEngage)
         await queryRunner.manager.save(Engage, {
           userId: userId,
           art: artId,
         });
+
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();

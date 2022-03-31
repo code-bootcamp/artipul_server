@@ -70,9 +70,10 @@ export class PaymentResolver {
   @Mutation(() => String)
   async saveBid(
     @Args('artId') artId: string,
+    @Args('bid_price') bid_price: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    await this.paymentService.save(artId, currentUser.id);
+    await this.paymentService.save(artId, currentUser.id, bid_price);
     return 'ok';
   }
 }
