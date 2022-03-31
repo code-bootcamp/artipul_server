@@ -36,8 +36,18 @@ export class BoardService {
   }
 
   // 내가 쓴 게시물 조회
-  async findMine({ currentUser }) {
-    return await this.boardRepository.find({ user: currentUser });
+  async findMine({ currentUser }, page) {
+    return await this.boardRepository.find({
+      skip: 10,
+      take: 10,
+      where: { user: currentUser },
+    });
+  }
+
+  async countMine(userId) {
+    return await this.boardRepository.count({
+      user: userId,
+    });
   }
 
   // 게시물 등록
