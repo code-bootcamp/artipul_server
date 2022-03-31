@@ -90,17 +90,21 @@ export class ArtService {
   }
 
   // 미대생이 판매중인 작품 조회
-  async findAuction({ currentUser }) {
+  async findAuction({ currentUser }, page) {
     const art = await this.artRepository.find({
+      take: 10,
+      skip: 10 * (page - 1),
       where: { user: currentUser.id, is_soldout: false },
     });
     return art;
   }
 
   // 미대생 마감된 작품 조회
-  async fetchTimedOutArt(currentUser) {
+  async fetchTimedOutArt(currentUser, page) {
     const art = await this.artRepository.find({
       withDeleted: true,
+      take: 10,
+      skip: 10 * (page - 1),
       where: { user: currentUser.id, deletedAt: Not(IsNull()) },
     });
     console.log(art);
@@ -108,7 +112,7 @@ export class ArtService {
   }
 
   // 작품Id로 해당 작가 모든 작품검색
-  async findArtistWorks(artId) {
+  async findArtistWorks(artId, page) {
     const art = await this.artRepository.findOne({
       withDeleted: true,
       where: { id: artId },
@@ -116,15 +120,18 @@ export class ArtService {
     const user = art.user;
     return await this.artRepository.find({
       withDeleted: true,
+      take: 10,
+      skip: 10 * (page - 1),
       where: { user: user },
     });
   }
 
   // 일반유저(내가) 구매한 작품 조회
-  async findcompleteAuction({ currentUser }) {
+  async findcompleteAuction({ currentUser }, page) {
     const art = await this.artRepository.find({
       withDeleted: true,
-      relations: ['user'],
+      take: 10,
+      skip: 10 * (page - 1),
       where: { user: currentUser.id, is_soldout: true },
     });
     return art;

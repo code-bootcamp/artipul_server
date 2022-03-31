@@ -9,7 +9,7 @@ import { User } from '../user/entities/user.entity';
 import { Payment } from './entities/payment.entity';
 
 @Injectable()
-export class PaymentServie {
+export class PaymentService {
   constructor(
     @InjectRepository(Art)
     private readonly artRepository: Repository<Art>,
@@ -139,13 +139,12 @@ export class PaymentServie {
     }
   }
 
-  // 구매한 작품 목록 조회
-  async find(userId) {
-    return await this.paymentRepository.find({ user: userId });
-  }
-
   // 경매 참여 중인 작품 조회
-  async findEngage(userId) {
-    return await this.engageRepository.find({ userId: userId });
+  async findEngage(userId, page) {
+    return await this.engageRepository.find({
+      take: 10,
+      skip: 10 * (page - 1),
+      where: { userId: userId },
+    });
   }
 }

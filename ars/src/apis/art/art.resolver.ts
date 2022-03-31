@@ -4,8 +4,10 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
 import { ArtImage } from '../artImage/entities/artImage.entity';
+import { Engage } from '../engage/entities/engage.entity';
 import { FileService } from '../file/file.service';
 import { LikeArtService } from '../likeArt/likeArt.service';
+import { PaymentService } from '../payment/payment.service';
 import { ArtService } from './art.service';
 import { CreateArtInput } from './dto/createArtInput';
 import { Art } from './entities/art.entity';
@@ -16,6 +18,7 @@ export class ArtResolver {
     private readonly artService: ArtService,
     private readonly fileService: FileService,
     private readonly likeArtService: LikeArtService,
+    private readonly paymentService: PaymentService,
   ) {}
 
   @Query(() => [Art])
@@ -39,24 +42,50 @@ export class ArtResolver {
   // 미대생이 판매중인 작품 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
-  async fetchAuctionArts(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.artService.findAuction({ currentUser });
+  async fetchAuctionArts(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.artService.findAuction({ currentUser }, page);
   }
 
   // 미대생 마감된 작품 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
-  async fetchTimedOutArt(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.artService.fetchTimedOutArt(currentUser);
+  async fetchTimedOutArt(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.artService.fetchTimedOutArt(currentUser, page);
   }
 
   // 일반유저(내가) 구매한 작품 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
   async fetchTransactionCompletedArts(
+    @Args('page') page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    return await this.artService.findcompleteAuction({ currentUser });
+    return await this.artService.findcompleteAuction({ currentUser }, page);
+  }
+
+  // 일반유저(내가) 경매 참여 중인 작품 조회
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Engage])
+  async fetchEngaging(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.paymentService.findEngage(currentUser.id, page);
+  }
+
+  // 작품id로 해당 작가의 모든 작품 조회
+  @Query(() => [Art])
+  async fetchArtistWorks(
+    @Args('page') page: number,
+    @Args('artId') artId: string,
+  ) {
+    return await this.artService.findArtistWorks(artId, page);
   }
 
   @UseGuards(GqlAuthAccessGuard)
