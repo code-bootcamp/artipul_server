@@ -9,6 +9,7 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -57,6 +58,14 @@ export class Art {
   @Column({ default: false })
   @Field(() => Boolean)
   is_soldout: boolean;
+
+  @UpdateDateColumn()
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)

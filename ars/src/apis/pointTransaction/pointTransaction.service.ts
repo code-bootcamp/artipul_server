@@ -75,6 +75,7 @@ export class PointTransactionServive {
           status: POINTTRANSACTION_STATUS_ENUM.PAYMENT,
         },
       );
+
       // 유저 누적 포인트 업데이트
       const updatedUser = await queryRunner.manager.save(User, {
         ...user,
