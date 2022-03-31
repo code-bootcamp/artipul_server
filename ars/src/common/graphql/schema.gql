@@ -2,14 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Profile {
-  id: String!
-  url: String
-  introduce: String
-  address: String
-  user: User!
-}
-
 type User {
   id: String!
   name: String!
@@ -21,6 +13,18 @@ type User {
   is_artist: Boolean!
   college: String!
   profile: Profile
+}
+
+type Profile {
+  id: String!
+  url: String
+  introduce: String
+  address: String
+  user: User!
+}
+
+type Token {
+  accessToken: String!
 }
 
 type Payment {
@@ -63,8 +67,8 @@ type ArtImage {
   art: Art!
 }
 
-type Token {
-  accessToken: String!
+type Engage {
+  art: Art!
 }
 
 type PointTransaction {
@@ -114,17 +118,15 @@ type Comment {
   user: User!
 }
 
-type Engage {
-  art: Art!
-}
-
 type Query {
   fetchArts(tags: [String!]!, createdAt: String = "1970-2-10"): [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
-  fetchAuctionArts: [Art!]!
-  fetchTimedOutArt: [Art!]!
-  fetchTransactionCompletedArts: [Art!]!
+  fetchAuctionArts(page: Float!): [Art!]!
+  fetchTimedOutArt(page: Float!): [Art!]!
+  fetchTransactionCompletedArts(page: Float!): [Art!]!
+  fetchEngaging(page: Float!): [Engage!]!
+  fetchArtistWorks(page: Float!, artId: String!): [Art!]!
   fetchLikeArt: [Art!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
@@ -138,9 +140,6 @@ type Query {
   fetchArtistProfile(artId: String!): Profile!
   fetchUser: User!
   findUserEmail(phoneNum: String!): String!
-  fetchArtistWorks(artId: String!): [Art!]!
-  fetchPurchaseList: Payment!
-  fetchEngaging: [Engage!]!
   fetchPointTransactions: [PointTransaction!]!
 }
 

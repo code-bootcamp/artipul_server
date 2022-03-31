@@ -1,34 +1,20 @@
 import { CACHE_MANAGER, Inject, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
-import { Engage } from '../engage/entities/engage.entity';
 import { UserService } from '../user/user.service';
-import { Payment } from './entities/payment.entity';
-import { PaymentServie } from './payment.service';
+import { PaymentService } from './payment.service';
 
 @Resolver()
 export class PaymentResolver {
   constructor(
-    private readonly paymentService: PaymentServie,
+    private readonly paymentService: PaymentService,
     private readonly userService: UserService,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => Payment)
-  async fetchPurchaseList(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.paymentService.find(currentUser.id);
-  }
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => [Engage])
-  async fetchEngaging(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.paymentService.findEngage(currentUser.id);
-  }
 
   @Mutation(() => String)
   async checkTimedoutAndProcess() {

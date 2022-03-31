@@ -8,7 +8,7 @@ import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentResolver } from './payment.resolver';
-import { PaymentServie } from './payment.service';
+import { PaymentService } from './payment.service';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { PaymentServie } from './payment.service';
   ],
   providers: [
     PaymentResolver, //
-    PaymentServie,
+    PaymentService,
     ArtService,
     UserService,
   ],
