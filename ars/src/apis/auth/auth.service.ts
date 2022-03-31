@@ -38,10 +38,10 @@ export class AuthService {
       const createUser = { ...rest, password: hashedPassword };
       user = await this.userService.create({ ...createUser });
       this.setRefreshToken({ user, res });
-      res.redirect('http://localhost:3000/socialLogin');
+      res.redirect('/socialLogin');
     } else {
       this.setRefreshToken({ user, res });
-      res.redirect('http://localhost:3000');
+      res.redirect('');
     }
   }
 }
