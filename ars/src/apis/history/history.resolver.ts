@@ -17,4 +17,10 @@ export class HistoryResolver {
   ) {
     return await this.historyService.findAll(currentUser.id, page);
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchHitoryCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.historyService.count(currentUser.id);
+  }
 }

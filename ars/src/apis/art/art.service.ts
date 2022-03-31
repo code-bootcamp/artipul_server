@@ -1,9 +1,10 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getRepository, MoreThan, Not, Repository } from 'typeorm';
+import { Connection, IsNull, MoreThan, Not, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
+import { Engage } from '../engage/entities/engage.entity';
 import { Art } from './entities/art.entity';
+import { LikeArt } from './entities/likeArt.entity';
 
 @Injectable()
 export class ArtService {
@@ -14,9 +15,6 @@ export class ArtService {
     @InjectRepository(ArtImage)
     private readonly artImageRepository: Repository<ArtImage>,
 
-    @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache,
-
     private readonly connection: Connection,
   ) {}
 
@@ -25,7 +23,6 @@ export class ArtService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const qb = getRepository(Art).createQueryBuilder('art');
       const num = tags.length;
       let result = [];
 
@@ -95,27 +92,46 @@ export class ArtService {
   }
 
   // 미대생이 판매중인 작품 조회
-  async findAuction({ currentUser }) {
+  async findAuction({ currentUser }, page) {
     const art = await this.artRepository.find({
+      take: 10,
+      skip: 10 * (page - 1),
       where: { user: currentUser.id, is_soldout: false },
     });
     return art;
   }
 
   // 미대생 마감된 작품 조회
-  async fetchTimedOutArt(currentUser) {
+  async fetchTimedOutArt(currentUser, page) {
     const art = await this.artRepository.find({
       withDeleted: true,
-      where: { user: currentUser.id, deletedAt: Not(null) },
+      take: 10,
+      skip: 10 * (page - 1),
+      where: { user: currentUser.id, deletedAt: Not(IsNull()) },
     });
+    console.log(art);
     return art;
   }
 
+  // 작품Id로 해당 작가 모든 작품검색
+  async findArtistWorks(artId) {
+    const art = await this.artRepository.findOne({
+      withDeleted: true,
+      where: { id: artId },
+    });
+    const user = art.user;
+    return await this.artRepository.find({
+      withDeleted: true,
+      where: { user: user },
+    });
+  }
+
   // 일반유저(내가) 구매한 작품 조회
-  async findcompleteAuction({ currentUser }) {
+  async findcompleteAuction({ currentUser }, page) {
     const art = await this.artRepository.find({
       withDeleted: true,
-      relations: ['user'],
+      take: 10,
+      skip: 10 * (page - 1),
       where: { user: currentUser.id, is_soldout: true },
     });
     return art;
@@ -151,7 +167,24 @@ export class ArtService {
           });
         }
       }
-
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'Art create !';
+    } finally {
+      await queryRunner.manager.release();
+    }
+  }
+  ///////////////////////////////////////////////////////////////////////////
+  async countEngage(userId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await queryRunner.manager.count(Engage, {
+        userId: userId,
+      });
       await queryRunner.commitTransaction();
       return result;
     } catch (error) {
@@ -162,12 +195,45 @@ export class ArtService {
     }
   }
 
-  // 야매 입찰
-  async call(artId, bid_price, email) {
-    await this.cacheManager.set(artId, [bid_price, email], {
-      ttl: 180,
-    });
-
-    return [bid_price, email];
+  async countLikeArt(userId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await queryRunner.manager.count(LikeArt, {
+        userId: userId,
+      });
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'Art create !';
+    } finally {
+      await queryRunner.manager.release();
+    }
   }
+
+  async countComletedAuctionArts(userId) {
+    const result = await this.artRepository.count({
+      withDeleted: true,
+      where: { user: userId, is_soldout: true },
+    });
+    return result;
+  }
+
+  async countTimedoutArts(userId) {
+    const result = await this.artRepository.count({
+      withDeleted: true,
+      where: { user: userId, deletedAt: Not(IsNull()) },
+    });
+    return result;
+  }
+
+  async countAuctionArts(userId) {
+    const result = await this.artRepository.find({
+      where: { user: userId, is_soldout: false },
+    });
+    return result;
+  }
+  ///////////////////////////////////////////////////////////////////////////
 }

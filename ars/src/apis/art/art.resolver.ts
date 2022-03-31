@@ -5,8 +5,10 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
 import { ArtImage } from '../artImage/entities/artImage.entity';
+import { Engage } from '../engage/entities/engage.entity';
 import { FileService } from '../file/file.service';
 import { LikeArtService } from '../likeArt/likeArt.service';
+import { PaymentService } from '../payment/payment.service';
 import { ArtService } from './art.service';
 import { CreateArtInput } from './dto/createArtInput';
 import { Art } from './entities/art.entity';
@@ -23,6 +25,7 @@ export class ArtResolver {
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
+    private readonly paymentService: PaymentService,
   ) {}
 
   @Query(() => [Art])
@@ -90,27 +93,82 @@ export class ArtResolver {
   async fetchArtImages(@Args('artId') artId: string) {
     return await this.artService.findImages({ artId });
   }
+  ///////////////////////////////////////////////////////////////////////////
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchEngageCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countEngage(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchLikeArtCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countLikeArt(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchSoldoutArtsCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countComletedAuctionArts(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchTimedOutArtsCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countTimedoutArts(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchAuctionArtsCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countAuctionArts(currentUser.id);
+  }
+  //////////////////////////////////////////////////////////////////////////
 
   // 미대생이 판매중인 작품 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
-  async fetchAuctionArts(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.artService.findAuction({ currentUser });
+  async fetchAuctionArts(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.artService.findAuction({ currentUser }, page);
   }
 
   // 미대생 마감된 작품 조회
   @UseGuards(GqlAuthAccessGuard)
-  async fetchTimedOutArt(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.artService.fetchTimedOutArt(currentUser);
+  @Query(() => [Art])
+  async fetchTimedOutArt(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.artService.fetchTimedOutArt(currentUser, page);
   }
 
   // 일반유저(내가) 구매한 작품 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
-  async fetchtransactioncompletedArts(
+  async fetchTransactionCompletedArts(
+    @Args('page') page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    return await this.artService.findcompleteAuction({ currentUser });
+    return await this.artService.findcompleteAuction({ currentUser }, page);
+  }
+
+  // 일반유저(내가) 경매 참여 중인 작품 조회
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Engage])
+  async fetchEngaging(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.paymentService.findEngage(currentUser.id, page);
+  }
+
+  // 작품id로 해당 작가의 모든 작품 조회
+  @Query(() => [Art])
+  async fetchArtistWorks(@Args('artId') artId: string) {
+    return await this.artService.findArtistWorks(artId);
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -150,17 +208,10 @@ export class ArtResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
-  async fetchLikeArt(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.likeArtService.find(currentUser.id);
-  }
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => [String])
-  async Bid(
-    @Args('artId') artId: string,
-    @Args('bid_price') bid_price: number,
+  async fetchLikeArt(
+    @Args('page') page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    return await this.artService.call(artId, bid_price, currentUser.email);
+    return await this.likeArtService.find(currentUser.id, page);
   }
 }

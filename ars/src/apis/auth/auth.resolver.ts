@@ -40,12 +40,12 @@ export class AuthResolver {
     @Args('password') password: string,
     @Context() context: any,
   ) {
-    const user = await this.userService.findOAuthUser({ email });
+    const user = await this.userService.findOne(email);
     if (!user)
       // 이메일 체크
-      throw new UnprocessableEntityException();
+      throw new UnprocessableEntityException('이메일이 올바르지 않습니다.');
     const isAuth = await bcrypt.compare(password, user.password);
-    if (!isAuth) throw new UnauthorizedException();
+    if (!isAuth) throw new UnauthorizedException('비밀번호가 틀렸습니다.');
 
     this.authService.setRefreshToken({ user, res: context.res });
 

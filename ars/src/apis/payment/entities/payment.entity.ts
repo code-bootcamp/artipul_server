@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Art } from 'src/apis/art/entities/art.entity';
-import { PointTransaction } from 'src/apis/pointTransaction/entities/pointTransaction.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,

@@ -1,13 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Profile } from 'src/apis/profile/entities/profile.entity';
-import { History } from 'src/apis/history/entities/history.entity';
 
 @Entity()
 @ObjectType()

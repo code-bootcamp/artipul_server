@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
+import { Engage } from '../engage/entities/engage.entity';
 import { FileService } from '../file/file.service';
 import { LikeArtService } from '../likeArt/likeArt.service';
+import { Payment } from '../payment/entities/payment.entity';
+import { PaymentService } from '../payment/payment.service';
 import { User } from '../user/entities/user.entity';
 import { ArtResolver } from './art.resolver';
 import { ArtService } from './art.service';
@@ -17,6 +20,8 @@ import { LikeArt } from './entities/likeArt.entity';
       ArtImage,
       LikeArt,
       User,
+      Payment,
+      Engage,
     ]),
     ElasticsearchModule.register({
       node: 'http://elasticsearch:9200',
@@ -27,6 +32,7 @@ import { LikeArt } from './entities/likeArt.entity';
     ArtService,
     FileService,
     LikeArtService,
+    PaymentService,
   ],
 })
 export class ArtModule {}

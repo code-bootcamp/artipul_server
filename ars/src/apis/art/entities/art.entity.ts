@@ -45,11 +45,15 @@ export class Art {
 
   @CreateDateColumn()
   @Field(() => Date)
-  createdAt: string;
+  createdAt: Date;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @Column()
-  @Field(() => String)
-  deadline: string;
+  @Field(() => Date)
+  deadline: Date;
 
   @Column({ default: false })
   @Field(() => Boolean)

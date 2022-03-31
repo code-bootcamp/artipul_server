@@ -77,11 +77,10 @@ export class PointTransactionServive {
       );
 
       // 유저 누적 포인트 업데이트
-      const updatedUser = this.userRepository.create({
+      const updatedUser = await queryRunner.manager.save(User, {
         ...user,
         point: user.point + charge_amount,
       });
-      await queryRunner.manager.save(updatedUser);
 
       // history 테이블에 거래기록 생성
       const pointTransactionH = this.historyRepository.create({
@@ -97,7 +96,7 @@ export class PointTransactionServive {
       return pointTransaction;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error + 'create';
+      throw error + 'create pointTransaction !!!';
     } finally {
       await queryRunner.release();
     }
@@ -177,7 +176,7 @@ export class PointTransactionServive {
       );
 
       // 히스토리 테이블 저장
-      const pointTransactionH = await this.historyRepository.create({
+      const pointTransactionH = this.historyRepository.create({
         point: -charge_amount,
         user: user,
         pointTransaction: pointTransaction,

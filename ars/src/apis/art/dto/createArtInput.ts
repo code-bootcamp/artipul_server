@@ -17,8 +17,8 @@ export class CreateArtInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => String)
-  deadline: string;
+  @Field(() => Date)
+  deadline: Date;
 
   @Field(() => [String])
   image_urls: string[];
