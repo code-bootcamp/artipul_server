@@ -40,8 +40,17 @@ export class BoardResolver {
   // 내가 쓴 게시물 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Board])
-  async fetchBoardsOfMine(@CurrentUser() currentUser: ICurrentUser) {
-    return await this.boardService.findMine({ currentUser });
+  async fetchBoardsOfMine(
+    @Args('page') page: number,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return await this.boardService.findMine({ currentUser }, page);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchBoardsOfMineCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.boardService.countMine(currentUser.id);
   }
 
   // 게시물 등록
