@@ -76,12 +76,7 @@ export class PointTransactionServive {
         },
       );
       // 유저 누적 포인트 업데이트
-      // const updatedUser = this.userRepository.create({
-      //   ...user,
-      //   point: user.point + charge_amount,
-      // });
-
-      const updatedUser = await queryRunner.manager.save({
+      const updatedUser = await queryRunner.manager.save(User, {
         ...user,
         point: user.point + charge_amount,
       });

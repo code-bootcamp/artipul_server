@@ -10,8 +10,12 @@ export class LikeArtService {
     private readonly likeArtRepository: Repository<LikeArt>,
   ) {}
 
-  async find(userId) {
-    const arts = await this.likeArtRepository.find({ userId: userId });
+  async find(userId, page) {
+    const arts = await this.likeArtRepository.find({
+      take: 10,
+      skip: 10 * (page - 1),
+      where: { userId: userId },
+    });
     return arts.map((ele) => ele.art);
   }
 
