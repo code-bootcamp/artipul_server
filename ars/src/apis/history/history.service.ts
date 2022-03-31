@@ -15,6 +15,11 @@ export class HistorySerive {
       take: 10,
       skip: 10 * (page - 1),
       where: { user: userId },
+      order: { createdAt: 'ASC' },
     });
+  }
+
+  async count(userId) {
+    return await this.historyRepository.count({ user: userId });
   }
 }

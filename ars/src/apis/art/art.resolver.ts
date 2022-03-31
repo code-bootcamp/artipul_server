@@ -38,6 +38,37 @@ export class ArtResolver {
   async fetchArtImages(@Args('artId') artId: string) {
     return await this.artService.findImages({ artId });
   }
+  ///////////////////////////////////////////////////////////////////////////
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchEngageCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countEngage(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchLikeArtCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countLikeArt(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchSoldoutArtsCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countComletedAuctionArts(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchTimedOutArtsCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countTimedoutArts(currentUser.id);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Number)
+  async fetchAuctionArtsCount(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.artService.countAuctionArts(currentUser.id);
+  }
+  //////////////////////////////////////////////////////////////////////////
 
   // 미대생이 판매중인 작품 조회
   @UseGuards(GqlAuthAccessGuard)
