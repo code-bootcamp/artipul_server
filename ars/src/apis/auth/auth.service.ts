@@ -25,7 +25,7 @@ export class AuthService {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader(
       'Set-Cookie',
-      `refreshToken=${refreshToken}; path=/; domain=.arios67.shop; SameSite=None; Secure;httpOnly;`,
+      `refreshToken=${refreshToken}; path=/; domain=.daseul.shop; SameSite=None; Secure;httpOnly;`,
     );
   }
 
