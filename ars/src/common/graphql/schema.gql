@@ -49,12 +49,10 @@ type Art {
   price: Int!
   thumbnail: String!
   createdAt: DateTime!
-  deadline: String!
-  is_soldout: Boolean!
-  updatedAt: DateTime!
   deletedAt: DateTime!
   deadline: DateTime!
   is_soldout: Boolean!
+  updatedAt: DateTime!
   user: User!
   payment: Payment!
   tag1: String!
@@ -177,7 +175,7 @@ type Mutation {
   checkTimedoutAndProcess: String!
   instantBid(artId: String!, price: Float!, artistEmail: String!): String!
   Bid(artId: String!, bid_price: Float!): [String!]!
-  saveBid(artId: String!): String!
+  saveBid(artId: String!, bid_price: Float!): String!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
 }
@@ -192,9 +190,9 @@ input CreateArtInput {
   image_urls: [String!]!
   is_soldout: Boolean!
   tag1: String!
-  tag2: String!
-  tag3: String!
-  tag4: String!
+  tag2: String
+  tag3: String
+  tag4: String
 }
 
 """The `Upload` scalar type represents a file upload."""

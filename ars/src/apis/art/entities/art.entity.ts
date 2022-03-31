@@ -63,10 +63,6 @@ export class Art {
   @Field(() => Date)
   updatedAt: Date;
 
-  @DeleteDateColumn()
-  @Field(() => Date)
-  deletedAt: Date;
-
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
@@ -81,13 +77,13 @@ export class Art {
 
   @Column({ nullable: true, default: null })
   @Field(() => String, { nullable: true })
-  tag2: string;
+  tag2?: string;
 
   @Column({ nullable: true, default: null })
   @Field(() => String, { nullable: true })
-  tag3: string;
+  tag3?: string;
 
   @Column({ nullable: true, default: null })
   @Field(() => String, { nullable: true })
-  tag4: string;
+  tag4?: string;
 }
