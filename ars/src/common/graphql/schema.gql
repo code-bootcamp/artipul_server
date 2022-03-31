@@ -122,12 +122,17 @@ type Query {
   fetchArts(tags: [String!]!, createdAt: String = "1970-2-10"): [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
+  fetchEngageCount: Float!
+  fetchLikeArtCount: Float!
+  fetchSoldoutArtsCount: Float!
+  fetchTimedOutArtsCount: Float!
+  fetchAuctionArtsCount: Float!
   fetchAuctionArts(page: Float!): [Art!]!
   fetchTimedOutArt(page: Float!): [Art!]!
   fetchTransactionCompletedArts(page: Float!): [Art!]!
   fetchEngaging(page: Float!): [Engage!]!
-  fetchArtistWorks(page: Float!, artId: String!): [Art!]!
-  fetchLikeArt: [Art!]!
+  fetchArtistWorks(artId: String!): [Art!]!
+  fetchLikeArt(page: Float!): [Art!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
@@ -136,6 +141,7 @@ type Query {
   fetchLikeBoard: [Board!]!
   fetchComments(boardId: String!): [Comment!]!
   fetchHistory(page: Float!): [History!]!
+  fetchHitoryCount: Float!
   fetchProfile: Profile!
   fetchArtistProfile(artId: String!): Profile!
   fetchUser: User!

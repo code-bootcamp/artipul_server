@@ -34,7 +34,6 @@ export class AuthService {
 
     if (!user) {
       const { password, ...rest } = req.user;
-      console.log(password, '비밀번호');
       const hashedPassword = await bcrypt.hash(String(password), 1);
       const createUser = { ...rest, password: hashedPassword };
       user = await this.userService.create({ ...createUser });

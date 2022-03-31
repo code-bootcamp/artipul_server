@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, IsNull, MoreThan, Not, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
+import { Engage } from '../engage/entities/engage.entity';
 import { Art } from './entities/art.entity';
+import { LikeArt } from './entities/likeArt.entity';
 
 @Injectable()
 export class ArtService {
@@ -174,4 +176,66 @@ export class ArtService {
       await queryRunner.manager.release();
     }
   }
+  ///////////////////////////////////////////////////////////////////////////
+  async countEngage(userId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await queryRunner.manager.count(Engage, {
+        userId: userId,
+      });
+
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'Art create !';
+    } finally {
+      await queryRunner.manager.release();
+    }
+  }
+
+  async countLikeArt(userId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await queryRunner.manager.count(LikeArt, {
+        userId: userId,
+      });
+
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'Art create !';
+    } finally {
+      await queryRunner.manager.release();
+    }
+  }
+
+  async countComletedAuctionArts(userId) {
+    const result = await this.artRepository.count({
+      withDeleted: true,
+      where: { user: userId, is_soldout: true },
+    });
+    return result;
+  }
+
+  async countTimedoutArts(userId) {
+    const result = await this.artRepository.count({
+      withDeleted: true,
+      where: { user: userId, deletedAt: Not(IsNull()) },
+    });
+    return result;
+  }
+
+  async countAuctionArts(userId) {
+    const result = await this.artRepository.find({
+      where: { user: userId, is_soldout: false },
+    });
+    return result;
+  }
+  ///////////////////////////////////////////////////////////////////////////
 }
