@@ -26,6 +26,15 @@ export class CreateArtInput {
   @Field(() => Boolean)
   is_soldout: boolean;
 
-  @Field(() => [String])
-  tags: string[];
+  @Field(() => String)
+  tag1: string;
+
+  @Field(() => String)
+  tag2: string;
+
+  @Field(() => String)
+  tag3: string;
+
+  @Field(() => String)
+  tag4: string;
 }

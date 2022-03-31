@@ -122,7 +122,7 @@ export class ArtService {
   }
 
   // 작품 등록
-  async create({ image_urls, tags, ...rest }, currentUser) {
+  async create({ image_urls, tag1, tag2, tag3, tag4, ...rest }, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -131,10 +131,10 @@ export class ArtService {
         ...rest,
         user: currentUser,
         thumbnail: image_urls[0],
-        tag1: tags[0],
-        tag2: tags[1],
-        tag3: tags[2],
-        tag4: tags[3],
+        tag1,
+        tag2,
+        tag3,
+        tag4,
       });
 
       for (let i = 0; i < image_urls.length; i++) {
@@ -151,10 +151,6 @@ export class ArtService {
           });
         }
       }
-
-      this.cacheManager.set(result.id, [], { ttl: 10 }, async (ttl) => {
-        if (ttl === -2) console.log(result.id + ' 레디스 저장 만료');
-      });
 
       await queryRunner.commitTransaction();
       return result;

@@ -51,6 +51,7 @@ type Art {
   createdAt: DateTime!
   deadline: String!
   is_soldout: Boolean!
+  updatedAt: DateTime!
   deletedAt: DateTime!
   user: User!
   payment: Payment!
@@ -115,7 +116,7 @@ type Comment {
 }
 
 type Query {
-  fetchArts(tags: [String!]!, createdAt: String = "1970-2-10"): [Art!]!
+  fetchArts(tag1: String!, tag2: String, tag3: String, tag4: String): [Art!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
   fetchAuctionArts: [Art!]!
@@ -171,7 +172,10 @@ input CreateArtInput {
   deadline: String!
   image_urls: [String!]!
   is_soldout: Boolean!
-  tags: [String!]!
+  tag1: String!
+  tag2: String!
+  tag3: String!
+  tag4: String!
 }
 
 """The `Upload` scalar type represents a file upload."""
