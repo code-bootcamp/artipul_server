@@ -4,7 +4,10 @@ import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthRefreshGuard,
+} from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
 import { UpdateSocialUser } from './dto/updateSocialUserInput';
 
@@ -23,9 +26,10 @@ export class UserResolver {
     return await this.userService.findUserEmail({ phoneNum });
   }
 
-  @Query(() => String)
-  async findSocialUser(@Args('email') email: string) {
-    const user = await this.userService.findOne(email);
+  @UseGuards(GqlAuthRefreshGuard)
+  @Query(() => User)
+  async findSocialUser(@CurrentUser() currentUser: ICurrentUser) {
+    return await this.userService.findOne(currentUser.email);
   }
 
   @Mutation(() => User)

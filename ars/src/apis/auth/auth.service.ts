@@ -30,19 +30,24 @@ export class AuthService {
   }
 
   async loginOAuth(req, res) {
-    let user = await this.userService.findOne({ email: req.user.email });
-
+    let email = req.user.email;
+    console.log(email + '****************!!');
+    let user = await this.userService.findOne(email);
+    console.log('LLLLLLOOOOOO !' + user);
     if (!user) {
       const { password, ...rest } = req.user;
       const hashedPassword = await bcrypt.hash(String(password), 1);
       const createUser = { ...rest, password: hashedPassword };
       user = await this.userService.create({ ...createUser });
       this.setRefreshToken({ user, res });
+      console.log('user created !!!');
       res.redirect('https://artipul.shop/socialLogin');
+      return user;
     } else {
       this.setRefreshToken({ user, res });
       res.redirect('https://artipul.shop/');
       res.send(user);
+      return user;
     }
   }
 }
