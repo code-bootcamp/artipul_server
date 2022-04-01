@@ -11,11 +11,17 @@ export class LikeArtService {
   ) {}
 
   async find(userId, page) {
-    const arts = await this.likeArtRepository.find({
-      take: 10,
-      skip: 10 * (page - 1),
-      where: { userId: userId },
-    });
+    let arts = [];
+    if (page) {
+      arts = await this.likeArtRepository.find({
+        take: 10,
+        skip: 10 * (page - 1),
+        where: { userId: userId },
+      });
+    } else {
+      arts = await this.likeArtRepository.find({ userId });
+    }
+
     return arts.map((ele) => ele.art);
   }
 
