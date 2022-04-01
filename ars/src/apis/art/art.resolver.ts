@@ -199,7 +199,7 @@ export class ArtResolver {
       });
       return artTags;
     }
-  }
+
 
   @Query(() => Art)
   async fetchArt(@Args('artId') artId: string) {
@@ -210,6 +210,7 @@ export class ArtResolver {
   async fetchArtImages(@Args('artId') artId: string) {
     return await this.artService.findImages({ artId });
   }
+
   ///////////////////////////////////////////////////////////////////////////
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => Number)
@@ -316,7 +317,7 @@ export class ArtResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
   async fetchLikeArt(
-    @Args('page') page: number,
+    @Args('page', { nullable: true }) page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.likeArtService.find(currentUser.id, page);
