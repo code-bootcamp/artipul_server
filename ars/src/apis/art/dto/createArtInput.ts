@@ -26,15 +26,18 @@ export class CreateArtInput {
   @Field(() => Boolean)
   is_soldout: boolean;
 
-  @Field(() => String)
-  tag1: string;
+  @Field(() => [String])
+  tags: string[];
 
-  @Field(() => String, { nullable: true })
-  tag2?: string;
+  // @Field(() => String)
+  // tag1: string;
 
-  @Field(() => String, { nullable: true })
-  tag3?: string;
+  // @Field(() => String, { nullable: true })
+  // tag2?: string;
 
-  @Field(() => String, { nullable: true })
-  tag4?: string;
+  // @Field(() => String, { nullable: true })
+  // tag3?: string;
+
+  // @Field(() => String, { nullable: true })
+  // tag4?: string;
 }

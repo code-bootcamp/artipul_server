@@ -31,62 +31,175 @@ export class ArtResolver {
 
   @Query(() => [ArtsSearch])
   async fetchArts(
-    @Args('tag1') tag1: string,
-    @Args('tag2', { nullable: true }) tag2: string,
-    @Args('tag3', { nullable: true }) tag3: string,
-    @Args('tag4', { nullable: true }) tag4: string,
+    @Args({ name: 'tags', type: () => [String] }) tags: string[],
   ) {
-    //redis에 캐시되어 있는지 확인하기
-    const redisValue = await this.cacheManager.get(
-      `tag1: ${tag1}, tag2: ${tag2}, tag3: ${tag3}, tag4: ${tag4}`,
-    );
-    if (redisValue) {
-      return redisValue;
-    }
-    // 레디스에 캐시가 되어있지 않다면, 엘라스틱서치에서 조회하기(유저가 검색한 검색어로 조회하기)
-    const result = await this.elasticsearchService.search({
-      index: 'artipul00',
-      query: {
-        bool: {
-          should: [
-            { match: { tag1: tag1 } },
-            { match: { tag2: tag2 } },
-            { match: { tag3: tag3 } },
-            { match: { tag4: tag4 } },
-          ],
+    if (tags.length === 1) {
+      const redisValue = await this.cacheManager.get(`tags: ${tags}`);
+      if (redisValue) {
+        return redisValue;
+      }
+
+      const result = await this.elasticsearchService.search({
+        index: 'artipul09',
+        query: {
+          bool: {
+            must: [{ match: { tag1: tags[0] } }],
+          },
         },
-      },
-    });
+      });
 
-    if (!result.hits.hits.length) return null;
+      if (!result.hits.hits.length) return null;
 
-    const artTags = result.hits.hits.map((el: any) => {
-      return {
-        id: el._source.id,
-        title: el._source.title,
-        start_price: el._source.start_price,
-        instant_bid: el._source.instant_bid,
-        price: el._source.price,
-        deadline: el._source.deadline,
-        thumbnail: el._source.thumbnail,
-        tag1: el._source.tag1,
-        tag2: el._source.tag2,
-        tag3: el._source.tag3,
-        tag4: el._source.tag4,
-        nickname: el._source.nickname,
-      };
-    });
+      const artTags = result.hits.hits.map((el: any) => {
+        return {
+          id: el._source.id,
+          title: el._source.title,
+          start_price: el._source.start_price,
+          instant_bid: el._source.instant_bid,
+          price: el._source.price,
+          deadline: el._source.deadline,
+          thumbnail: el._source.thumbnail,
+          tag1: el._source.tag1,
+          nickname: el._source.nickname,
+        };
+      });
 
-    // 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
-    await this.cacheManager.set(
-      `tag1: ${tag1}, tag2: ${tag2}, tag3: ${tag3}, tag4: ${tag4}`,
-      artTags,
-      { ttl: 0 },
-    );
-    // 최종 결과 브라우저에 리턴해주기
+      // 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
+      await this.cacheManager.set(`tags: ${tags}`, artTags, {
+        ttl: 5,
+      });
+      return artTags;
+    }
 
-    return artTags;
-  }
+    if (tags.length === 2) {
+      const redisValue = await this.cacheManager.get(`tags: ${tags}`);
+      if (redisValue) {
+        return redisValue;
+      }
+
+      const result = await this.elasticsearchService.search({
+        index: 'artipul09',
+        query: {
+          bool: {
+            must: [{ match: { tag1: tags[0] } }, { match: { tag2: tags[1] } }],
+          },
+        },
+      });
+
+      if (!result.hits.hits.length) return null;
+
+      const artTags = result.hits.hits.map((el: any) => {
+        return {
+          id: el._source.id,
+          title: el._source.title,
+          start_price: el._source.start_price,
+          instant_bid: el._source.instant_bid,
+          price: el._source.price,
+          deadline: el._source.deadline,
+          thumbnail: el._source.thumbnail,
+          tag1: el._source.tag1,
+          tag2: el._source.tag2,
+          nickname: el._source.nickname,
+        };
+      });
+
+      // 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
+      await this.cacheManager.set(`tags: ${tags}`, artTags, {
+        ttl: 5,
+      });
+      return artTags;
+    }
+
+    if (tags.length === 3) {
+      const redisValue = await this.cacheManager.get(`tags: ${tags}`);
+      if (redisValue) {
+        return redisValue;
+      }
+
+      const result = await this.elasticsearchService.search({
+        index: 'artipul09',
+        query: {
+          bool: {
+            must: [
+              { match: { tag1: tags[0] } },
+              { match: { tag2: tags[1] } },
+              { match: { tag3: tags[2] } },
+            ],
+          },
+        },
+      });
+
+      if (!result.hits.hits.length) return null;
+
+      const artTags = result.hits.hits.map((el: any) => {
+        return {
+          id: el._source.id,
+          title: el._source.title,
+          start_price: el._source.start_price,
+          instant_bid: el._source.instant_bid,
+          price: el._source.price,
+          deadline: el._source.deadline,
+          thumbnail: el._source.thumbnail,
+          tag1: el._source.tag1,
+          tag2: el._source.tag2,
+          tag3: el._source.tag3,
+          nickname: el._source.nickname,
+        };
+      });
+
+      // 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
+      await this.cacheManager.set(`tags: ${tags}`, artTags, {
+        ttl: 5,
+      });
+      return artTags;
+    }
+
+    if (tags.length === 4) {
+      const redisValue = await this.cacheManager.get(`tags: ${tags}`);
+      if (redisValue) {
+        return redisValue;
+      }
+
+      const result = await this.elasticsearchService.search({
+        index: 'artipul09',
+        query: {
+          bool: {
+            must: [
+              { match: { tag1: tags[0] } },
+              { match: { tag2: tags[1] } },
+              { match: { tag3: tags[2] } },
+              { match: { tag4: tags[3] } },
+            ],
+          },
+        },
+      });
+
+      if (!result.hits.hits.length) return null;
+
+      const artTags = result.hits.hits.map((el: any) => {
+        return {
+          id: el._source.id,
+          title: el._source.title,
+          start_price: el._source.start_price,
+          instant_bid: el._source.instant_bid,
+          price: el._source.price,
+          deadline: el._source.deadline,
+          thumbnail: el._source.thumbnail,
+          tag1: el._source.tag1,
+          tag2: el._source.tag2,
+          tag3: el._source.tag3,
+          tag4: el._source.tag4,
+          nickname: el._source.nickname,
+        };
+      });
+
+      // 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
+      await this.cacheManager.set(`tags: ${tags}`, artTags, {
+        ttl: 5,
+      });
+      return artTags;
+    }
+
 
   @Query(() => Art)
   async fetchArt(@Args('artId') artId: string) {

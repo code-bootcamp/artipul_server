@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArtService } from '../art/art.service';
 import { Art } from '../art/entities/art.entity';
