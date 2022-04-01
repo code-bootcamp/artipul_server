@@ -36,14 +36,13 @@ export class ArtResolver {
     @Args('tag3', { nullable: true }) tag3: string,
     @Args('tag4', { nullable: true }) tag4: string,
   ) {
-    // redis에 캐시되어 있는지 확인하기
-    // const redisValue = await this.cacheManager.get(
-    //   `tag1: ${tag1}, tag2: ${tag2}, tag3: ${tag3}, tag4: ${tag4}`,
-    // );
-    // if (redisValue) {
-    //   console.log('💛', redisValue);
-    //   return redisValue;
-    // }
+    //redis에 캐시되어 있는지 확인하기
+    const redisValue = await this.cacheManager.get(
+      `tag1: ${tag1}, tag2: ${tag2}, tag3: ${tag3}, tag4: ${tag4}`,
+    );
+    if (redisValue) {
+      return redisValue;
+    }
 
     // 레디스에 캐시가 되어있지 않다면, 엘라스틱서치에서 조회하기(유저가 검색한 검색어로 조회하기)
     const result = await this.elasticsearchService.search({
@@ -78,8 +77,6 @@ export class ArtResolver {
         nickname: el._source.nickname,
       };
     });
-
-    console.log(artTags);
 
     // 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
     await this.cacheManager.set(
