@@ -14,6 +14,7 @@ import { CreateArtInput } from './dto/createArtInput';
 import { Art } from './entities/art.entity';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
+import { ArtsSearch } from './entities/artsSearch.entity';
 
 @Resolver()
 export class ArtResolver {
@@ -28,24 +29,23 @@ export class ArtResolver {
     private readonly paymentService: PaymentService,
   ) {}
 
-  @Query(() => [Art])
+  @Query(() => [ArtsSearch])
   async fetchArts(
     @Args('tag1') tag1: string,
     @Args('tag2', { nullable: true }) tag2: string,
     @Args('tag3', { nullable: true }) tag3: string,
     @Args('tag4', { nullable: true }) tag4: string,
   ) {
-    // redis에 캐시되어 있는지 확인하기
+    //redis에 캐시되어 있는지 확인하기
     const redisValue = await this.cacheManager.get(
       `tag1: ${tag1}, tag2: ${tag2}, tag3: ${tag3}, tag4: ${tag4}`,
     );
     if (redisValue) {
-      console.log(redisValue);
       return redisValue;
     }
     // 레디스에 캐시가 되어있지 않다면, 엘라스틱서치에서 조회하기(유저가 검색한 검색어로 조회하기)
     const result = await this.elasticsearchService.search({
-      index: 'artipul01',
+      index: 'artipul00',
       query: {
         bool: {
           should: [
@@ -60,20 +60,22 @@ export class ArtResolver {
 
     if (!result.hits.hits.length) return null;
 
-    const artTags = result.hits.hits.map((el: any) => ({
-      id: el._source.id,
-      title: el._source.title,
-      start_price: el._source.start_price,
-      instant_bid: el._source.instant_bid,
-      price: el._source.price,
-      deadline: el._source.deadline,
-      thumbnail: el._source.thumbnail,
-      tag1: el._source.tag1,
-      tag2: el._source.tag2,
-      tag3: el._source.tag3,
-      tag4: el._source.tag4,
-      nickname: el._source.nickname,
-    }));
+    const artTags = result.hits.hits.map((el: any) => {
+      return {
+        id: el._source.id,
+        title: el._source.title,
+        start_price: el._source.start_price,
+        instant_bid: el._source.instant_bid,
+        price: el._source.price,
+        deadline: el._source.deadline,
+        thumbnail: el._source.thumbnail,
+        tag1: el._source.tag1,
+        tag2: el._source.tag2,
+        tag3: el._source.tag3,
+        tag4: el._source.tag4,
+        nickname: el._source.nickname,
+      };
+    });
 
     // 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
     await this.cacheManager.set(
@@ -180,17 +182,6 @@ export class ArtResolver {
     @Args('createArtInput') createArtInput: CreateArtInput, //
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-
-    //엘라스틱서치에서 등록할때 한번 사용 후 주석
-    // await this.elasticsearchService.create({
-    //   id: 'artipulid01',
-    //   index: 'artipul01',
-    //   document: {
-    //     ...createArtInput,
-    //     currentUser,
-    //   },
-    // });
-
     return this.artService.create({ ...createArtInput }, currentUser);
   }
 

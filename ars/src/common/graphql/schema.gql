@@ -96,6 +96,21 @@ type History {
   payment: Payment
 }
 
+type ArtsSearch {
+  id: String!
+  title: String!
+  start_price: Int!
+  instant_bid: Int!
+  price: Int!
+  thumbnail: String!
+  deadline: DateTime!
+  tag1: String!
+  tag2: String
+  tag3: String
+  tag4: String
+  nickname: String!
+}
+
 type Board {
   id: String!
   title: String!
@@ -120,7 +135,7 @@ type Comment {
 }
 
 type Query {
-  fetchArts(tag1: String!, tag2: String, tag3: String, tag4: String): [Art!]!
+  fetchArts(tag1: String!, tag2: String, tag3: String, tag4: String): [ArtsSearch!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
   fetchEngageCount: Float!
