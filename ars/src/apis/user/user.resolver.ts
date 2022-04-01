@@ -23,6 +23,11 @@ export class UserResolver {
     return await this.userService.findUserEmail({ phoneNum });
   }
 
+  @Query(() => String)
+  async findSocialUser(@Args('email') email: string) {
+    const user = await this.userService.findOne(email);
+  }
+
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     const { password, ...rest } = createUserInput;

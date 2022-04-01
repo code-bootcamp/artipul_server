@@ -22,9 +22,9 @@ export class PaymentResolver {
       const arts = await this.paymentService.checkTimeout();
       arts.map(async (e) => {
         const bidInfo = await this.cacheManager.get(e.id);
-        const price = bidInfo[0];
-        const bidder = await this.userService.findOne(bidInfo[1]);
-        if (price) {
+        if (bidInfo) {
+          const price = bidInfo[0];
+          const bidder = await this.userService.findOne(bidInfo[1]);
           await this.paymentService.successfulBid(e.id, price, bidder, e.user);
         } else {
           await this.paymentService.failedBid(e.id);
