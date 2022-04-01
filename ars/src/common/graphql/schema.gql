@@ -135,7 +135,7 @@ type Comment {
 }
 
 type Query {
-  fetchArts(tag1: String!, tag2: String, tag3: String, tag4: String): [ArtsSearch!]!
+  fetchArts(tags: [String!]!): [ArtsSearch!]!
   fetchArt(artId: String!): Art!
   fetchArtImages(artId: String!): [ArtImage!]!
   fetchEngageCount: Float!
@@ -205,10 +205,7 @@ input CreateArtInput {
   deadline: DateTime!
   image_urls: [String!]!
   is_soldout: Boolean!
-  tag1: String!
-  tag2: String
-  tag3: String
-  tag4: String
+  tags: [String!]!
 }
 
 """The `Upload` scalar type represents a file upload."""

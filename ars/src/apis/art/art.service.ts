@@ -134,7 +134,7 @@ export class ArtService {
   }
 
   // 작품 등록
-  async create({ image_urls, ...rest }, currentUser) {
+  async create({ image_urls, tags, ...rest }, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -143,6 +143,10 @@ export class ArtService {
         ...rest,
         user: currentUser,
         thumbnail: image_urls[0],
+        tag1: tags[0],
+        tag2: tags[1],
+        tag3: tags[2],
+        tag4: tags[3],
       });
 
       for (let i = 0; i < image_urls.length; i++) {
