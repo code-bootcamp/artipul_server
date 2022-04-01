@@ -43,7 +43,6 @@ export class ArtResolver {
       console.log(redisValue);
       return redisValue;
     }
-
     // 레디스에 캐시가 되어있지 않다면, 엘라스틱서치에서 조회하기(유저가 검색한 검색어로 조회하기)
     const result = await this.elasticsearchService.search({
       index: 'artipul01',
@@ -83,6 +82,7 @@ export class ArtResolver {
       { ttl: 0 },
     );
     // 최종 결과 브라우저에 리턴해주기
+
     return artTags;
   }
 
@@ -95,6 +95,7 @@ export class ArtResolver {
   async fetchArtImages(@Args('artId') artId: string) {
     return await this.artService.findImages({ artId });
   }
+
   ///////////////////////////////////////////////////////////////////////////
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => Number)
@@ -179,6 +180,7 @@ export class ArtResolver {
     @Args('createArtInput') createArtInput: CreateArtInput, //
     @CurrentUser() currentUser: ICurrentUser,
   ) {
+
     //엘라스틱서치에서 등록할때 한번 사용 후 주석
     // await this.elasticsearchService.create({
     //   id: 'artipulid01',
@@ -211,7 +213,7 @@ export class ArtResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
   async fetchLikeArt(
-    @Args('page') page: number,
+    @Args('page', { nullable: true }) page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.likeArtService.find(currentUser.id, page);

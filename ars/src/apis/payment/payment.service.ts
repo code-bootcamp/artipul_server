@@ -28,12 +28,9 @@ export class PaymentService {
 
   // 마감된 작품 체크
   async checkTimeout() {
-    const time = new Date();
-    const yyyy = time.getFullYear();
-    const mm = time.getMonth() + 1;
-    const dd = time.getDate();
-    const currentTime = `${yyyy}-${mm}-${dd}`;
-
+    const utc = new Date();
+    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+    const currentTime = new Date(Number(utc) + Number(KR_TIME_DIFF));
     console.log(currentTime, ' 현 재 시 간 ');
     return await this.artRepository.find({
       where: {
@@ -104,7 +101,11 @@ export class PaymentService {
   // 입찰
   async call(artId, bid_price, email) {
     const art = await this.artRepository.findOne(artId);
-    const time = Number(art.deadline) - Number(new Date());
+
+    const utc = new Date();
+    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+    const currentTime = new Date(Number(utc) + Number(KR_TIME_DIFF));
+    const time = Number(art.deadline) - Number(currentTime);
     if (time > 0) {
       await this.cacheManager.set(artId, [bid_price, email], {
         ttl: time + 60000,

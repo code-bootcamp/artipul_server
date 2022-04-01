@@ -133,7 +133,7 @@ type Query {
   fetchTransactionCompletedArts(page: Float!): [Art!]!
   fetchEngaging(page: Float!): [Engage!]!
   fetchArtistWorks(artId: String!): [Art!]!
-  fetchLikeArt(page: Float!): [Art!]!
+  fetchLikeArt(page: Float): [Art!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
   fetchBoards: [Board!]!
@@ -148,6 +148,7 @@ type Query {
   fetchArtistProfile(artId: String!): Profile!
   fetchUser: User!
   findUserEmail(phoneNum: String!): String!
+  findSocialUser(email: String!): String!
   fetchPointTransactions: [PointTransaction!]!
 }
 
