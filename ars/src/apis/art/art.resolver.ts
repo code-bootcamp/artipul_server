@@ -199,7 +199,7 @@ export class ArtResolver {
       });
       return artTags;
     }
-
+  }
 
   @Query(() => Art)
   async fetchArt(@Args('artId') artId: string) {
