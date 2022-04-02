@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
+import { User } from '../user/entities/user.entity';
 import { Board } from './entities/board.entity';
 
 @Injectable()
@@ -56,9 +57,13 @@ export class BoardService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const user = await queryRunner.manager.findOne(User, {
+        id: currentUser.id,
+      });
+
       const result = await queryRunner.manager.save(Board, {
         ...rest,
-        user: currentUser,
+        user: user,
         thumbnail: image_urls[0],
       });
 

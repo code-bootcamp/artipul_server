@@ -20,8 +20,11 @@ export class CreateArtInput {
   @Field(() => Date, { nullable: true })
   deadline: Date;
 
-  @Field(() => [String])
-  image_urls: string[];
+  // @Field(() => [String])
+  // image_urls: string[];
+
+  @Field(() => String)
+  thumbnail: string;
 
   @Field(() => Boolean)
   is_soldout: boolean;
