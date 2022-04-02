@@ -31,7 +31,7 @@ export class Board {
   @Field(() => String)
   thumbnail: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
 }

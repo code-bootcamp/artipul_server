@@ -34,9 +34,7 @@ export class ArtService {
               tag2: tags[1],
               tag3: tags[2],
               tag4: tags[3],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 3:
@@ -45,9 +43,7 @@ export class ArtService {
               tag1: tags[0],
               tag2: tags[1],
               tag3: tags[2],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 2:
@@ -55,18 +51,14 @@ export class ArtService {
             where: {
               tag1: tags[0],
               tag2: tags[1],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 1:
           result = await this.artRepository.find({
             where: {
               tag1: tags[0],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
       }
       await queryRunner.commitTransaction();
@@ -105,7 +97,6 @@ export class ArtService {
       skip: 10 * (page - 1),
       where: { user: currentUser.id, deletedAt: Not(IsNull()) },
     });
-    console.log(art);
     return art;
   }
 
@@ -134,7 +125,7 @@ export class ArtService {
   }
 
   // 작품 등록
-  async create({ image_urls, tags, ...rest }, currentUser) {
+  async create({ thumbnail, tags, ...rest }, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -142,27 +133,27 @@ export class ArtService {
       const result = await queryRunner.manager.save(Art, {
         ...rest,
         user: currentUser,
-        thumbnail: image_urls[0],
+        thumbnail: thumbnail,
         tag1: tags[0],
         tag2: tags[1],
         tag3: tags[2],
         tag4: tags[3],
       });
 
-      for (let i = 0; i < image_urls.length; i++) {
-        if (i === 0) {
-          await queryRunner.manager.save(ArtImage, {
-            url: image_urls[i],
-            isMain: true,
-            art: result,
-          });
-        } else {
-          await queryRunner.manager.save(ArtImage, {
-            url: image_urls[i],
-            art: result,
-          });
-        }
-      }
+      // for (let i = 0; i < image_urls.length; i++) {
+      //   if (i === 0) {
+      //     await queryRunner.manager.save(ArtImage, {
+      //       url: image_urls[i],
+      //       isMain: true,
+      //       art: result,
+      //     });
+      //   } else {
+      //     await queryRunner.manager.save(ArtImage, {
+      //       url: image_urls[i],
+      //       art: result,
+      //     });
+      //   }
+      // }
       await queryRunner.commitTransaction();
       return result;
     } catch (error) {

@@ -60,6 +60,7 @@ export class BoardService {
       const user = await queryRunner.manager.findOne(User, {
         id: currentUser.id,
       });
+
       const result = await queryRunner.manager.save(Board, {
         ...rest,
         user: user,

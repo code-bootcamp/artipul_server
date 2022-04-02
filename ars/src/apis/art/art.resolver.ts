@@ -40,7 +40,9 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
+        from: 0,
+        size: 500,
         query: {
           bool: {
             must: [{ match: { tag1: tags[0] } }],
@@ -48,7 +50,7 @@ export class ArtResolver {
         },
       });
 
-      if (!result.hits.hits.length) return null;
+      if (!result.hits.hits.length) return [];
 
       const artTags = result.hits.hits.map((el: any) => {
         return {
@@ -56,8 +58,8 @@ export class ArtResolver {
           title: el._source.title,
           start_price: el._source.start_price,
           instant_bid: el._source.instant_bid,
-          price: el._source.price,
           deadline: el._source.deadline,
+          is_soldout: el._source.is_soldout,
           thumbnail: el._source.thumbnail,
           tag1: el._source.tag1,
           nickname: el._source.nickname,
@@ -78,7 +80,9 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
+        from: 0,
+        size: 500,
         query: {
           bool: {
             must: [{ match: { tag1: tags[0] } }, { match: { tag2: tags[1] } }],
@@ -86,7 +90,7 @@ export class ArtResolver {
         },
       });
 
-      if (!result.hits.hits.length) return null;
+      if (!result.hits.hits.length) return [];
 
       const artTags = result.hits.hits.map((el: any) => {
         return {
@@ -94,8 +98,8 @@ export class ArtResolver {
           title: el._source.title,
           start_price: el._source.start_price,
           instant_bid: el._source.instant_bid,
-          price: el._source.price,
           deadline: el._source.deadline,
+          is_soldout: el._source.is_soldout,
           thumbnail: el._source.thumbnail,
           tag1: el._source.tag1,
           tag2: el._source.tag2,
@@ -117,7 +121,9 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
+        from: 0,
+        size: 500,
         query: {
           bool: {
             must: [
@@ -129,7 +135,7 @@ export class ArtResolver {
         },
       });
 
-      if (!result.hits.hits.length) return null;
+      if (!result.hits.hits.length) return [];
 
       const artTags = result.hits.hits.map((el: any) => {
         return {
@@ -137,8 +143,8 @@ export class ArtResolver {
           title: el._source.title,
           start_price: el._source.start_price,
           instant_bid: el._source.instant_bid,
-          price: el._source.price,
           deadline: el._source.deadline,
+          is_soldout: el._source.is_soldout,
           thumbnail: el._source.thumbnail,
           tag1: el._source.tag1,
           tag2: el._source.tag2,
@@ -161,7 +167,9 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
+        from: 0,
+        size: 500,
         query: {
           bool: {
             must: [
@@ -174,7 +182,7 @@ export class ArtResolver {
         },
       });
 
-      if (!result.hits.hits.length) return null;
+      if (!result.hits.hits.length) return [];
 
       const artTags = result.hits.hits.map((el: any) => {
         return {
@@ -182,8 +190,8 @@ export class ArtResolver {
           title: el._source.title,
           start_price: el._source.start_price,
           instant_bid: el._source.instant_bid,
-          price: el._source.price,
           deadline: el._source.deadline,
+          is_soldout: el._source.is_soldout,
           thumbnail: el._source.thumbnail,
           tag1: el._source.tag1,
           tag2: el._source.tag2,
