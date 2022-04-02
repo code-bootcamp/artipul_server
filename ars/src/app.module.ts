@@ -47,6 +47,7 @@ import { PaymentModule } from './apis/payment/payment.module';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
+      timezone: 'Asia/seoul',
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,

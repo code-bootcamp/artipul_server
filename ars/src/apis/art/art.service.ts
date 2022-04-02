@@ -34,9 +34,7 @@ export class ArtService {
               tag2: tags[1],
               tag3: tags[2],
               tag4: tags[3],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 3:
@@ -45,9 +43,7 @@ export class ArtService {
               tag1: tags[0],
               tag2: tags[1],
               tag3: tags[2],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 2:
@@ -55,18 +51,14 @@ export class ArtService {
             where: {
               tag1: tags[0],
               tag2: tags[1],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 1:
           result = await this.artRepository.find({
             where: {
               tag1: tags[0],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
       }
       await queryRunner.commitTransaction();
