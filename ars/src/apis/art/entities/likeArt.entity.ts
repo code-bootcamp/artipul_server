@@ -1,4 +1,4 @@
-import { ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -13,11 +13,12 @@ import { Art } from './art.entity';
 @ObjectType()
 export class LikeArt {
   @PrimaryGeneratedColumn()
+  @Field(() => String)
   id: string;
 
   @Column()
   userId: string;
 
-  @ManyToOne(() => Art, { eager: true })
+  @ManyToOne(() => Art)
   art: Art;
 }
