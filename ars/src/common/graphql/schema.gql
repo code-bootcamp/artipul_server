@@ -103,7 +103,7 @@ type ArtsSearch {
   instant_bid: Int!
   price: Int!
   thumbnail: String!
-  deadline: DateTime!
+  deadline: String
   tag1: String!
   tag2: String
   tag3: String
@@ -203,7 +203,7 @@ input CreateArtInput {
   start_price: Int!
   instant_bid: Int!
   price: Int!
-  deadline: DateTime!
+  deadline: DateTime
   image_urls: [String!]!
   is_soldout: Boolean!
   tags: [String!]!

@@ -17,7 +17,7 @@ export class CreateArtInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   deadline: Date;
 
   @Field(() => [String])
@@ -28,16 +28,4 @@ export class CreateArtInput {
 
   @Field(() => [String])
   tags: string[];
-
-  // @Field(() => String)
-  // tag1: string;
-
-  // @Field(() => String, { nullable: true })
-  // tag2?: string;
-
-  // @Field(() => String, { nullable: true })
-  // tag3?: string;
-
-  // @Field(() => String, { nullable: true })
-  // tag4?: string;
 }

@@ -29,8 +29,8 @@ export class ArtsSearch {
   thumbnail: string;
 
   @Column()
-  @Field(() => Date)
-  deadline: Date;
+  @Field(() => String, { nullable: true })
+  deadline: string;
 
   @Column()
   @Field(() => String)
