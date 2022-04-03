@@ -147,7 +147,7 @@ type Query {
   fetchAuctionArtsCount: Float!
   fetchAuctionArts(page: Float!): [Art!]!
   fetchTimedOutArt(page: Float!): [Art!]!
-  fetchTransactionCompletedArts(page: Float): [Art!]!
+  fetchTransactionCompletedArts(page: Float!): [Art!]!
   fetchEngaging(page: Float!): [Engage!]!
   fetchArtistWorks(artId: String!): [Art!]!
   fetchLikeArt(page: Float): [Art!]!
@@ -172,7 +172,7 @@ type Query {
 type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
   uploadArtImage(files: [Upload!]!): [String!]!
-  addLikeArt(artId: String!, likeId: String): Boolean!
+  addLikeArt(artId: String!): Boolean!
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!

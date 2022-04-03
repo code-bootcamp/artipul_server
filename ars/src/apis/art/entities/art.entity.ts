@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Board } from 'src/apis/board/entities/board.entity';
 import { Payment } from 'src/apis/payment/entities/payment.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
