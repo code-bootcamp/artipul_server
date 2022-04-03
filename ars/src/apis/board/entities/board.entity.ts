@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -37,7 +38,7 @@ export class Board {
   @Field(() => User)
   user: User;
 
-  @OneToOne(() => Art, { eager: true })
+  @ManyToOne(() => Art, { eager: true })
   @Field(() => Art)
   art: Art;
 }
