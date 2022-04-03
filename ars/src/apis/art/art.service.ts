@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, IsNull, MoreThan, Not, Repository } from 'typeorm';
+import { Connection, getRepository, IsNull, Not, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { Engage } from '../engage/entities/engage.entity';
+import { Payment } from '../payment/entities/payment.entity';
+import { User } from '../user/entities/user.entity';
 import { Art } from './entities/art.entity';
 import { LikeArt } from './entities/likeArt.entity';
 
@@ -14,6 +16,12 @@ export class ArtService {
 
     @InjectRepository(ArtImage)
     private readonly artImageRepository: Repository<ArtImage>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
 
     private readonly connection: Connection,
   ) {}
@@ -115,12 +123,14 @@ export class ArtService {
 
   // 일반유저(내가) 구매한 작품 조회
   async findcompleteAuction({ currentUser }, page) {
-    const art = await this.artRepository.find({
-      withDeleted: true,
-      take: 10,
-      skip: 10 * (page - 1),
-      where: { user: currentUser.id, is_soldout: true },
-    });
+    const art = await getRepository(Art)
+      .createQueryBuilder('art')
+      .leftJoinAndSelect('art.payment', 'payment')
+      .leftJoinAndSelect('payment.user', 'user')
+      .where('user.id =:id', { id: currentUser.id })
+      .withDeleted()
+      .getMany();
+    console.log('***********', art);
     return art;
   }
 

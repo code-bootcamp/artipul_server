@@ -67,7 +67,7 @@ export class Art {
   @Field(() => User)
   user: User;
 
-  @OneToOne(() => Payment)
+  @OneToOne(() => Payment, (payment) => payment.art)
   @Field(() => Payment)
   payment: Payment;
 

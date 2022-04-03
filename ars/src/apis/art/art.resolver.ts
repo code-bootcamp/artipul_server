@@ -275,7 +275,7 @@ export class ArtResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Art])
   async fetchTransactionCompletedArts(
-    @Args('page') page: number,
+    @Args('page', { nullable: true }) page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.artService.findcompleteAuction({ currentUser }, page);
@@ -317,6 +317,7 @@ export class ArtResolver {
   @Mutation(() => Boolean)
   async addLikeArt(
     @Args('artId') artId: string,
+    @Args('likeId', { nullable: true }) likeId: string,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.likeArtService.like(artId, currentUser.id);

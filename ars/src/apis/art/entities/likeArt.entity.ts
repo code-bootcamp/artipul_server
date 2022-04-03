@@ -1,4 +1,3 @@
-
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
@@ -18,8 +17,10 @@ export class LikeArt {
   id: string;
 
   @Column()
+  @Field(() => String)
   userId: string;
 
-  @ManyToOne(() => Art)
+  @ManyToOne(() => Art, { eager: true })
+  @Field(() => Art)
   art: Art;
 }
