@@ -15,6 +15,7 @@ import { ProfileModule } from './apis/profile/profile.module';
 import { HistoryModule } from './apis/history/history.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PaymentModule } from './apis/payment/payment.module';
+import { setgroups } from 'process';
 
 @Module({
   imports: [

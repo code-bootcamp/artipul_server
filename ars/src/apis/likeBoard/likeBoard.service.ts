@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getRepository, Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Board } from '../board/entities/board.entity';
 import { LikeBoard } from '../board/entities/likeBoard.entity';
-import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class LikeBoardService {
@@ -17,12 +16,14 @@ export class LikeBoardService {
   async find(userId) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
+    await queryRunner.startTransaction('SERIALIZABLE');
     try {
       const boards = await queryRunner.manager.find(LikeBoard, {
         where: { userId },
         relations: ['board'],
+        lock: { mode: 'pessimistic_write' },
       });
+      await queryRunner.commitTransaction();
       return boards.map((ele) => ele.board);
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -35,7 +36,7 @@ export class LikeBoardService {
   async like(boardId, userId) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
+    await queryRunner.startTransaction('SERIALIZABLE');
     try {
       const board = await queryRunner.manager.findOne(Board, { id: boardId });
       const prevLike = await queryRunner.manager.findOne(LikeBoard, {
@@ -43,6 +44,8 @@ export class LikeBoardService {
           userId: userId,
           board: boardId,
         },
+        relations: ['board'],
+        lock: { mode: 'pessimistic_write' },
       });
       if (!prevLike) {
         await queryRunner.manager.save(LikeBoard, {
