@@ -16,21 +16,26 @@ export class LikeArtService {
   async find(userId, page) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
+    await queryRunner.startTransaction('SERIALIZABLE');
     try {
       let arts = [];
       if (page) {
-        arts = await queryRunner.manager.find(Art, {
+        arts = await queryRunner.manager.find(LikeArt, {
           take: 10,
           skip: 10 * (page - 1),
           where: { userId: userId },
+          relations: ['art'],
+          lock: { mode: 'pessimistic_write' },
         });
       } else {
         arts = await queryRunner.manager.find(LikeArt, {
           where: { userId },
           relations: ['art'],
+          lock: { mode: 'pessimistic_write' },
         });
       }
+
+      await queryRunner.commitTransaction();
       return arts.map((ele) => ele.art);
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -43,14 +48,20 @@ export class LikeArtService {
   async like(artId, userId) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
+    await queryRunner.startTransaction('SERIALIZABLE');
     try {
-      const art = await queryRunner.manager.findOne(Art, { id: artId });
+      const art = await queryRunner.manager.findOne(Art, {
+        where: { id: artId },
+        lock: { mode: 'pessimistic_write' },
+      });
+      console.log(art);
       const prevLike = await queryRunner.manager.findOne(LikeArt, {
         where: {
           userId: userId,
-          art: artId,
+          art: art,
         },
+        relations: ['art'],
+        lock: { mode: 'pessimistic_write' },
       });
       if (!prevLike) {
         await queryRunner.manager.save(LikeArt, {
@@ -60,7 +71,7 @@ export class LikeArtService {
         await queryRunner.commitTransaction();
         return true;
       } else {
-        await queryRunner.manager.delete(LikeArt, { art: artId });
+        await queryRunner.manager.delete(LikeArt, { art: art });
         await queryRunner.commitTransaction();
         return false;
       }

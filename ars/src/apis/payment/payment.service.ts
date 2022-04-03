@@ -4,6 +4,7 @@ import { Cache } from 'cache-manager';
 import { Connection, LessThan, Repository } from 'typeorm';
 import { Art } from '../art/entities/art.entity';
 import { Engage } from '../engage/entities/engage.entity';
+import { EventGateway } from '../event/event.gateway';
 import { History } from '../history/entities/history.entity';
 import { User } from '../user/entities/user.entity';
 import { Payment } from './entities/payment.entity';
@@ -22,6 +23,8 @@ export class PaymentService {
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
+
+    private eventGateway: EventGateway,
 
     private readonly connection: Connection,
   ) {}
@@ -98,10 +101,9 @@ export class PaymentService {
     await this.artRepository.softDelete({ id: artId });
   }
 
-  // 입찰
+  // 레디스에 입찰 정보(작품, 현재 입찰가, 현재 상위 입찰자)
   async call(artId, bid_price, email) {
     const art = await this.artRepository.findOne(artId);
-
     const utc = new Date();
     const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
     const currentTime = new Date(Number(utc) + Number(KR_TIME_DIFF));
@@ -114,7 +116,9 @@ export class PaymentService {
     return [bid_price, email];
   }
 
+  // DB 저장
   async save(artId, userId, bid_price) {
+    this.eventGateway.server.emit('message', bid_price);
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -125,7 +129,6 @@ export class PaymentService {
           art: artId,
         },
       });
-
       await queryRunner.manager.update(
         Art,
         { id: artId },

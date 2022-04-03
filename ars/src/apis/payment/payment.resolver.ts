@@ -39,6 +39,7 @@ export class PaymentResolver {
     }
   }
 
+  // 즉시 구매
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   async instantBid(
@@ -55,7 +56,7 @@ export class PaymentResolver {
     return artId;
   }
 
-  // 입찰 API(임시)
+  // 레디스에 입찰 정보(작품, 현재 입찰가, 현재 상위 입찰자)
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => [String])
   async Bid(
@@ -66,6 +67,7 @@ export class PaymentResolver {
     return await this.paymentService.call(artId, bid_price, currentUser.email);
   }
 
+  // DB 저장
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   async saveBid(
