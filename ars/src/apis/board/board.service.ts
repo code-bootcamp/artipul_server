@@ -98,10 +98,13 @@ export class BoardService {
     await queryRunner.startTransaction();
     try {
       const board = await queryRunner.manager.findOne(Board, { id: boardId });
+      const user = await queryRunner.manager.findOne(User, {
+        id: currentUser.id,
+      });
       const result = await queryRunner.manager.save(Board, {
         ...board,
         ...rest,
-        user: currentUser,
+        user: user,
         thumbnail: image_urls[0],
       });
 
