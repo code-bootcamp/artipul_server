@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Like, Repository } from 'typeorm';
+import { Art } from '../art/entities/art.entity';
 import { LikeArt } from '../art/entities/likeArt.entity';
 
 @Injectable()
@@ -8,42 +9,66 @@ export class LikeArtService {
   constructor(
     @InjectRepository(LikeArt)
     private readonly likeArtRepository: Repository<LikeArt>,
+
+    private readonly connection: Connection,
   ) {}
 
   async find(userId, page) {
-    let arts = [];
-    if (page) {
-      arts = await this.likeArtRepository.find({
-        take: 10,
-        skip: 10 * (page - 1),
-        where: { userId: userId },
-      });
-    } else {
-      arts = await this.likeArtRepository.find({ userId });
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      let arts = [];
+      if (page) {
+        arts = await queryRunner.manager.find(Art, {
+          take: 10,
+          skip: 10 * (page - 1),
+          where: { userId: userId },
+        });
+      } else {
+        arts = await queryRunner.manager.find(LikeArt, {
+          where: { userId },
+          relations: ['art'],
+        });
+      }
+      return arts.map((ele) => ele.art);
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error + 'like art!!!';
+    } finally {
+      await queryRunner.release();
     }
-
-    return arts.map((ele) => ele.art);
   }
 
   async like(artId, userId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
     try {
-      const prevLike = await this.likeArtRepository.findOne({
+      const art = await queryRunner.manager.findOne(Art, { id: artId });
+      const prevLike = await queryRunner.manager.findOne(LikeArt, {
         where: {
           userId: userId,
           art: artId,
         },
       });
       if (!prevLike) {
-        await this.likeArtRepository.save({
+        await queryRunner.manager.save(LikeArt, {
           userId: userId,
-          art: artId,
+          art: art,
         });
+        await queryRunner.commitTransaction();
+        return true;
       } else {
-        await this.likeArtRepository.delete({ art: artId });
+        await queryRunner.manager.delete(LikeArt, { art: artId });
+        await queryRunner.commitTransaction();
+        return false;
       }
-      return true;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       throw error + 'like art!!!';
+    } finally {
+      await queryRunner.release();
     }
   }
 }

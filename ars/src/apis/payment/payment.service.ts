@@ -64,7 +64,7 @@ export class PaymentService {
       });
 
       // 유저 누적 포인트 업데이트
-      const updated = await queryRunner.manager.save(User, {
+      const updatedUser = await queryRunner.manager.save(User, {
         ...bidder,
         point: bidder.point - price,
       });
@@ -72,8 +72,8 @@ export class PaymentService {
       // 히스토리 테이블(낙찰자) 저장
       await queryRunner.manager.save(History, {
         point: price,
-        balance: updated.point,
-        user: updated,
+        balance: updatedUser.point,
+        user: updatedUser,
         payment: payment,
       });
 

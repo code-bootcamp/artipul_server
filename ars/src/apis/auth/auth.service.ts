@@ -32,7 +32,8 @@ export class AuthService {
   async loginOAuth(req, res) {
     let email = req.user.email;
     let user = await this.userService.findOne(email);
-    if (!user) {
+
+    if (!user || !user.phoneNum) {
       const { password, ...rest } = req.user;
       const hashedPassword = await bcrypt.hash(String(password), 1);
       const createUser = { ...rest, password: hashedPassword };
