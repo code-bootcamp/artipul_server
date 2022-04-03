@@ -25,10 +25,13 @@ export class CommentService {
     await queryRunner.startTransaction();
     try {
       const board = await queryRunner.manager.findOne(Board, { id: boardId });
+      const user = await queryRunner.manager.findOne(User, {
+        id: currentUser.id,
+      });
       const comment = await queryRunner.manager.save(Comment, {
         content,
         board,
-        user: currentUser,
+        user: user,
       });
       await queryRunner.commitTransaction();
       return comment;
