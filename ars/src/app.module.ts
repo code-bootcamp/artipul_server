@@ -15,7 +15,7 @@ import { ProfileModule } from './apis/profile/profile.module';
 import { HistoryModule } from './apis/history/history.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PaymentModule } from './apis/payment/payment.module';
-import { setgroups } from 'process';
+import { EventModule } from './apis/event/event.module';
 
 @Module({
   imports: [
@@ -28,6 +28,7 @@ import { setgroups } from 'process';
     UserModule,
     PaymentModule,
     PointTransactionModule,
+    EventModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -48,7 +49,6 @@ import { setgroups } from 'process';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
-      timezone: 'Asia/seoul',
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,

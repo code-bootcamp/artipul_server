@@ -6,6 +6,8 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { Engage } from '../engage/entities/engage.entity';
+import { EventGateway } from '../event/event.gateway';
+import { EventModule } from '../event/event.module';
 import { FileService } from '../file/file.service';
 import { LikeArtService } from '../likeArt/likeArt.service';
 import { Payment } from '../payment/entities/payment.entity';
@@ -31,6 +33,7 @@ import { LikeArt } from './entities/likeArt.entity';
     ElasticsearchModule.register({
       node: 'http://elasticsearch:9200',
     }),
+    EventModule,
   ],
   providers: [
     ArtResolver, //
