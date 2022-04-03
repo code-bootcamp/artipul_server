@@ -1,6 +1,13 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Profile } from 'src/apis/profile/entities/profile.entity';
+import { Payment } from 'src/apis/payment/entities/payment.entity';
 
 @Entity()
 @ObjectType()
@@ -44,4 +51,8 @@ export class User {
   @OneToOne(() => Profile)
   @Field(() => Profile, { nullable: true })
   profile?: Profile;
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  @Field(() => Payment)
+  payment: Payment;
 }

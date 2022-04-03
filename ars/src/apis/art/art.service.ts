@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, IsNull, MoreThan, Not, Repository } from 'typeorm';
+import { Connection, getRepository, IsNull, Not, Repository } from 'typeorm';
 import { ArtImage } from '../artImage/entities/artImage.entity';
 import { Engage } from '../engage/entities/engage.entity';
+import { Payment } from '../payment/entities/payment.entity';
+import { User } from '../user/entities/user.entity';
 import { Art } from './entities/art.entity';
 import { LikeArt } from './entities/likeArt.entity';
 
@@ -14,6 +16,12 @@ export class ArtService {
 
     @InjectRepository(ArtImage)
     private readonly artImageRepository: Repository<ArtImage>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
 
     private readonly connection: Connection,
   ) {}
@@ -34,9 +42,7 @@ export class ArtService {
               tag2: tags[1],
               tag3: tags[2],
               tag4: tags[3],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 3:
@@ -45,9 +51,7 @@ export class ArtService {
               tag1: tags[0],
               tag2: tags[1],
               tag3: tags[2],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 2:
@@ -55,18 +59,14 @@ export class ArtService {
             where: {
               tag1: tags[0],
               tag2: tags[1],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
           break;
         case 1:
           result = await this.artRepository.find({
             where: {
               tag1: tags[0],
-              createdAt: MoreThan(createdAt),
             },
-            order: { createdAt: 'ASC' },
           });
       }
       await queryRunner.commitTransaction();
@@ -105,7 +105,6 @@ export class ArtService {
       skip: 10 * (page - 1),
       where: { user: currentUser.id, deletedAt: Not(IsNull()) },
     });
-    console.log(art);
     return art;
   }
 
@@ -124,17 +123,19 @@ export class ArtService {
 
   // 일반유저(내가) 구매한 작품 조회
   async findcompleteAuction({ currentUser }, page) {
-    const art = await this.artRepository.find({
-      withDeleted: true,
-      take: 10,
-      skip: 10 * (page - 1),
-      where: { user: currentUser.id, is_soldout: true },
-    });
+    const art = await getRepository(Art)
+      .createQueryBuilder('art')
+      .leftJoinAndSelect('art.payment', 'payment')
+      .leftJoinAndSelect('payment.user', 'user')
+      .where('user.id =:id', { id: currentUser.id })
+      .withDeleted()
+      .getMany();
+    console.log('***********', art);
     return art;
   }
 
   // 작품 등록
-  async create({ image_urls, tags, ...rest }, currentUser) {
+  async create({ thumbnail, tags, ...rest }, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -142,27 +143,27 @@ export class ArtService {
       const result = await queryRunner.manager.save(Art, {
         ...rest,
         user: currentUser,
-        thumbnail: image_urls[0],
+        thumbnail: thumbnail,
         tag1: tags[0],
         tag2: tags[1],
         tag3: tags[2],
         tag4: tags[3],
       });
 
-      for (let i = 0; i < image_urls.length; i++) {
-        if (i === 0) {
-          await queryRunner.manager.save(ArtImage, {
-            url: image_urls[i],
-            isMain: true,
-            art: result,
-          });
-        } else {
-          await queryRunner.manager.save(ArtImage, {
-            url: image_urls[i],
-            art: result,
-          });
-        }
-      }
+      // for (let i = 0; i < image_urls.length; i++) {
+      //   if (i === 0) {
+      //     await queryRunner.manager.save(ArtImage, {
+      //       url: image_urls[i],
+      //       isMain: true,
+      //       art: result,
+      //     });
+      //   } else {
+      //     await queryRunner.manager.save(ArtImage, {
+      //       url: image_urls[i],
+      //       art: result,
+      //     });
+      //   }
+      // }
       await queryRunner.commitTransaction();
       return result;
     } catch (error) {

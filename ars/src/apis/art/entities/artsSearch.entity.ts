@@ -20,17 +20,17 @@ export class ArtsSearch {
   @Field(() => Int)
   instant_bid: number;
 
-  @Column({ default: null })
-  @Field(() => Int)
-  price: number;
-
   @Column()
   @Field(() => String)
   thumbnail: string;
 
   @Column()
-  @Field(() => Date)
-  deadline: Date;
+  @Field(() => String, { nullable: true })
+  deadline: string;
+
+  @Column({ default: false })
+  @Field(() => Boolean)
+  is_soldout: boolean;
 
   @Column()
   @Field(() => String)

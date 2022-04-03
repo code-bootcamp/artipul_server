@@ -11,8 +11,10 @@ export class LikeArt {
   id: string;
 
   @Column()
+  @Field(() => String)
   userId: string;
 
   @ManyToOne(() => Art, { eager: true })
+  @Field(() => Art)
   art: Art;
 }

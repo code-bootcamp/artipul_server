@@ -27,11 +27,11 @@ export class Payment {
   amount: number;
 
   @JoinColumn()
-  @OneToOne(() => Art)
+  @OneToOne(() => Art, (art) => art.payment)
   @Field(() => Art)
   art: Art;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, (user) => user.payment, { eager: true })
   @Field(() => User)
   user: User;
 }

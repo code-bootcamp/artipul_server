@@ -2,6 +2,40 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Art {
+  id: String!
+  title: String!
+  description: String!
+  start_price: Int!
+  instant_bid: Int!
+  price: Int!
+  thumbnail: String!
+  createdAt: DateTime!
+  deletedAt: DateTime!
+  deadline: String!
+  is_soldout: Boolean!
+  updatedAt: DateTime!
+  user: User!
+  payment: Payment!
+  tag1: String!
+  tag2: String
+  tag3: String
+  tag4: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Payment {
+  id: String!
+  createdAt: DateTime!
+  amount: Int!
+  art: Art!
+  user: User!
+}
+
 type User {
   id: String!
   name: String!
@@ -13,6 +47,7 @@ type User {
   is_artist: Boolean!
   college: String!
   profile: Profile
+  payment: Payment!
 }
 
 type Profile {
@@ -25,40 +60,6 @@ type Profile {
 
 type Token {
   accessToken: String!
-}
-
-type Payment {
-  id: String!
-  createdAt: DateTime!
-  amount: Int!
-  art: Art!
-  user: User!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Art {
-  id: String!
-  title: String!
-  description: String!
-  start_price: Int!
-  instant_bid: Int!
-  price: Int!
-  thumbnail: String!
-  createdAt: DateTime!
-  deletedAt: DateTime!
-  deadline: DateTime!
-  is_soldout: Boolean!
-  updatedAt: DateTime!
-  user: User!
-  payment: Payment!
-  tag1: String!
-  tag2: String
-  tag3: String
-  tag4: String
 }
 
 type ArtImage {
@@ -101,9 +102,9 @@ type ArtsSearch {
   title: String!
   start_price: Int!
   instant_bid: Int!
-  price: Int!
   thumbnail: String!
-  deadline: DateTime!
+  deadline: String
+  is_soldout: Boolean!
   tag1: String!
   tag2: String
   tag3: String
@@ -145,7 +146,7 @@ type Query {
   fetchAuctionArtsCount: Float!
   fetchAuctionArts(page: Float!): [Art!]!
   fetchTimedOutArt(page: Float!): [Art!]!
-  fetchTransactionCompletedArts(page: Float!): [Art!]!
+  fetchTransactionCompletedArts(page: Float): [Art!]!
   fetchEngaging(page: Float!): [Engage!]!
   fetchArtistWorks(artId: String!): [Art!]!
   fetchLikeArt(page: Float): [Art!]!
@@ -170,7 +171,7 @@ type Query {
 type Mutation {
   createArt(createArtInput: CreateArtInput!): Art!
   uploadArtImage(files: [Upload!]!): [String!]!
-  addLikeArt(artId: String!): Boolean!
+  addLikeArt(artId: String!, likeId: String): Boolean!
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!
@@ -203,8 +204,8 @@ input CreateArtInput {
   start_price: Int!
   instant_bid: Int!
   price: Int!
-  deadline: DateTime!
-  image_urls: [String!]!
+  deadline: DateTime
+  thumbnail: String!
   is_soldout: Boolean!
   tags: [String!]!
 }
