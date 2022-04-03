@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { Art } from 'src/apis/art/entities/art.entity';
 
 @InputType()
 export class CreateBoardInput {

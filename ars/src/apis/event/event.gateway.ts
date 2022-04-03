@@ -8,7 +8,7 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:3000', 'https://mybackend.arios67.shop'],
+    origin: ['http://localhost:3000', 'https://daseul.shop'],
   },
   namespace: /./,
 })
