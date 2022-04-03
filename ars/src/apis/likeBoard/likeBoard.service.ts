@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getRepository, Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
+import { Board } from '../board/entities/board.entity';
 import { LikeBoard } from '../board/entities/likeBoard.entity';
 
 @Injectable()
@@ -37,16 +38,19 @@ export class LikeBoardService {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
     try {
+      const board = await queryRunner.manager.findOne(Board, { id: boardId });
       const prevLike = await queryRunner.manager.findOne(LikeBoard, {
         where: {
           userId: userId,
           board: boardId,
         },
+        relations: ['board'],
+        lock: { mode: 'pessimistic_write' },
       });
       if (!prevLike) {
         await queryRunner.manager.save(LikeBoard, {
           userId: userId,
-          board: boardId,
+          board: board,
         });
         await queryRunner.commitTransaction();
         return true;
