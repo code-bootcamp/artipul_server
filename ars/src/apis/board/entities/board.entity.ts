@@ -1,10 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Art } from 'src/apis/art/entities/art.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -34,4 +36,8 @@ export class Board {
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)
   user: User;
+
+  @OneToOne(() => Art, { eager: true })
+  @Field(() => Art)
+  art: Art;
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
+import { Art } from '../art/entities/art.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
 import { User } from '../user/entities/user.entity';
@@ -52,7 +53,7 @@ export class BoardService {
   }
 
   // 게시물 등록
-  async create({ image_urls, ...rest }, currentUser) {
+  async create({ image_urls, ...rest }, artId, currentUser) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -60,10 +61,14 @@ export class BoardService {
       const user = await queryRunner.manager.findOne(User, {
         id: currentUser.id,
       });
+      const art = await queryRunner.manager.findOne(Art, {
+        id: artId,
+      });
 
       const result = await queryRunner.manager.save(Board, {
         ...rest,
         user: user,
+        art: art,
         thumbnail: image_urls[0],
       });
 

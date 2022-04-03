@@ -119,6 +119,7 @@ type Board {
   content: String!
   thumbnail: String!
   user: User!
+  art: Art!
 }
 
 type BoardImage {
@@ -175,7 +176,7 @@ type Mutation {
   login(email: String!, password: String!): Token!
   restoreAccessToken: Token!
   logout: String!
-  createBoard(createBoardInput: CreateBoardInput!): Board!
+  createBoard(createBoardInput: CreateBoardInput!, artId: String!): Board!
   updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
   deleteBoard(boardId: String!): Boolean!
   uploadBoardImage(files: [Upload!]!): [String!]!

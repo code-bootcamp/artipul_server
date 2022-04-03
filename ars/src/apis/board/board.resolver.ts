@@ -58,9 +58,14 @@ export class BoardResolver {
   @Mutation(() => Board)
   async createBoard(
     @Args('createBoardInput') createBoardInput: CreateBoardInput,
+    @Args('artId') artId: string,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    return await this.boardService.create({ ...createBoardInput }, currentUser);
+    return await this.boardService.create(
+      { ...createBoardInput },
+      artId,
+      currentUser,
+    );
   }
 
   // 게시물 수정
