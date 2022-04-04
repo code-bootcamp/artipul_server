@@ -33,15 +33,15 @@ export class BoardResolver {
 
   // 게시물 모두 조회
   @Query(() => [Board])
-  async fetchBoards() {
-    return await this.boardService.findAll();
+  async fetchBoards(@Args('page', { nullable: true }) page: number) {
+    return await this.boardService.findAll(page);
   }
 
   // 내가 쓴 게시물 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Board])
   async fetchBoardsOfMine(
-    @Args('page') page: number,
+    @Args('page', { nullable: true }) page: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.boardService.findMine({ currentUser }, page);

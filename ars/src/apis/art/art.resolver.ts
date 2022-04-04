@@ -40,7 +40,7 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
         query: {
           bool: {
             must: [{ match: { tag1: tags[0] } }],
@@ -78,7 +78,7 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
         query: {
           bool: {
             must: [{ match: { tag1: tags[0] } }, { match: { tag2: tags[1] } }],
@@ -117,7 +117,7 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
         query: {
           bool: {
             must: [
@@ -161,7 +161,7 @@ export class ArtResolver {
       }
 
       const result = await this.elasticsearchService.search({
-        index: 'artipul09',
+        index: 'artipul00',
         query: {
           bool: {
             must: [
