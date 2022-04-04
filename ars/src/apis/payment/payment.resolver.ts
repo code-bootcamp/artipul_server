@@ -12,7 +12,6 @@ export class PaymentResolver {
   constructor(
     private readonly paymentService: PaymentService,
     private readonly userService: UserService,
-    private readonly elasticsearchService: ElasticsearchService,
 
     private readonly elasticsearchService: ElasticsearchService,
 
@@ -69,8 +68,6 @@ export class PaymentResolver {
     return artId;
   }
 
-    return 'ok';
-  }
   // 레디스에 입찰 정보(작품, 현재 입찰가, 현재 상위 입찰자)
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => [String])
