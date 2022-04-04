@@ -127,6 +127,8 @@ export class ArtService {
       .createQueryBuilder('art')
       .leftJoinAndSelect('art.payment', 'payment')
       .leftJoinAndSelect('payment.user', 'user')
+      .take(10)
+      .skip(10 * (page - 1))
       .where('user.id =:id', { id: currentUser.id })
       .withDeleted()
       .getMany();
@@ -217,6 +219,7 @@ export class ArtService {
       .where('user.id =:id', { id: userId })
       .withDeleted()
       .getCount();
+    
     return art;
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Connection, getRepository, Repository } from 'typeorm';
 import { Art } from '../art/entities/art.entity';
 import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
@@ -35,6 +35,7 @@ export class BoardService {
   // 게시물 모두 조회
   async findAll(page) {
     return await this.boardRepository.find({
+      relations: ['art'],
       take: 10,
       skip: 10 * (page - 1),
     });

@@ -14,6 +14,8 @@ export class PaymentResolver {
     private readonly userService: UserService,
     private readonly elasticsearchService: ElasticsearchService,
 
+    private readonly elasticsearchService: ElasticsearchService,
+
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
@@ -64,6 +66,9 @@ export class PaymentResolver {
       },
     });
 
+    return artId;
+  }
+
     return 'ok';
   }
   // 레디스에 입찰 정보(작품, 현재 입찰가, 현재 상위 입찰자)
@@ -87,5 +92,10 @@ export class PaymentResolver {
   ) {
     await this.paymentService.save(artId, currentUser.id, bid_price);
     return 'ok';
+  }
+
+  @Mutation(() => String)
+  async enterBidRomm(@Args('artId') artId: string) {
+    return await this.paymentService.room(artId);
   }
 }
