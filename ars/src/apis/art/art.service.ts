@@ -127,10 +127,11 @@ export class ArtService {
       .createQueryBuilder('art')
       .leftJoinAndSelect('art.payment', 'payment')
       .leftJoinAndSelect('payment.user', 'user')
+      .take(10)
+      .skip(10 * (page - 1))
       .where('user.id =:id', { id: currentUser.id })
       .withDeleted()
       .getMany();
-    console.log('***********', art);
     return art;
   }
 
@@ -211,11 +212,15 @@ export class ArtService {
   }
 
   async countComletedAuctionArts(userId) {
-    const result = await this.artRepository.count({
-      withDeleted: true,
-      where: { user: userId, is_soldout: true },
-    });
-    return result;
+    const art = await getRepository(Art)
+      .createQueryBuilder('art')
+      .leftJoinAndSelect('art.payment', 'payment')
+      .leftJoinAndSelect('payment.user', 'user')
+      .where('user.id =:id', { id: userId })
+      .withDeleted()
+      .getCount();
+
+    return art;
   }
 
   async countTimedoutArts(userId) {

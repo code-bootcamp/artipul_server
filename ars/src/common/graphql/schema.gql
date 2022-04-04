@@ -195,6 +195,7 @@ type Mutation {
   instantBid(artId: String!, price: Float!, artistEmail: String!): String!
   Bid(artId: String!, bid_price: Float!): [String!]!
   saveBid(artId: String!, bid_price: Float!): String!
+  enterBidRomm(artId: String!): String!
   createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
   cancelPointTransaction(impUid: String!): PointTransaction!
 }

@@ -118,7 +118,10 @@ export class PaymentService {
 
   // DB 저장
   async save(artId, userId, bid_price) {
-    this.eventGateway.server.emit('message', bid_price);
+    this.eventGateway.server.emit('message', {
+      price: bid_price,
+      artId: artId,
+    });
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -157,4 +160,6 @@ export class PaymentService {
       where: { userId: userId },
     });
   }
+
+  async room(artId) {}
 }
