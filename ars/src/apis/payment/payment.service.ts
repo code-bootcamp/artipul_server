@@ -29,6 +29,10 @@ export class PaymentService {
     private readonly connection: Connection,
   ) {}
 
+  async find() {
+    await this.artRepository.find();
+  }
+
   // 마감된 작품 체크
   async checkTimeout() {
     const utc = new Date();

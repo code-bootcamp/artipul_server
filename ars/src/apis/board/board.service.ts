@@ -33,17 +33,19 @@ export class BoardService {
   }
 
   // 게시물 모두 조회
-  async findAll() {
+  async findAll(page) {
     return await this.boardRepository.find({
       relations: ['art'],
+      take: 10,
+      skip: 10 * (page - 1),
     });
   }
 
   // 내가 쓴 게시물 조회
   async findMine({ currentUser }, page) {
     return await this.boardRepository.find({
-      skip: 10,
       take: 10,
+      skip: 10 * (page - 1),
       where: { user: currentUser },
     });
   }

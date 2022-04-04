@@ -219,7 +219,7 @@ export class ArtService {
       .where('user.id =:id', { id: userId })
       .withDeleted()
       .getCount();
-
+    
     return art;
   }
 

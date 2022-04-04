@@ -5,6 +5,7 @@ import { BoardImage } from '../boardImage/entities/boardImage.entity';
 import { Comment } from '../comment/entities/comment.entity';
 import { FileService } from '../file/file.service';
 import { LikeBoardService } from '../likeBoard/likeBoard.service';
+import { User } from '../user/entities/user.entity';
 import { BoardResolver } from './board.resolver';
 import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
@@ -18,6 +19,7 @@ import { LikeBoard } from './entities/likeBoard.entity';
       BoardImage,
       Comment,
       LikeBoard,
+      User,
     ]),
   ],
   providers: [
