@@ -153,8 +153,8 @@ type Query {
   fetchLikeArt(page: Float): [Art!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardImgaes(boardId: String!): [BoardImage!]!
-  fetchBoards: [Board!]!
-  fetchBoardsOfMine(page: Float!): [Board!]!
+  fetchBoards(page: Float): [Board!]!
+  fetchBoardsOfMine(page: Float): [Board!]!
   fetchBoardsOfMineCount: Float!
   countLikeBoard(boardId: String!): Int!
   fetchLikeBoard: [Board!]!

@@ -1,4 +1,5 @@
 import { CACHE_MANAGER, Inject, UseGuards } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
@@ -11,6 +12,7 @@ export class PaymentResolver {
   constructor(
     private readonly paymentService: PaymentService,
     private readonly userService: UserService,
+    private readonly elasticsearchService: ElasticsearchService,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
@@ -53,9 +55,17 @@ export class PaymentResolver {
     const bidder = await this.userService.findOne(currentUser.email);
     await this.paymentService.successfulBid(artId, price, bidder, artist);
 
-    return artId;
-  }
+    const result = await this.elasticsearchService.deleteByQuery({
+      index: 'artipul00',
+      query: {
+        bool: {
+          must: [{ match: { id: artId } }],
+        },
+      },
+    });
 
+    return 'ok';
+  }
   // 레디스에 입찰 정보(작품, 현재 입찰가, 현재 상위 입찰자)
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => [String])
