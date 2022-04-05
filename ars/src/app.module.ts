@@ -37,7 +37,7 @@ import { EventModule } from './apis/event/event.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
-      cors: { origin: 'http://localhost:3000', credential: true },
+      cors: { origin: 'https://artipul.shop', credential: true },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',

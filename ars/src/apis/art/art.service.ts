@@ -132,6 +132,7 @@ export class ArtService {
       .where('user.id =:id', { id: currentUser.id })
       .withDeleted()
       .getMany();
+
     return art;
   }
 
@@ -175,6 +176,7 @@ export class ArtService {
     }
   }
   ///////////////////////////////////////////////////////////////////////////
+
   async countEngage(userId) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
@@ -187,7 +189,6 @@ export class ArtService {
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error + 'Art create !';
     } finally {
       await queryRunner.manager.release();
     }
@@ -205,7 +206,6 @@ export class ArtService {
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error + 'Art create !';
     } finally {
       await queryRunner.manager.release();
     }
@@ -219,7 +219,7 @@ export class ArtService {
       .where('user.id =:id', { id: userId })
       .withDeleted()
       .getCount();
-    
+
     return art;
   }
 
@@ -237,5 +237,6 @@ export class ArtService {
     });
     return result;
   }
+
   ///////////////////////////////////////////////////////////////////////////
 }

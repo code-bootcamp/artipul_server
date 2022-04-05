@@ -24,20 +24,25 @@ export class BoardService {
 
   // 게시물 1개 조회
   async findOne(boardId: string) {
-    return await this.boardRepository.findOne(boardId);
+    return await this.boardRepository.findOne({
+      where: { id: boardId },
+      relations: ['art'],
+      withDeleted: true,
+    });
   }
 
   // 게시물 이미지 조회
   async findImage({ boardId }) {
-    return await this.boardImageRepository.find({ board: boardId });
+    return await this.boardImageRepository.find({
+      where: { board: boardId },
+      relations: ['board'],
+    });
   }
 
   // 게시물 모두 조회
-  async findAll(page) {
+  async findAll() {
     return await this.boardRepository.find({
       relations: ['art'],
-      take: 10,
-      skip: 10 * (page - 1),
     });
   }
 
@@ -65,9 +70,11 @@ export class BoardService {
       const user = await queryRunner.manager.findOne(User, {
         id: currentUser.id,
       });
-      const art = await queryRunner.manager.findOne(Art, {
-        id: artId,
-      });
+      const art = await getRepository(Art)
+        .createQueryBuilder('art')
+        .where('art.id = :id', { id: artId })
+        .withDeleted()
+        .getOne();
 
       const result = await queryRunner.manager.save(Board, {
         ...rest,
@@ -106,10 +113,15 @@ export class BoardService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const board = await queryRunner.manager.findOne(Board, { id: boardId });
+      const board = await this.boardRepository.findOne({
+        where: { id: boardId },
+        relations: ['art'],
+        withDeleted: true,
+      });
       const user = await queryRunner.manager.findOne(User, {
         id: currentUser.id,
       });
+
       const result = await queryRunner.manager.save(Board, {
         ...board,
         ...rest,
@@ -117,7 +129,10 @@ export class BoardService {
         thumbnail: image_urls[0],
       });
 
-      for (let i = 0; i < image_urls.lenght; i++) {
+      await queryRunner.manager.delete(BoardImage, {
+        board: result,
+      });
+      for (let i = 0; i < image_urls.length; i++) {
         if (i === 0) {
           await queryRunner.manager.save(BoardImage, {
             url: image_urls[i],

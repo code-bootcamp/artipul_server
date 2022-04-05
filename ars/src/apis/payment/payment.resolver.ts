@@ -56,7 +56,7 @@ export class PaymentResolver {
     const bidder = await this.userService.findOne(currentUser.email);
     await this.paymentService.successfulBid(artId, price, bidder, artist);
 
-    const result = await this.elasticsearchService.deleteByQuery({
+    await this.elasticsearchService.deleteByQuery({
       index: 'artipul00',
       query: {
         bool: {
