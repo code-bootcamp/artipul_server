@@ -7,7 +7,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: 'https://artipul.shop',
     credentials: true,
   });
   app.use(graphqlUploadExpress());

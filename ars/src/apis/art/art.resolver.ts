@@ -97,6 +97,7 @@ export class ArtResolver {
           start_price: el._source.start_price,
           instant_bid: el._source.instant_bid,
           deadline: el._source.deadline,
+          is_soldout: el._source.is_soldout,
           thumbnail: el._source.thumbnail,
           tag1: el._source.tag1,
           tag2: el._source.tag2,

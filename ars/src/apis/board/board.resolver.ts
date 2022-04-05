@@ -33,8 +33,8 @@ export class BoardResolver {
 
   // 게시물 모두 조회
   @Query(() => [Board])
-  async fetchBoards(@Args('page', { nullable: true }) page: number) {
-    return await this.boardService.findAll(page);
+  async fetchBoards() {
+    return await this.boardService.findAll();
   }
 
   // 내가 쓴 게시물 조회
