@@ -105,7 +105,7 @@ export class PaymentService {
     await this.artRepository.softDelete({ id: artId });
   }
 
-  // 레디스에 입찰 정보(작품, 현재 입찰가, 현재 상위 입찰자)
+  // 레디스에 입찰 정보 저장(작품, 현재 입찰가, 현재 상위 입찰자)
   async call(artId, bid_price, email) {
     const art = await this.artRepository.findOne(artId);
     const utc = new Date();
@@ -114,13 +114,13 @@ export class PaymentService {
     const time = Number(art.deadline) - Number(currentTime);
     if (time > 0) {
       await this.cacheManager.set(artId, [bid_price, email], {
-        ttl: time + 60000,
+        ttl: time + 65000,
       });
     }
     return [bid_price, email];
   }
 
-  // DB 저장
+  // 실시간 가격 변동, DB 저장
   async save(artId, userId, bid_price) {
     this.eventGateway.server.emit('message', {
       price: bid_price,

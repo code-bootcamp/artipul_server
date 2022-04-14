@@ -1,6 +1,7 @@
 import { CACHE_MANAGER, Inject, UseGuards } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Cron } from '@nestjs/schedule';
 import { Cache } from 'cache-manager';
 import { GqlAuthAccessGuard } from 'src/common/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/common/auth/gql-user.param';
@@ -33,6 +34,15 @@ export class PaymentResolver {
           await this.paymentService.failedBid(e.id);
         }
 
+        await this.elasticsearchService.deleteByQuery({
+          index: 'artipul00',
+          query: {
+            bool: {
+              must: [{ match: { id: e.id } }],
+            },
+          },
+        });
+
         return e.id;
       });
 
@@ -40,6 +50,11 @@ export class PaymentResolver {
     } catch (error) {
       throw error + 'checkout';
     }
+  }
+
+  @Cron('* * * * *')
+  handleCron() {
+    this.checkTimedoutAndProcess();
   }
 
   // 즉시 구매

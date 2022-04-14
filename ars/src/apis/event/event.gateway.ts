@@ -19,7 +19,7 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   //소켓 연결시 유저목록에 추가
   public handleConnection(client: Socket): void {
-    console.log('connected', client.id);
+    console.log('connected');
     client.leave(client.id);
     client.data.roomId = `room:lobby`;
     client.join('room:lobby');
