@@ -1,0 +1,252 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Art {
+  id: String!
+  title: String!
+  description: String!
+  start_price: Int!
+  instant_bid: Int!
+  price: Int!
+  thumbnail: String!
+  createdAt: DateTime!
+  deletedAt: DateTime!
+  deadline: String!
+  is_soldout: Boolean!
+  updatedAt: DateTime!
+  user: User!
+  payment: Payment!
+  tag1: String!
+  tag2: String
+  tag3: String
+  tag4: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Payment {
+  id: String!
+  createdAt: DateTime!
+  amount: Int!
+  art: Art!
+  user: User!
+}
+
+type User {
+  id: String!
+  name: String!
+  phoneNum: String!
+  email: String!
+  password: String!
+  nickname: String!
+  point: Int!
+  is_artist: Boolean!
+  college: String!
+  profile: Profile
+  payment: Payment!
+}
+
+type Profile {
+  id: String!
+  url: String
+  introduce: String
+  address: String
+  user: User!
+}
+
+type Token {
+  accessToken: String!
+}
+
+type ArtImage {
+  id: String!
+  url: String!
+  isMain: Boolean!
+  art: Art!
+}
+
+type Engage {
+  art: Art!
+}
+
+type PointTransaction {
+  id: String!
+  impUid: String!
+  createdAt: DateTime!
+  charge_amount: Int!
+  status: POINTTRANSACTION_ENUM!
+  user: User!
+}
+
+enum POINTTRANSACTION_ENUM {
+  PAYMENT
+  CANCLE
+}
+
+type History {
+  id: String!
+  createdAt: DateTime!
+  point: Int!
+  balance: Int!
+  user: User!
+  pointTransaction: PointTransaction
+  payment: Payment
+}
+
+type ArtsSearch {
+  id: String!
+  title: String!
+  start_price: Int!
+  instant_bid: Int!
+  thumbnail: String!
+  deadline: String
+  is_soldout: Boolean!
+  tag1: String!
+  tag2: String
+  tag3: String
+  tag4: String
+  nickname: String!
+}
+
+type Board {
+  id: String!
+  title: String!
+  createdAt: DateTime!
+  content: String!
+  thumbnail: String!
+  user: User!
+  art: Art!
+}
+
+type BoardImage {
+  id: String!
+  url: String!
+  is_main: Boolean!
+  board: Board!
+}
+
+type Comment {
+  id: String!
+  content: String!
+  board: Board!
+  user: User!
+}
+
+type Query {
+  fetchArts(tags: [String!]!): [ArtsSearch!]!
+  fetchArt(artId: String!): Art!
+  fetchArtImages(artId: String!): [ArtImage!]!
+  fetchEngageCount: Float!
+  fetchLikeArtCount: Float!
+  fetchSoldoutArtsCount: Float!
+  fetchTimedOutArtsCount: Float!
+  fetchAuctionArtsCount: Float!
+  fetchAuctionArts(page: Float!): [Art!]!
+  fetchTimedOutArt(page: Float!): [Art!]!
+  fetchTransactionCompletedArts(page: Float!): [Art!]!
+  fetchEngaging(page: Float!): [Engage!]!
+  fetchArtistWorks(artId: String!): [Art!]!
+  fetchLikeArt(page: Float): [Art!]!
+  fetchBoard(boardId: String!): Board!
+  fetchBoardImgaes(boardId: String!): [BoardImage!]!
+  fetchBoards: [Board!]!
+  fetchBoardsOfMine(page: Float): [Board!]!
+  fetchBoardsOfMineCount: Float!
+  countLikeBoard(boardId: String!): Int!
+  fetchLikeBoard: [Board!]!
+  fetchComments(boardId: String!): [Comment!]!
+  fetchHistory(page: Float!): [History!]!
+  fetchHitoryCount: Float!
+  fetchProfile: Profile!
+  fetchArtistProfile(artId: String!): Profile!
+  fetchUser: User!
+  findUserEmail(phoneNum: String!): String!
+  findSocialUser: User!
+  fetchPointTransactions: [PointTransaction!]!
+}
+
+type Mutation {
+  createArt(createArtInput: CreateArtInput!): Art!
+  uploadArtImage(files: [Upload!]!): [String!]!
+  addLikeArt(artId: String!): Boolean!
+  login(email: String!, password: String!): Token!
+  restoreAccessToken: Token!
+  logout: String!
+  createBoard(createBoardInput: CreateBoardInput!, artId: String!): Board!
+  updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
+  deleteBoard(boardId: String!): Boolean!
+  uploadBoardImage(files: [Upload!]!): [String!]!
+  addLikeBoard(boardId: String!): Int!
+  createComment(boardId: String!, content: String!): Comment!
+  updateComment(commentId: String!, content: String!): Comment!
+  deleteComment(commentId: String!): Boolean!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateSocialUser(updateSocialUser: UpdateSocialUser!): User!
+  sendPhoneToken(phoneNum: String!): String!
+  phoneAuth(phoneNum: String!, token: String!): Boolean!
+  checkNickname(nickname: String!): Boolean!
+  resetUserPassword(email: String!, password: String!): User!
+  checkTimedoutAndProcess: String!
+  instantBid(artId: String!, price: Float!, artistEmail: String!): String!
+  Bid(artId: String!, bid_price: Float!): [String!]!
+  saveBid(artId: String!, bid_price: Float!): String!
+  enterBidRomm(artId: String!): String!
+  createPointTransaction(impUid: String!, charge_amount: Float!): PointTransaction!
+  cancelPointTransaction(impUid: String!): PointTransaction!
+}
+
+input CreateArtInput {
+  title: String!
+  description: String!
+  start_price: Int!
+  instant_bid: Int!
+  price: Int!
+  deadline: DateTime
+  thumbnail: String!
+  is_soldout: Boolean!
+  tags: [String!]!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateBoardInput {
+  title: String!
+  content: String!
+  image_urls: [String!]!
+}
+
+input UpdateBoardInput {
+  title: String
+  content: String
+  image_urls: [String!]
+}
+
+input CreateProfileInput {
+  url: String
+  introduce: String
+  address: String
+}
+
+input CreateUserInput {
+  name: String!
+  phoneNum: String!
+  password: String!
+  email: String!
+  nickname: String!
+  is_artist: Boolean!
+  college: String
+}
+
+input UpdateSocialUser {
+  email: String!
+  nickname: String!
+  phoneNum: String!
+  is_artist: Boolean!
+  college: String
+}
