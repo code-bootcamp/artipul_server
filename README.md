@@ -137,8 +137,8 @@ About Us 페이지
 | 이름 | 역할 | 담당 부분 |
 | ------ | ------ | ------ |
 | 변재준 | 팀장, 프론트엔드 | 1. 프로젝트기획 <br/>2. Docker 세팅 <br/> 3. Front-end 배포 <br/> 4. Team Issue 관리 <br/> 5. LoginPage <br/> 6. SignUp Page <br/> 7. User Mypage <br/> 8. Artist Mypage <br/> 9. 결제대행 오픈API(아임포트) <br/> 10. 다음포스트 코드와 카카오맵 <br/> 11. Web Editor(Toast UI) <br/> 12. 권한분기 설정 <br/> 13. CustomHook <br/> 14. 발표자료 작성 <br/> 15. Read.me 작성|
-| 최다슬 | 백엔드 | 1. ERD 디자인 <br/> 2. Back-end 배포 <br/> 3. Flow-Chart 제작 <br/> 4. API Docs 제작 <br/> 5. 결제API(아임포트) <br/> 6. Search Engine <br/> 7. Board CRUD API <br/> 8. MyPage CRUD API <br/> 9. 발표자료 작성 <br/> 10. 기획서 작성|
-| 김진아 | 프론트엔드 | 1. Notion rhksfl <br/> 2. 회의록 작성 <br/> 3. Review Page <br/> 4. Data Work |
+| 최다슬 | 백엔드 | 1. ERD 디자인 <br/> 2. Back-end 배포 <br/> 3. Flow-Chart 제작 <br/> 4. API Docs 제작 <br/> 5. 결제API(아임포트) <br/> 6. Board CRUD API <br/> 7. MyPage CRUD API <br/> 8. 발표자료 작성 <br/> 9. 기획서 작성|
+| 김진아 | 프론트엔드 | 1. Notion 관리 <br/> 2. 회의록 작성 <br/> 3. Review Page <br/> 4. Data Work |
 | 이재후 | 백엔드 | 1. Docker 세팅 <br/> 2. Trouble Shooter <br/> 3. Test 환경 배포 <br/> 4. API Docs 제작 <br/> 5. Sign up, Sign in API <br/> 6. Social Login <br/> 7. 경매 API (Socket) <br/> 8. Art CRUD API |
 | 김재현 | 프론트엔드 | 1. GitHub 관리 <br/> 2. Trouble Shooter <br/> 3. MainPage <br/> 4. About Us Page <br/> 5. Art Page <br/> 6. Auction Page <br/> 7. 실시간 양방향 소통(Socket) |
 
